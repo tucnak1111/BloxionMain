@@ -5,6 +5,7 @@ model Workspace {
   allowedRanks  Int[]
   createdAt     DateTime @default(now())
   owner         User     @relation(fields: [ownerId], references: [id])
+  members       WorkspaceMember[]
 }
 
 model User {
@@ -13,4 +14,15 @@ model User {
   username    String
   avatarUrl   String?
   workspaces  Workspace[]
+}
+model WorkspaceMember {
+  id            String   @id @default(cuid())
+  userId        String?
+  workspaceId   String
+  robloxId      String
+  rankId        Int
+  rankName      String
+  updatedAt     DateTime @updatedAt
+
+  workspace     Workspace @relation(fields: [workspaceId], references: [id])
 }
