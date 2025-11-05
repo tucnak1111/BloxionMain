@@ -1,1 +1,40 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "../prisma/client"; // adjust path if needed
+import { z } from "zod";
 
+// Define input validation
+const WorkspaceSchema = z.object({
+  userId: z.string(),
+  groupId: z.string(),
+  groupName: z.string(),
+  allowedRanks: z.array(z.number()),
+});
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    // Parse and validate incoming data
+    const body = WorkspaceSchema.parse(req.body);
+    const { userId, groupId, groupName, allowedRanks } = body;
+
+    // Create workspace record
+    const workspace = await prisma.workspace.create({
+      data: {
+        ownerId: userId,
+        groupId,
+        groupName,
+        allowedRanks,
+      },
+    });
+
+    return res.status(201).json({ success: true, workspace });
+  } catch (err: any) {
+    console.error("❌ Error creating workspace:", err);
+    return res
+      .status(400)
+      .json({ success: false, error: err.message || "Invalid request" });
+  }
+}
