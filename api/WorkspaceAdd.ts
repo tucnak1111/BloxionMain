@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../prisma/client"; // adjust path if needed
 import { z } from "zod";
 
-// Define input validation
 const WorkspaceSchema = z.object({
   userId: z.string(),
   groupId: z.string(),
@@ -16,11 +15,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Parse and validate incoming data
     const body = WorkspaceSchema.parse(req.body);
     const { userId, groupId, groupName, allowedRanks } = body;
 
-    // Create workspace record
     const workspace = await prisma.workspace.create({
       data: {
         ownerId: userId,
@@ -32,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(201).json({ success: true, workspace });
   } catch (err: any) {
-    console.error("❌ Error creating workspace:", err);
+    console.error("Error creating workspace:", err);
     return res
       .status(400)
       .json({ success: false, error: err.message || "Invalid request" });
