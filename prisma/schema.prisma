@@ -1,0 +1,16 @@
+model Workspace {
+  id            String   @id @default(cuid())
+  ownerId       String
+  groupId       String
+  allowedRanks  Int[]
+  createdAt     DateTime @default(now())
+  owner         User     @relation(fields: [ownerId], references: [id])
+}
+
+model User {
+  id          String   @id @default(cuid())
+  robloxId    String   @unique
+  username    String
+  avatarUrl   String?
+  workspaces  Workspace[]
+}
