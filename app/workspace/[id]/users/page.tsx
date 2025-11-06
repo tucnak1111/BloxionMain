@@ -1,4 +1,4 @@
-import UserList from "../components/UserList";
+import UserList from "../components/UserList.tsx";
 
 export default function WorkspaceUsersPage({ params }: { params: { id: string } }) {
   return (
