@@ -1,10 +1,10 @@
 model Workspace {
-  id            String   @id @default(cuid())
+  id            String            @id @default(cuid())
   ownerId       String
   groupId       String
   allowedRanks  Int[]
-  createdAt     DateTime @default(now())
-  owner         User     @relation(fields: [ownerId], references: [id])
+  createdAt     DateTime          @default(now())
+  owner         User              @relation(fields: [ownerId], references: [id])
   members       WorkspaceMember[]
 }
 
@@ -15,14 +15,16 @@ model User {
   avatarUrl   String?
   workspaces  Workspace[]
 }
-model WorkspaceMember {
-  id            String   @id @default(cuid())
-  userId        String?
-  workspaceId   String
-  robloxId      String
-  rankId        Int
-  rankName      String
-  updatedAt     DateTime @updatedAt
 
-  workspace     Workspace @relation(fields: [workspaceId], references: [id])
+model WorkspaceMember {
+  id           String     @id @default(cuid())
+  workspaceId  String
+  robloxId     String
+  username     String
+  avatarUrl    String?
+  rankId       Int
+  rankName     String
+  updatedAt    DateTime   @updatedAt
+
+  workspace    Workspace  @relation(fields: [workspaceId], references: [id])
 }
