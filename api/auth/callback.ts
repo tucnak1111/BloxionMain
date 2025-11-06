@@ -8,7 +8,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!code) return res.status(400).json({ error: "Missing authorization code" });
 
   try {
-    const tokenResponse = await axios.post(
+    // Exchange the authorization code for an access token
+    const tokenRes = await axios.post(
       "https://apis.roblox.com/oauth/v1/token",
       new URLSearchParams({
         grant_type: "authorization_code",
@@ -20,22 +21,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
     );
 
-    const { access_token } = tokenResponse.data;
+    const accessToken = tokenRes.data.access_token;
 
-    // Fetch Roblox user info
-    const userInfo = await axios.get("https://apis.roblox.com/oauth/v1/userinfo", {
-      headers: { Authorization: `Bearer ${access_token}` },
+    // Fetch user info from Roblox OAuth
+    const userInfoRes = await axios.get("https://apis.roblox.com/oauth/v1/userinfo", {
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const robloxUser = userInfo.data;
+    const robloxUser = userInfoRes.data;
 
-    // Fetch avatar (optional)
+    // Fetch Roblox avatar
     const avatarRes = await axios.get(
       `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxUser.sub}&size=150x150&format=Png&isCircular=true`
     );
     const avatarUrl = avatarRes.data.data[0]?.imageUrl || null;
 
-    // Store or update user in DB
+    // 🔹 Upsert user in Prisma
     const user = await prisma.user.upsert({
       where: { robloxId: robloxUser.sub },
       update: { username: robloxUser.name, avatarUrl },
@@ -46,22 +47,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    // Create a JWT
+    // 🔐 Sign JWT
     const token = jwt.sign(
-      { id: user.id, robloxId: user.robloxId, username: user.username },
+      {
+        id: user.id,
+        robloxId: user.robloxId,
+        username: user.username,
+      },
       process.env.JWT_SECRET!,
       { expiresIn: "7d" }
     );
 
-    // Set auth cookie
+    // 🍪 Store session cookie
     res.setHeader(
       "Set-Cookie",
       `bloxion_auth=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
     );
 
-    res.redirect("/"); // redirect to dashboard or homepage
+    res.redirect("/"); // redirect user to home/dashboard
   } catch (err: any) {
-    console.error("OAuth error:", err.response?.data || err.message);
-    res.status(500).json({ error: "Authentication failed" });
+    console.error("Auth callback error:", err.response?.data || err.message);
+    return res.status(500).json({ error: "Authentication failed" });
   }
 }
