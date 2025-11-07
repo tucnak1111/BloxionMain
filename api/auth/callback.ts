@@ -47,7 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    // 🔐 Sign JWT
     const token = jwt.sign(
       {
         id: user.id,
@@ -58,7 +57,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       { expiresIn: "7d" }
     );
 
-    // 🍪 Store session cookie
     res.setHeader(
       "Set-Cookie",
       `bloxion_auth=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
