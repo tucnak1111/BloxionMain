@@ -11,12 +11,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = await prisma.user.findUnique({
       where: { robloxId: decoded.robloxId },
+      select: {
+        id: true,
+        robloxId: true,
+        username: true,          // optional, remove if you don't have it
+        isSuspended: true,
+        suspendedReason: true,
+      },
     });
 
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    return res.status(200).json({ success: true, user });
-  } catch {
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (err) {
     return res.status(403).json({ error: "Invalid or expired session" });
   }
 }
