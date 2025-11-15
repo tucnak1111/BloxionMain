@@ -14,7 +14,10 @@ model User {
   username    String
   avatarUrl   String?
   workspaces  Workspace[]
+  isSuspended     Boolean  @default(false)
+  suspendedReason String?
 }
+
 
 model WorkspaceMember {
   id           String     @id @default(cuid())
