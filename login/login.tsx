@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
-import "./login.css"; // <-- import the CSS (shown below)
+import React, { useState } from "react";
+import "./login.css";
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = () => {
-    // Redirect to your API login route
+    setLoading(true);
     window.location.href = "/api/auth/redirect";
   };
 
@@ -22,7 +24,14 @@ export default function LoginPage() {
         rel="stylesheet"
       />
       <h1>Welcome to Bloxion</h1>
-      <input className="lf--submit" type="submit" value="Log In with Roblox" />
+
+      <button className="lf--submit" disabled={loading}>
+        {loading ? (
+          <span className="spinner" />
+        ) : (
+          "Log In with Roblox"
+        )}
+      </button>
     </form>
   );
 }
