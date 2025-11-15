@@ -6,7 +6,7 @@ import "./login.css"; // <-- import the CSS (shown below)
 export default function LoginPage() {
   const handleLogin = () => {
     // Redirect to your API login route
-    window.location.href = "/api/auth/roblox";
+    window.location.href = "/api/auth/redirect";
   };
 
   return (
