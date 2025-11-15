@@ -45,24 +45,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         username: robloxUser.name,
         avatarUrl,
       },
+      select: {
+        id: true,
+        robloxId: true,
+        username: true,
+        isSuspended: true,
+        suspendedReason: true,
+      },
     });
 
+    // ✍ Create session token
     const token = jwt.sign(
-      {
-        id: user.id,
-        robloxId: user.robloxId,
-        username: user.username,
-      },
+      { id: user.id, robloxId: user.robloxId, username: user.username },
       process.env.JWT_SECRET!,
       { expiresIn: "7d" }
     );
 
+    // Set auth cookie
     res.setHeader(
       "Set-Cookie",
       `bloxion_auth=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
     );
 
-    res.redirect("/"); // redirect user to home/dashboard
+    // If suspended → redirect immediately
+    if (user.isSuspended) {
+      const reason = encodeURIComponent(user.suspendedReason || "No reason provided");
+      return res.redirect(`/suspended?reason=${reason}`);
+    }
+
+    // 🎉 Otherwise → redirect to app/dashboard
+    return res.redirect("/");
   } catch (err: any) {
     console.error("Auth callback error:", err.response?.data || err.message);
     return res.status(500).json({ error: "Authentication failed" });
