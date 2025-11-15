@@ -31,3 +31,11 @@ model WorkspaceMember {
 
   workspace    Workspace  @relation(fields: [workspaceId], references: [id])
 }
+
+model BanLog {
+  id          String   @id @default(cuid())
+  userId      String
+  reason      String
+  createdAt   DateTime @default(now())
+  bannedBy    String   // moderator ID or "bot"
+
