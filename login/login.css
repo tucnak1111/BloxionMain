@@ -1,1 +1,74 @@
--
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(36,46,77,.95), rgba(137,126,121,.95));
+  font-family:
+    -apple-system, BlinkMacSystemFont,
+    "Inter",
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Helvetica Neue", sans-serif;
+  color: #fff;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(data:image/png;base64,...); /* keep your texture */
+  opacity: 0.25;
+}
+
+.login-form {
+  position: relative;
+  padding: 2em;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.login-form h1 {
+  margin: 0 0 1.5em;
+  font-size: 1.25em;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.lf--submit {
+  display: block;
+  width: 100%;
+  padding: 1em;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(to right, #35c3c1, #00d6b7);
+  color: #fff;
+  font-size: .9em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.lf--submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(53,195,193, .4);
+}
+
+.lf--submit:focus {
+  outline: none;
+  transform: scale(1.03);
+}
