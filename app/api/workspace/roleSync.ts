@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-import { prisma } from "../prisma/Client";
+import { prisma } from "../../../prisma/Client";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
