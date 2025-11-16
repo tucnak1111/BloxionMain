@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../../prisma/Client";
 
 export async function POST(req: Request) {
   const auth = req.headers.get("x-api-key");
