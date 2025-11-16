@@ -1,21 +1,16 @@
-"use client";
-
 import "./privacy.css";
 
 export default function PrivacyPolicyPage() {
   return (
-    <head><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"></head>
- <body>   
-<div className="privacy-container">
+    <div className="privacy-wrapper">
       <div className="privacy-card">
         <h1>Privacy Policy</h1>
-        <p className="updated">Last updated: [DATE]</p>
+
+        <p className="last-updated">Last updated: [DATE]</p>
 
         <p>
-          This Privacy Policy describes how <strong>[YOUR APP NAME]</strong>
-          ("we", "our", or "us") handles your data when you use our services.
+          This Privacy Policy describes how [YOUR APP NAME] ("we", "our", or "us")
+          handles your data when you use our services.
         </p>
 
         <h2>Information We Collect</h2>
@@ -35,6 +30,7 @@ export default function PrivacyPolicyPage() {
         </ul>
 
         <h2>Data Sharing</h2>
+        <p>We do not sell your personal data. We may share limited information only:</p>
         <ul>
           <li>[If required by law or legal process]</li>
           <li>[With services necessary to operate the platform]</li>
@@ -42,22 +38,17 @@ export default function PrivacyPolicyPage() {
 
         <h2>Your Rights</h2>
         <ul>
-          <li>[Access or update your data]</li>
-          <li>[Request deletion of stored information]</li>
-          <li>[Withdraw consent where applicable]</li>
+          <li>[Request access or deletion of your data]</li>
+          <li>[Withdraw permissions]</li>
         </ul>
 
         <h2>Contact Us</h2>
         <p>
-          If you have any questions about this Privacy Policy, you can contact us at: <br/>
+          If you have any questions, please contact us at:
+          <br />
           <strong>[YOUR CONTACT EMAIL]</strong>
         </p>
-
-        <div className="button-row">
-          <a href="/" className="return-btn">Return to Home</a>
-        </div>
       </div>
     </div>
-</body>
   );
 }
