@@ -60,7 +60,8 @@ model WorkspaceMember {
   rank        Int        @default(0)                 // Roblox group rank
   roles       String[]   @default([])                // Custom Bloxion roles
   joinedAt    DateTime   @default(now())
-
+  robloxId    String
+  rankName    String?
   workspace   Workspace  @relation(fields: [workspaceId], references: [id])
   user        User       @relation(fields: [userId], references: [id])
 
