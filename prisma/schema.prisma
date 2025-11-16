@@ -38,4 +38,4 @@ model BanLog {
   reason      String
   createdAt   DateTime @default(now())
   bannedBy    String   // moderator ID or "bot"
-
+}
