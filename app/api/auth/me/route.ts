@@ -1,32 +1,43 @@
+import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { prisma } from "../../../../prisma/Client";
-import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "@/prisma/Client"; // adjust if needed
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const cookie = req.cookies.bloxion_auth;
-  if (!cookie) return res.status(401).json({ error: "Not logged in" });
+export async function GET(req: Request) {
+  const cookie = req.headers.get("cookie");
+  const token = cookie
+    ?.split("; ")
+    .find((c) => c.startsWith("bloxion_auth="))
+    ?.split("bloxion_auth=")[1];
+
+  if (!token) {
+    return NextResponse.json({ error: "Not logged in" }, { status: 401 });
+  }
 
   try {
-    const decoded = jwt.verify(cookie, process.env.JWT_SECRET!) as { robloxId: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      robloxId: string;
+    };
 
     const user = await prisma.user.findUnique({
       where: { robloxId: decoded.robloxId },
       select: {
         id: true,
         robloxId: true,
-        username: true,          // optional, remove if you don't have it
+        username: true,
         isSuspended: true,
         suspendedReason: true,
       },
     });
 
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
-    return res.status(200).json({
-      success: true,
-      user,
-    });
-  } catch (err) {
-    return res.status(403).json({ error: "Invalid or expired session" });
+    return NextResponse.json({ success: true, user });
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid or expired session" },
+      { status: 403 }
+    );
   }
 }
