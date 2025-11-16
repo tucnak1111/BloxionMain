@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // Update rank
           await prisma.workspaceMember.update({
             where: { id: existing.id },
-            data: { rankId: userRank, rankName },
+            data: { rank: userRank, rankName },
           });
         } else {
           // Create membership entry
@@ -63,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data: {
               workspaceId: workspace.id,
               userId: robloxId.toString(), // store robloxId as userId
-              rankId: userRank,
+              rank: userRank,
               rankName,
             },
           });
