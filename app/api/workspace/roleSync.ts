@@ -1,34 +1,28 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import axios from "axios";
 import { prisma } from "../../../prisma/Client";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
+export async function POST(req: Request) {
   try {
-    const { robloxId } = req.body;
+    const { robloxId } = await req.json();
     if (!robloxId) {
-      return res.status(400).json({ error: "Missing robloxId" });
+      return NextResponse.json({ error: "Missing robloxId" }, { status: 400 });
     }
 
-    // Fetch Roblox groups for user
-    const groupsRes = await axios.get(
+    // Get Roblox group roles
+    const { data } = await axios.get(
       `https://groups.roblox.com/v2/users/${robloxId}/groups/roles`
     );
 
-    const userGroups = groupsRes.data.data || [];
-
-    // Collect all group IDs
+    const userGroups = data?.data ?? [];
     const groupIds = userGroups.map((g: any) => g.group.id.toString());
 
-    // Find workspaces which belong to those groups
+    // Find workspaces matching groups
     const workspaces = await prisma.workspace.findMany({
       where: { groupId: { in: groupIds } },
     });
 
-    const updated: { workspaceId: string; groupId: string }[] = [];
+    const updated: string[] = [];
 
     for (const workspace of workspaces) {
       const match = userGroups.find(
@@ -38,57 +32,53 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const userRank = match.role.rank;
       const rankName = match.role.name;
+      const allowed = workspace.allowedRanks.includes(userRank);
 
-      const allowedRanks = workspace.allowedRanks as number[];
-      const hasAccess = allowedRanks.includes(userRank);
-
-      // Check entry in WorkspaceMember
+      // Find existing membership
       const existing = await prisma.workspaceMember.findFirst({
-        where: {
-          workspaceId: workspace.id,
-          userId: robloxId.toString(), // userId stores Roblox ID
-        },
+        where: { workspaceId: workspace.id, robloxId: robloxId.toString() },
       });
 
-      if (hasAccess) {
+      if (allowed) {
+        // Upsert membership
         if (existing) {
-          // Update rank
           await prisma.workspaceMember.update({
             where: { id: existing.id },
             data: { rank: userRank, rankName },
           });
         } else {
-          // Create membership entry
+          // Find linked user if exists
+          const user = await prisma.user.findUnique({
+            where: { robloxId: robloxId.toString() },
+          });
+
           await prisma.workspaceMember.create({
             data: {
               workspaceId: workspace.id,
-              userId: robloxId.toString(), // store robloxId as userId
+              userId: user ? user.id : workspace.ownerId, // fallback if user not registered yet
+              robloxId: robloxId.toString(),
               rank: userRank,
               rankName,
+              roles: [],
             },
           });
         }
-
-        updated.push({ workspaceId: workspace.id, groupId: workspace.groupId });
-      } else {
-        // Remove if no longer allowed
-        if (existing) {
-          await prisma.workspaceMember.delete({ where: { id: existing.id } });
-        }
+        updated.push(workspace.groupName ?? workspace.id);
+      } else if (existing) {
+        await prisma.workspaceMember.delete({ where: { id: existing.id } });
       }
     }
 
-    return res.status(200).json({
+    return NextResponse.json({
       success: true,
       updatedCount: updated.length,
       updatedWorkspaces: updated,
     });
-
   } catch (err: any) {
     console.error("Role sync failed:", err);
-    return res.status(500).json({
-      error: "Internal Server Error",
-      detail: err.message,
-    });
+    return NextResponse.json(
+      { error: "Internal server error", detail: err.message },
+      { status: 500 }
+    );
   }
 }
