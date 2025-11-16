@@ -1,4 +1,4 @@
-import UserList from "../components/userList";
+import UserList from "../../components/userList";
 
 export default function WorkspaceUsersPage({ params }: { params: { id: string } }) {
   return (
