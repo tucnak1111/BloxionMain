@@ -10,10 +10,10 @@ model Workspace {
   id            String            @id @default(cuid())
   ownerId       String
   groupId       String
-  allowedRanks  Int Json
+  allowedRanks  Json
   createdAt     DateTime          @default(now())
   owner         User              @relation(fields: [ownerId], references: [id])
-  members       WorkspaceMember Json
+  members       Json
 }
 
 model User {
@@ -21,7 +21,7 @@ model User {
   robloxId    String   @unique
   username    String
   avatarUrl   String?
-  workspaces  Workspace Json
+  workspaces  Json
   isSuspended     Boolean  @default(false)
   suspendedReason String?
 }
