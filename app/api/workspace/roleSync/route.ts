@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
-import { prisma } from "@/prisma/Client";
+import { prisma } from "../../../../prisma/Client";
 
 export async function POST(req: Request) {
   try {
