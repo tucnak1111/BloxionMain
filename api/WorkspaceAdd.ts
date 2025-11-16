@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../prisma/client"; 
+import { prisma } from "../prisma"; 
 import { z } from "zod";
 
 const WorkspaceSchema = z.object({
