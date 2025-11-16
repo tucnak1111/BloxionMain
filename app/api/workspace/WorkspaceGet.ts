@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../prisma/Client";
+import { prisma } from "../../../prisma/Client";
 import axios from "axios";
 
 
