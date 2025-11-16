@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/Client";
-if (req.method === "GET") {
-  return res.status(200).json({ message: "status OK" })
+export async function GET(req: Request) {
+  return Response.json({ message: "200 OK" });
 }
 export async function POST(req: Request) {
   const auth = req.headers.get("x-api-key");
