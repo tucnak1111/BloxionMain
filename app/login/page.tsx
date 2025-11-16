@@ -8,7 +8,7 @@ export default function LoginPage() {
 
   const handleLogin = () => {
     setLoading(true);
-    window.location.href = "/api/auth/redirect";
+    window.location.href = "/../api/auth/redirect";
   };
 
   return (
