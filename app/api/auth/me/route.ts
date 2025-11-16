@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { prisma } from "@/prisma/Client"; // adjust if needed
+import { prisma } from "../../../../prisma/Client"; // adjust if needed
 
 export async function GET(req: Request) {
   const cookie = req.headers.get("cookie");
