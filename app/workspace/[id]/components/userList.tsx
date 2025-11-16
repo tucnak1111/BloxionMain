@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import UserCard from "./UserCard";
+import UserCard from "./userCard";
 
 interface Member {
   id: string;
