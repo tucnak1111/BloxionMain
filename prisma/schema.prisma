@@ -1,49 +1,56 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
-model Workspace {
-  id            String            @id @default(cuid())
-  ownerId       String
-  groupId       String
-  allowedRanks  Json
-  createdAt     DateTime          @default(now())
-  owner         User              @relation(fields: [ownerId], references: [id])
-  members       Json
-}
-
 model User {
-  id          String   @id @default(cuid())
-  robloxId    String   @unique
+  id          String            @id @default(cuid())
   username    String
   avatarUrl   String?
-  workspaces  Json
-  isSuspended     Boolean  @default(false)
+  isSuspended Boolean           @default(false)
   suspendedReason String?
+  
+  // A user can own multiple workspaces
+  workspaces  Workspace[]
+  
+  // A user can be a member of many workspaces
+  memberships WorkspaceMember[]
 }
 
+model Workspace {
+  id          String            @id @default(cuid())
+  groupId     String
+  ownerId     String
+  createdAt   DateTime          @default(now())
+
+  // Relation to User (owner)
+  owner       User              @relation(fields: [ownerId], references: [id])
+
+  // Allowed ranks -> stored as text JSON instead of Int[]
+  allowedRanks String?          // will contain JSON: "[1,50,200]"
+
+  // Workspace members
+  members     WorkspaceMember[]
+}
 
 model WorkspaceMember {
-  id           String     @id @default(cuid())
-  workspaceId  String
-  robloxId     String
-  username     String
-  avatarUrl    String?
-  rankId       Int
-  rankName     String
-  updatedAt    DateTime   @updatedAt
+  id          String     @id @default(cuid())
+  workspaceId String
+  userId      String
+  rank        Int        @default(0)
 
-  workspace    Workspace  @relation(fields: [workspaceId], references: [id])
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
 }
 
 model BanLog {
-  id          String   @id @default(cuid())
-  userId      String
-  reason      String
-  createdAt   DateTime @default(now())
-  bannedBy    String   // moderator ID or "bot"
+  id        String   @id @default(cuid())
+  userId    String
+  reason    String
+  bannedBy  String   // moderator or "bot"
+  createdAt DateTime @default(now())
 }
