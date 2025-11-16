@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       
       const existing = await prisma.workspaceMember.findFirst({
-        where: { workspaceId: workspace.id, robloxId: robloxId.toString() },
+        where: { workspaceId: workspace.id, userId: userId.toString() },
       });
 
       if (hasAccess) {
