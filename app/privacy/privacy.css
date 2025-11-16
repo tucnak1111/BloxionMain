@@ -1,0 +1,70 @@
+.privacy-container {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.privacy-card {
+  width: 100%;
+  max-width: 700px;
+  background: #111;
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid #222;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 6px;
+}
+
+.updated {
+  text-align: center;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 26px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+ul {
+  padding-left: 20px;
+  margin-bottom: 14px;
+}
+
+li {
+  margin-bottom: 6px;
+  color: #ccc;
+}
+
+.button-row {
+  text-align: center;
+  margin-top: 35px;
+}
+
+.return-btn {
+  display: inline-block;
+  background: linear-gradient(to right, #00e6d9, #00b56b);
+  padding: 12px 26px;
+  border-radius: 10px;
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s ease-in-out;
+}
+
+.return-btn:hover {
+  opacity: 0.85;
+}
