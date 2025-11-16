@@ -26,7 +26,6 @@ model User {
   isSuspended     Boolean           @default(false)
   suspendedReason String?
   suspendedAt     DateTime?
-  robloxId        String            @unique
 
   // Workspaces they own
   workspaces      Workspace[]
