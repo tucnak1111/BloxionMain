@@ -1,5 +1,5 @@
 import axios from "axios";
-import { prisma } from "../../prisma/Client";
+import { prisma } from "../../../prisma/Client";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 
