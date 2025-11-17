@@ -16,7 +16,7 @@ export function middleware(req: NextRequest) {
   if (!isProtected) return NextResponse.next();
 
   if (!token) {
-    url.pathname = "/login";         // redirect to login
+    url.pathname = "/app/login";         // redirect to login
     return NextResponse.redirect(url);
   }
 
@@ -24,7 +24,7 @@ export function middleware(req: NextRequest) {
     jwt.verify(token, process.env.JWT_SECRET!);
     return NextResponse.next();
   } catch {
-    url.pathname = "/login";        // token invalid or expired
+    url.pathname = "/app/login";        // token invalid or expired
     return NextResponse.redirect(url);
   }
 }
