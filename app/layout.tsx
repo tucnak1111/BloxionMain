@@ -1,3 +1,3 @@
-export const metadata {
+export const metadata = {
   title: "Bloxion"
 }
