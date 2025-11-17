@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // 🎉 Otherwise → redirect to app/dashboard
-    return res.redirect("/");
+    return res.redirect("../../workspaces");
   } catch (err: any) {
     console.error("Auth callback error:", err.response?.data || err.message);
     return res.status(500).json({ error: "Authentication failed" });
