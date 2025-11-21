@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/Client"; 
 import { z } from "zod";
 
@@ -9,14 +9,12 @@ const WorkspaceSchema = z.object({
   allowedRanks: z.array(z.number()),
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed, ensure you're using POST" });
-  }
-
+export async function handler(req: Request) {
   try {
-    const body = WorkspaceSchema.parse(req.body);
-    const { userId, groupId, groupName, allowedRanks } = body;
+    const body = await req.json();
+    const data = WorkspaceSchema.parse(body);
+
+    const { userId, groupId, groupName, allowedRanks } = data;
 
     const workspace = await prisma.workspace.create({
       data: {
@@ -26,12 +24,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         allowedRanks,
       },
     });
-
-    return res.status(201).json({ success: true, workspace });
+    return NextResponse.json({ success: true, workspace }, {status: 201});
   } catch (err: any) {
-    console.error("Error creating workspace:", err);
-    return res
-      .status(400)
-      .json({ success: false, error: err.message || "Invalid request" });
+    console.error("Error: ", err);
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: err.message || "Invalid request",
+      },
+      {
+        status: 400
+      }
+    );
   }
 }
