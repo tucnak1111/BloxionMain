@@ -3,7 +3,10 @@ import { prisma } from "../../../../prisma/Client";
 export async function POST(req: Request) {
   const auth = req.headers.get("x-api-key");
   if (auth !== process.env.INTERNAL_BAN_API_KEY) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized; wrong key" }, { status: 401 });
+  }
+    if (auth == null) {
+    return NextResponse.json({ error: "Unauthorized; no key" }, { status: 401 });
   }
   const body = await req.json();
   const { robloxId, reason, bannedBy } = body;
