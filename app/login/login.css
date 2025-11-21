@@ -7,7 +7,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(36,46,77,.95), rgba(137,126,121,.95));
   font-family:
     -apple-system, BlinkMacSystemFont,
     "Inter",
