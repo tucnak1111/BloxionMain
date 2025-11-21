@@ -9,7 +9,7 @@ const WorkspaceSchema = z.object({
   allowedRanks: z.array(z.number()),
 });
 
-export async function handler(req: Request) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
     const data = WorkspaceSchema.parse(body);
