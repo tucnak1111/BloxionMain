@@ -1,19 +1,35 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/Client";
+
 export async function POST(req: Request) {
   const auth = req.headers.get("x-api-key");
-  const token = auth.replace("Bearer ", "");
+
+  if (auth == null) {
+    return NextResponse.json(
+      { error: "Unauthorized; no key" },
+      { status: 401 }
+    );
+  }
+
+  const token = auth.startsWith("Bearer ")
+    ? auth.slice("Bearer ".length)
+    : auth;
+
   if (token !== process.env.INTERNAL_BAN_API_KEY) {
-    return NextResponse.json({ error: "Unauthorized; wrong key" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized; wrong key" },
+      { status: 401 }
+    );
   }
-    if (token == null) {
-    return NextResponse.json({ error: "Unauthorized; no key" }, { status: 401 });
-  }
+
   const body = await req.json();
   const { robloxId, reason, bannedBy } = body;
 
   if (!robloxId || !reason) {
-    return NextResponse.json({ error: "Missing robloxId or reason" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing robloxId or reason" },
+      { status: 400 }
+    );
   }
 
   await prisma.user.update({
