@@ -2,10 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/Client";
 export async function POST(req: Request) {
   const auth = req.headers.get("x-api-key");
-  if (auth !== process.env.INTERNAL_BAN_API_KEY) {
+  const token = auth.replace("Bearer ", "");
+  if (token !== process.env.INTERNAL_BAN_API_KEY) {
     return NextResponse.json({ error: "Unauthorized; wrong key" }, { status: 401 });
   }
-    if (auth == null) {
+    if (token == null) {
     return NextResponse.json({ error: "Unauthorized; no key" }, { status: 401 });
   }
   const body = await req.json();
