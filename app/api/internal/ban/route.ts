@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/Client";
-export async function GET(req: Request) {
-  return Response.json({ message: "200 OK" });
-}
 export async function POST(req: Request) {
   const auth = req.headers.get("x-api-key");
   if (auth !== process.env.INTERNAL_BAN_API_KEY) {
