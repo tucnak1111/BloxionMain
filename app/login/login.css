@@ -5,6 +5,7 @@ html, body {
 
 body {
   display: flex;
+  background-color: #1e293b;
   align-items: center;
   justify-content: center;
   font-family:
