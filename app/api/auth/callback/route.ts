@@ -8,7 +8,8 @@ export async function GET(req: Request) {
   const code = searchParams.get("code");
 
   if (!code) {
-    return Response.json({ error: "Missing authorization code" }, { status: 400 });
+    headers.append("Location", "/error");
+    return new Response(null, { status: 302 });
   }
 
   try {
