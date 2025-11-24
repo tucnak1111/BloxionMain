@@ -11,8 +11,8 @@ export async function GET(req: Request) {
     headers.append("Location", "/error");
     return new Response(null, { status: 302 });
   }
-
-  try {
+  try { console.error("test"); }
+  //try {
     // Exchange authorization code for access token
     const tokenRes = await axios.post(
       "https://apis.roblox.com/oauth/v1/token",
