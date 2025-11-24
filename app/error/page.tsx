@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import "./login.css";
+import "./error.css";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
