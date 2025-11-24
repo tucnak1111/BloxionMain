@@ -66,7 +66,7 @@ export async function GET(req: Request) {
     );
 
     const headers = new Headers();
-    headers.append(
+    Headers.append(
       "Set-Cookie",
       `bloxion_auth=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
     );
@@ -74,17 +74,17 @@ export async function GET(req: Request) {
     // If suspended → redirect
     if (user.isSuspended) {
       const reason = encodeURIComponent(user.suspendedReason || "No reason provided");
-      headers.append("Location", `/suspended?reason=${reason}`);
+      Headers.append("Location", `/suspended?reason=${reason}`);
       return new Response(null, { status: 302, headers });
     }
 
     // Success → redirect
-    headers.append("Location", "/");
+    Headers.append("Location", "/");
     return new Response(null, { status: 302, headers });
 
   } catch (err: any) {
     console.error("Auth callback error:", err.response?.data || err.message);
-    headers.append("Location", "/error");
+    Headers.append("Location", "/error");
     return new Response(null, { status: 302 });
   }
 }
