@@ -1,6 +1,6 @@
 {
   "name": "bloxion",
-  "version": "1.0.0",
+  "version": "1.0.2Beta",
   "private": true,
   "scripts": {
     "dev": "next dev",
