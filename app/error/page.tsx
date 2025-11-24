@@ -24,7 +24,7 @@ export default function LoginPage() {
         rel="stylesheet"
       />
       <h1>An error has occurred</h1>
-      <p> An error has occured while authenticating. Please try again and if the issue presists, contact support.
+      <p> An error has occured while authenticating. Please try again and if the issue presists, contact support. </p>
       <button className="lf--submit" disabled={loading}>
         {loading ? (
           <span className="spinner" />
