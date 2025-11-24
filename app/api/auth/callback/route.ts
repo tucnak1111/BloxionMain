@@ -84,6 +84,6 @@ export async function GET(req: Request) {
 
   } catch (err: any) {
     console.error("Auth callback error:", err.response?.data || err.message);
-    return Response.json({ error: "Authentication failed" }, { status: 500 });
+    headers.append("Location", "/error";
   }
 }
