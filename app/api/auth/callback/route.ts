@@ -85,5 +85,6 @@ export async function GET(req: Request) {
   } catch (err: any) {
     console.error("Auth callback error:", err.response?.data || err.message);
     headers.append("Location", "/error");
+    return new Response(null, { status: 302 });
   }
 }
