@@ -1,6 +1,7 @@
 import axios from "axios";
 import { prisma } from "../../../../prisma/Client";
 import jwt from "jsonwebtoken";
+const headers = new Headers();
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -65,7 +66,7 @@ export async function GET(req: Request) {
       { expiresIn: "7d" }
     );
 
-    const headers = new Headers();
+    
     headers.append(
       "Set-Cookie",
       `bloxion_auth=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
