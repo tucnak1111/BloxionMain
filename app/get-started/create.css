@@ -21,9 +21,12 @@
 
 /* Group Grid */
 .group-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  display: flex; /* Changed from grid to flex */
+  overflow-x: auto; /* Enable horizontal scrolling */
   gap: 1.5em;
+  padding: 1em 0; /* Add some padding for scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .group-card {
@@ -34,6 +37,7 @@
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0; /* Prevent cards from shrinking */
 }
 
 .group-card:hover {
