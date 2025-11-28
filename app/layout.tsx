@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "../components/navbar.tsx";
-import "./not-allowed/style.css"; // Using existing global styles
+import "../components/navbar.css"; // Using existing global styles
 
 export const metadata: Metadata = {
   title: "Bloxion",
