@@ -100,7 +100,9 @@
 .sidebar-footer .user-info {
   gap: 0.75em;
   margin-top: auto;
-  padding-top: 1em
+  padding-top: 1em;
+  display: flex;
+  align-items: center
 }
 
 .sidebar-footer .navbar-logout {
