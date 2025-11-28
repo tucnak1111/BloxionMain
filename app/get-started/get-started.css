@@ -19,15 +19,20 @@
   color: #9ca3af;
 }
 
-/* Group Grid */
+/* New wrapper for the grid to handle scrolling */
+.group-grid-wrapper {
+  overflow-x: auto; /* Enable horizontal scrolling on the wrapper */
+  padding: 1em 0;
+}
+
+/* The grid itself now focuses only on layout */
 .group-grid {
   display: grid;
   grid-auto-flow: column; /* Lay out items in columns */
   grid-template-rows: repeat(2, 1fr); /* Create a 2-row grid */
-  overflow-x: auto; /* Enable horizontal scrolling */
   gap: 1.5em;
-  padding: 1em;
-  min-height: 400px; /* Ensure container has enough height for two rows */
+  padding-right: 1em; /* Add padding to the end of the scroll area */
+  width: max-content; /* Allow the grid to expand as needed */
 }
 
 .group-card {

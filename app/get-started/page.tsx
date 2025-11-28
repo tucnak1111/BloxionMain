@@ -121,13 +121,15 @@ export default function GetStartedPage() {
               <h1>Create Your First Workspace</h1>
               <p>Choose a Roblox group to get started.</p>
             </div>
-            <div className="group-grid">
-              {groups.map((group) => (
-                <div key={group.id} className="group-card" onClick={() => handleGroupSelect(group)}>
-                  <img src={group.iconUrl || "/default-group-icon.png"} alt={group.name} />
-                  <span>{group.name}</span>
-                </div>
-              ))}
+            <div className="group-grid-wrapper">
+              <div className="group-grid">
+                {groups.map((group) => (
+                  <div key={group.id} className="group-card" onClick={() => handleGroupSelect(group)}>
+                    <img src={group.iconUrl || "/default-group-icon.png"} alt={group.name} />
+                    <span>{group.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         );
