@@ -1,6 +1,11 @@
+body, .create-workspace-container {
+    padding-top: 100px
+}
+
 .create-workspace-container {
-  max-width: 900px;
-  margin: 2em auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 4em auto;
   padding: 2em;
 }
 
@@ -22,7 +27,7 @@
 /* A standard, responsive grid that wraps and scrolls vertically with the page */
 .group-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.5em;
 }
 
