@@ -104,7 +104,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     validateEnv();
 
-    const { code } = req.query;
+    const { code, error } = req.query;
+
+    // Handle OAuth cancellation or errors from Roblox
+    if (error) {
+      console.warn("OAuth flow failed or was cancelled by the user.", { error });
+      return res.redirect("/error");
+    }
+
     if (!code || typeof code !== "string") {
       return res.status(400).json({ error: "Missing or invalid authorization code" });
     }
