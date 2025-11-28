@@ -1,6 +1,6 @@
 "use client";
 
-import "./sidebar.css";
+import "./Sidebar.css";
 
 type User = {
   username: string | null;
