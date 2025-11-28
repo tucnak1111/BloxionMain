@@ -53,6 +53,7 @@ model Workspace {
   ownerId       String
   groupId       String
   allowedRanks  Int[]                                 // Who may access workspace
+  trackedRoleIds Int[] @default([])                   // Roles to track for logs/activity
   createdAt     DateTime          @default(now())
   groupName     String? 
   owner         User              @relation(fields: [ownerId], references: [id])

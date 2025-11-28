@@ -1,0 +1,113 @@
+.create-workspace-container {
+  max-width: 900px;
+  margin: 2em auto;
+  padding: 2em;
+}
+
+.step-header {
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.step-header h1 {
+  font-size: 2em;
+  margin-bottom: 0.25em;
+}
+
+.step-header p {
+  font-size: 1.1em;
+  color: #9ca3af;
+}
+
+/* Group Grid */
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.5em;
+}
+
+.group-card {
+  background: #293548;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1em;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.group-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.group-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  margin: 0 auto 1em;
+  background-color: #1e293b;
+}
+
+.group-card span {
+  font-size: 0.9em;
+  font-weight: 500;
+  display: block;
+  word-wrap: break-word;
+}
+
+/* Roles Selection */
+.roles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  background: #1e293b;
+  padding: 1.5em;
+  border-radius: 12px;
+}
+
+.role-item {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 0.75em;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.role-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.role-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #38bdf8;
+}
+
+.role-item label {
+  font-size: 1em;
+  cursor: pointer;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+}
+
+.btn {
+  padding: 0.8em 1.5em;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  background-color: #38bdf8;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background-color: #475569;
+}
