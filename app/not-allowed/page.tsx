@@ -47,7 +47,7 @@ export default async function SuspendedPage() {
 
   return (
     <div className="login-form">
-      <h1 style={{ color: "#ef4444", marginBottom: "0.5em" }}>
+      <h1 style={{ color: "#ef4444", marginBottom: "0.5em", fontStyle: "opaque" }}>
         Account Suspended
       </h1>
       <p style={{ color: "#d1d5db", marginTop: 0, marginBottom: "1.5em" }}>
@@ -57,7 +57,7 @@ export default async function SuspendedPage() {
       <div style={{ textAlign: "left" }}>
         <h2 style={{ fontSize: "1em", fontWeight: 600, color: "#f3f4f6" }}>Reason for Suspension:</h2>
         <div style={{ marginTop: "0.5em", borderRadius: "6px", background: "rgba(255, 255, 255, 0.1)", padding: "1em" }}>
-          <p style={{ margin: 0, color: "#d1d5db", fontStyle: "italic" }}>{user.suspendedReason || "No reason was provided."}</p>
+          <p style={{ margin: 0, color: "#d1d5db" }}>{user.suspendedReason || "No reason was provided."}</p>
         </div>
       </div>
 
