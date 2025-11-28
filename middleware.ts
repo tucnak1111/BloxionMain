@@ -29,5 +29,5 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // The matcher excludes API routes, static files, and the login page itself
-  matcher: ["/((?!api/|login|error|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api/.*|login|error|_next/static|_next/image|favicon.ico).*)"],
 };
