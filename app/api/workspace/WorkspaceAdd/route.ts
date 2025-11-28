@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/Client"; 
-import { z } from "zod";
+import { z } from "zod";npm
 
 const WorkspaceSchema = z.object({
   userId: z.string(),
