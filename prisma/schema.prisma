@@ -36,6 +36,12 @@ model User {
   // Discord link (optional)
   discord         DiscordLink?
 
+  // API Keys
+  apiKeys         ApiKey[]
+
+  // Logbooks they have authored
+  logbooks        Logbook[]
+
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 }
@@ -50,6 +56,7 @@ model Workspace {
   groupName     String? 
   owner         User              @relation(fields: [ownerId], references: [id])
   members       WorkspaceMember[]
+  logbooks      Logbook[]
 }
 
 // User's membership inside a workspace
@@ -59,6 +66,12 @@ model WorkspaceMember {
   userId      String
   rank        Int        @default(0)                 // Roblox group rank
   roles       String[]   @default([])                // Custom Bloxion roles
+
+  // Permissions
+  canPost     Boolean    @default(false)
+  canEdit     Boolean    @default(false)
+  canDelete   Boolean    @default(false)
+
   joinedAt    DateTime   @default(now())
   robloxId    String
   rankName    String?
@@ -87,4 +100,34 @@ model DiscordLink {
   linkedAt   DateTime @default(now())
 
   user       User     @relation(fields: [userId], references: [id])
+}
+
+// API Keys for programmatic access
+model ApiKey {
+  id          String   @id @default(cuid())
+  key         String   @unique // In production, this should be a hash of the key
+  userId      String
+  permissions String[] @default([]) // e.g., ["logbook:create", "logbook:read"]
+  createdAt   DateTime @default(now())
+  lastUsedAt  DateTime?
+
+  // Relation to User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Logbook entries within a workspace
+model Logbook {
+  id          String   @id @default(cuid())
+  title       String
+  content     String?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
 }
