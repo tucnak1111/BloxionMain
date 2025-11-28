@@ -1,9 +1,9 @@
 /* Sidebar Styling */
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 64px;
   left: 0;
-  height: 100%;
+  height: calc(100vh - 64px);
   width: 280px;
   z-index: 1001;
   padding: 1.5em;
@@ -99,7 +99,6 @@
 /* Re-using navbar styles for consistency */
 .sidebar-footer .user-info {
   gap: 0.75em;
-  top: 60px;
 }
 
 .sidebar-footer .navbar-logout {
