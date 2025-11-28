@@ -89,9 +89,10 @@ export default function GetStartedPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          userId: "placeholder_user_id", // Replace with actual user ID from auth context
           groupId: selectedGroup.id.toString(),
           groupName: selectedGroup.name,
-          trackedRoleIds: Array.from(selectedRoleIds),
+          allowedRanks: Array.from(selectedRoleIds),
         }),
       });
 
