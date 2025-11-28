@@ -64,6 +64,12 @@ export default async function SuspendedPage() {
 
         <p style={{ marginTop: "2em", fontSize: "0.8em", color: "#9ca3af" }}>If you believe this is a mistake, please contact support.</p>
         <a href="/api/auth/logout" className="lf--submit" style={{ textDecoration: 'none', marginTop: '1.5em', textAlign: 'center' }}>Log out</a>
+
+        <div style={{ marginTop: '2em', fontSize: '0.75em', color: '#9ca3af' }}>
+          <a href="https://docs.bloxion.xyz/legal/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Privacy Policy</a>
+          <span style={{ margin: '0 0.5em' }}>&bull;</span>
+          <a href="https://docs.bloxion.xyz/legal/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Terms of Service</a>
+        </div>
       </div>
     </>
   );
