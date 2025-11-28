@@ -124,7 +124,7 @@ export default function GetStartedPage() {
             <div className="group-grid">
               {groups.map((group) => (
                 <div key={group.id} className="group-card" onClick={() => handleGroupSelect(group)}>
-                  <img src={group.iconUrl || "/default-group-icon.png"} alt={group.name} />
+                  <img src={group.iconUrl?.replace("http://", "https://") || "/default-group-icon.png"} alt={group.name} />
                   <span>{group.name}</span>
                 </div>
               ))}
