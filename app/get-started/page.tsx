@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import "./create.css";
+import "./get-started.css";
 
 interface Group {
   id: number;
@@ -18,7 +18,7 @@ interface Role {
 
 type Step = "select-group" | "select-roles" | "creating";
 
-export default function CreateWorkspacePage() {
+export default function GetStartedPage() {
   const [step, setStep] = useState<Step>("select-group");
   const [groups, setGroups] = useState<Group[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
@@ -112,8 +112,8 @@ export default function CreateWorkspacePage() {
         return (
           <>
             <div className="step-header">
-              <h1>Select a Group</h1>
-              <p>Choose a Roblox group to create your workspace from.</p>
+              <h1>Create Your First Workspace</h1>
+              <p>Choose a Roblox group to get started.</p>
             </div>
             <div className="group-grid">
               {groups.map((group) => (
