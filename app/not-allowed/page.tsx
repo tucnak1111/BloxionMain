@@ -63,7 +63,7 @@ export default async function SuspendedPage() {
         </div>
 
         <p style={{ marginTop: "2em", fontSize: "0.8em", color: "#9ca3af" }}>If you believe this is a mistake, please contact support.</p>
-        <a href="/api/auth/logout" className="lf--submit" style={{ textDecoration: 'none', marginTop: '1.5em', width: '100%', textAlign: 'center' }}>Log out</a>
+        <a href="/api/auth/logout" className="lf--submit" style={{ textDecoration: 'none', marginTop: '1.5em', textAlign: 'center' }}>Log out</a>
       </div>
     </>
   );
