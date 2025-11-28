@@ -24,7 +24,6 @@ export default function LayoutWrapper({
 
   return (
     <>
-      {/* @ts-expect-error Server Component */}
       <Navbar toggleSidebar={toggleSidebar} user={user} />
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} user={user} />
       <main>{children}</main>
