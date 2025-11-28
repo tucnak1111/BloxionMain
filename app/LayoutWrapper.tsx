@@ -6,6 +6,7 @@ import Sidebar from "../components/sidebar";
 
 type User = {
   username: string | null;
+  displayName: string | null;
   avatarUrl: string | null;
 } | null;
 

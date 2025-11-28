@@ -18,7 +18,7 @@ async function getCurrentUser() {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     return await prisma.user.findUnique({
       where: { id: decoded.id },
-      select: { username: true, avatarUrl: true },
+      select: { username: true, avatarUrl: true, displayName: true },
     });
   } catch (error) {
     return null;

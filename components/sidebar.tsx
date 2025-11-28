@@ -4,6 +4,7 @@ import "./sidebar.css";
 
 type User = {
   username: string | null;
+  displayName: string | null;
   avatarUrl: string | null;
 } | null;
 
@@ -37,7 +38,9 @@ export default function Sidebar({ isOpen, toggleSidebar, user }: SidebarProps) {
           <div className="sidebar-footer">
             <div className="user-info">
               {user.avatarUrl && <img src={user.avatarUrl} alt="User Avatar" />}
-              <span>{user.username}</span>
+              <span>
+                {user.displayName || user.username} (@{user.username})
+              </span>
             </div>
             <a href="/api/auth/logout" className="navbar-logout">Logout</a>
           </div>
