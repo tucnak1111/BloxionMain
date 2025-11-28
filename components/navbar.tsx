@@ -1,5 +1,3 @@
-import "./sidebar.css"; // Re-using some styles
-
 type User = {
   username: string | null;
   avatarUrl: string | null;
