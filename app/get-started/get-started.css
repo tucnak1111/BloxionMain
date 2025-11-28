@@ -8,8 +8,8 @@ html, body {
 
 .create-workspace-container {
   width: 100%;
-  max-width: 1200px;
-  margin: 4em auto;
+  max-width: 900px;
+  margin: 2em auto;
   padding: 2em;
 }
 
@@ -73,6 +73,8 @@ html, body {
   background: #1e293b;
   padding: 1.5em;
   border-radius: 12px;
+  margin: 0 auto;
+  max-width: 600px
 }
 
 .role-item {
@@ -119,4 +121,10 @@ html, body {
 
 .btn-secondary {
   background-color: #475569;
+}
+
+.create-workspace-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center
 }
