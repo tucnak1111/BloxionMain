@@ -143,18 +143,20 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.redirect(new URL("../../workspaces", req.url));
   } catch (err: any) {
-    const errorMessage = err.response?.data || err.message || "An unknown error occurred";
     console.error("Authentication callback failed:", {
       message: err.message,
       responseData: err.response?.data,
       requestConfig: err.config,
     });
 
-    // Avoid exposing detailed internal errors to the client
-    const clientMessage = err.message === "Server configuration error."
-      ? err.message
-      : "Authentication failed due to a server error.";
-
-    return NextResponse.json({ error: clientMessage }, { status: 500 });
+    // --- TEMPORARY DEBUGGING: Exposing detailed errors to the client ---
+    // This is for debugging only. Revert to the original generic error message for production.
+    const detailedError = {
+      error: "Authentication callback failed. See details below.",
+      message: err.message,
+      responseData: err.response?.data,
+    };
+    return NextResponse.json(detailedError, { status: 500 });
+    // --- END TEMPORARY DEBUGGING ---
   }
 }
