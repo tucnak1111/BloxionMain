@@ -52,6 +52,7 @@ body::before {
 .lf--submit {
   display: block;
   padding: 1em;
+  margin: 0 auto;
   border: none;
   border-radius: 6px;
   background: linear-gradient(to right, #35c3c1, #00d6b7);
