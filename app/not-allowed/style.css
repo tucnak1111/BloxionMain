@@ -61,6 +61,7 @@ body::before {
   letter-spacing: .5px;
   cursor: pointer;
   transition: all .2s ease;
+  align-items: center;
 }
 
 .lf--submit:hover {
