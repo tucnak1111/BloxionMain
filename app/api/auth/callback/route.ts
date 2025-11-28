@@ -149,14 +149,11 @@ export async function GET(req: NextRequest) {
       requestConfig: err.config,
     });
 
-    // --- TEMPORARY DEBUGGING: Exposing detailed errors to the client ---
-    // This is for debugging only. Revert to the original generic error message for production.
-    const detailedError = {
-      error: "Authentication callback failed. See details below.",
-      message: err.message,
-      responseData: err.response?.data,
+
+    const error = {
+      error: "Authentication callback failed. Contact support.",
     };
-    return NextResponse.json(detailedError, { status: 500 });
-    // --- END TEMPORARY DEBUGGING ---
+    return NextResponse.json(error, { status: 500 });
+
   }
 }
