@@ -50,24 +50,42 @@ export async function POST(req: Request) {
     );
   }
 
-  // 7. Update user
-  await prisma.user.update({
-    where: { robloxId },
-    data: {
-      isSuspended: true,
-      suspendedReason: reason,
-    },
-  });
+  try {
+    // 7. Find the user by their Roblox ID
+    const userToBan = await prisma.user.findUnique({
+      where: { robloxId },
+    });
 
-  // 8. Add to ban log
-  await prisma.banLog.create({
-    data: {
-      userId: robloxId,
-      reason,
-      bannedBy: bannedBy || "bot",
-    },
-  });
+    // If the user doesn't exist in our database, we can't ban them.
+    if (!userToBan) {
+      return NextResponse.json({ error: `User with robloxId '${robloxId}' not found.` }, { status: 404 });
+    }
 
-  // 9. Return success
-  return NextResponse.json({ success: true });
+    // 8. Perform the ban and logging in a single transaction
+    await prisma.$transaction([
+      // Update the user record
+      prisma.user.update({
+        where: { id: userToBan.id },
+        data: {
+          isSuspended: true,
+          suspendedReason: reason,
+          suspendedAt: new Date(),
+        },
+      }),
+      // Create a corresponding log entry using the user's primary ID
+      prisma.banLog.create({
+        data: {
+          userId: userToBan.id, // Use the user's CUID for consistency
+          reason,
+          bannedBy: bannedBy || "bot",
+        },
+      }),
+    ]);
+
+    // 9. Return success
+    return NextResponse.json({ success: true, message: `User ${userToBan.username} has been banned.` });
+  } catch (error: any) {
+    console.error("Failed to process ban:", error);
+    return NextResponse.json({ error: "An internal database error occurred." }, { status: 500 });
+  }
 }
