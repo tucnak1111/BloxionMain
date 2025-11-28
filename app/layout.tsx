@@ -66,6 +66,9 @@ async function Navbar() {
 export const metadata: Metadata = {
   title: "Bloxion",
   description: "Your workspace for everything.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
