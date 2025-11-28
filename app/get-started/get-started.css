@@ -21,12 +21,13 @@
 
 /* Group Grid */
 .group-grid {
-  display: flex; /* Changed from grid to flex */
+  display: grid;
+  grid-auto-flow: column; /* Lay out items in columns */
+  grid-template-rows: repeat(2, 1fr); /* Create a 2-row grid */
   overflow-x: auto; /* Enable horizontal scrolling */
   gap: 1.5em;
-  padding: 1em 0; /* Add some padding for scrollbar */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  padding: 1em;
+  min-height: 400px; /* Ensure container has enough height for two rows */
 }
 
 .group-card {
@@ -37,7 +38,6 @@
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  flex-shrink: 0; /* Prevent cards from shrinking */
 }
 
 .group-card:hover {
