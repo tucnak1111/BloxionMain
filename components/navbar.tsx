@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { prisma } from "../prisma/Client";
+import "./sidebar.css"; // Re-using some styles
 import "./navbar.css";
 
 interface JwtPayload extends jwt.JwtPayload {
@@ -30,15 +31,26 @@ async function getCurrentUser() {
   }
 }
 
-export default async function Navbar() {
+interface NavbarProps {
+  toggleSidebar?: () => void;
+}
+
+export default async function Navbar({ toggleSidebar }: NavbarProps) {
   const user = await getCurrentUser();
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <a href="/workspaces" className="navbar-brand">
-          Bloxion
-        </a>
+        <div className="navbar-left">
+          {toggleSidebar && (
+            <button onClick={toggleSidebar} className="sidebar-toggle-btn">
+              &#9776;
+            </button>
+          )}
+          <a href="/workspaces" className="navbar-brand">
+            Bloxion
+          </a>
+        </div>
 
         <div className="navbar-user">
           {user ? (
