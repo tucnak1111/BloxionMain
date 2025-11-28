@@ -69,7 +69,7 @@ export default function Navbar({ toggleSidebar, openSettings, user }: NavbarProp
               )}
             </>
           ) : (
-            <a href="/api/auth/login" className="lf--submit" style={{ textDecoration: 'none' }}>
+            <a href="/api/auth/redirect" className="lf--submit" style={{ textDecoration: 'none' }}>
               Login
             </a>
           )}
