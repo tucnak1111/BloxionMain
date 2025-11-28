@@ -32,10 +32,10 @@ export async function GET() {
     if (!robloxGroupsResponse.ok) {
       throw new Error("Failed to fetch groups from Roblox");
     }
-    const { data: groupsData } = await robloxGroupsResponse.json();
+    const robloxData = await robloxGroupsResponse.json();
 
     // Fetch group icons
-    const groupIds = groupsData.map((g: any) => g.group.id);
+    const groupIds = robloxData.data.map((g: any) => g.group.id);
     const thumbnailsResponse = await fetch(
       `https://thumbnails.roblox.com/v1/groups/icons?groupIds=${groupIds.join(",")}&size=150x150&format=Png&isCircular=false`
     );
@@ -53,6 +53,7 @@ export async function GET() {
 
     return NextResponse.json(groups);
   } catch (error) {
+    console.error("Error in /api/roblox/groups:", error); // Added for better server-side logging
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
