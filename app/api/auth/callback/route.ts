@@ -136,7 +136,7 @@ export async function GET(req: NextRequest) {
     // 5. Redirect based on user suspension status
     if (user.isSuspended) {
       const reason = encodeURIComponent(user.suspendedReason || "No reason provided");
-      const suspendedUrl = new URL("/suspended", req.url);
+      const suspendedUrl = new URL("/not-allowed", req.url);
       suspendedUrl.searchParams.set("reason", reason);
       return NextResponse.redirect(suspendedUrl);
     }
