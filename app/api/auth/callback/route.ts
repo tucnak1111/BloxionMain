@@ -99,6 +99,11 @@ function createSession(user: any) {
 }
 
 export async function GET(req: NextRequest) {
+  // --- TEMPORARY DEBUGGING ---
+  // This will print the secret to your SERVER console when a user logs in.
+  // Compare this output with the value in your .env.local file.
+  console.log("DEBUG: JWT_SECRET used for signing:", JWT_SECRET);
+  // ---------------------------
   try {
     validateEnv();
 
