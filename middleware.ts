@@ -2,37 +2,47 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 
+// Define the public routes that don't require authentication
+const publicRoutes = ["/login", "/api/auth/callback", "/suspended"];
+
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  const token = req.cookies.get("bloxion_auth")?.value;
+  const path = req.nextUrl.pathname;
 
-  // Public routes (do NOT force redirect here)
-  const publicRoutes = ["/", "/login", "/api/auth/roblox/callback", "/api/auth/logout"];
-  const isPublic = publicRoutes.some((path) => pathname.startsWith(path));
+  // Check if the route is public
+  const isPublicRoute = publicRoutes.some((publicPath) =>
+    path.startsWith(publicPath)
+  );
 
-  if (isPublic) {
+  if (isPublicRoute) {
     return NextResponse.next();
   }
 
-  // Auth required for everything under /app
-  if (pathname.startsWith("/app")) {
-    if (!token) {
-      const loginUrl = new URL("/login", req.url);
-      return NextResponse.redirect(loginUrl);
-    }
+  // 1. Get the token from the cookie
+  const cookie = req.cookies.get("bloxion_auth");
+  const token = cookie?.value;
 
-    try {
-      jwt.verify(token, process.env.JWT_SECRET!);
-      return NextResponse.next();
-    } catch {
-      const loginUrl = new URL("/login", req.url);
-      return NextResponse.redirect(loginUrl);
-    }
+  if (!token) {
+    // Redirect to login if no token is found
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  return NextResponse.next();
+  // 2. Verify the token
+  try {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error("JWT_SECRET is not defined in environment variables.");
+    }
+    jwt.verify(token, secret);
+    // If token is valid, proceed to the requested page
+    return NextResponse.next();
+  } catch (error) {
+    console.error("JWT Verification Error:", error);
+    // Redirect to login if token is invalid or expired
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 }
 
+// 3. Configure the matcher
 export const config = {
-  matcher: ["/((?!_next|favicon.ico).*)"], // match all routes except Next.js internals
+  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico).*)"],
 };
