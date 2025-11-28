@@ -8,7 +8,7 @@ export default function LoginPage() {
 
   const handleLogin = () => {
     setLoading(true);
-    window.location.href = "/../api/auth/redirect";
+    window.location.href = "/../login";
   };
 
   return (
@@ -23,8 +23,8 @@ export default function LoginPage() {
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
         rel="stylesheet"
       />
-      <h1>An error has occurred</h1>
-      <p> An error has occured while authenticating. Please try again and if the issue presists, contact support. </p>
+      <h1>Authentication error</h1>
+      <p> Something went wrong during authentication. Please try again and contact support if the issue is repeated. </p>
       <button className="lf--submit" disabled={loading}>
         {loading ? (
           <span className="spinner" />
