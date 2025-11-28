@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { prisma } from "../prisma/Client";
 import "./not-allowed/style.css"; // Global styles for body and background
-import "../components/navbar.css"; // Styles for the inlined navbar
 
 interface JwtPayload extends jwt.JwtPayload {
   id: string;
