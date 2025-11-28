@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+export default function handler(req: any, res: any) {
   res.setHeader(
     "Set-Cookie",
     `bloxion_auth=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
