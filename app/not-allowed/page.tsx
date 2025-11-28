@@ -46,22 +46,25 @@ export default async function SuspendedPage() {
   }
 
   return (
-    <div className="login-form">
-      <h1 style={{ color: "#ef4444", marginBottom: "0.5em", fontStyle: "opaque" }}>
-        Account Suspended
-      </h1>
-      <p style={{ color: "#d1d5db", marginTop: 0, marginBottom: "1.5em" }}>
-        Your access to Bloxion has been restricted.
-      </p>
+    <>
+      <div className="login-form">
+        <h1 style={{ color: "#ef4444", marginBottom: "0.5em", fontWeight: 650 }}>
+          Account Suspended
+        </h1>
+        <p style={{ color: "#d1d5db", marginTop: 0, marginBottom: "1.5em" }}>
+          Your access to Bloxion has been restricted.
+        </p>
 
-      <div style={{ textAlign: "left" }}>
-        <h2 style={{ fontSize: "1em", fontWeight: 600, color: "#f3f4f6" }}>Reason for Suspension:</h2>
-        <div style={{ marginTop: "0.5em", borderRadius: "6px", background: "rgba(255, 255, 255, 0.1)", padding: "1em" }}>
-          <p style={{ margin: 0, color: "#d1d5db" }}>{user.suspendedReason || "No reason was provided."}</p>
+        <div style={{ textAlign: "left" }}>
+          <h2 style={{ fontSize: "1em", fontWeight: 600, color: "#f3f4f6" }}>Reason for Suspension:</h2>
+          <div style={{ marginTop: "0.5em", borderRadius: "6px", background: "rgba(255, 255, 255, 0.1)", padding: "1em" }}>
+            <p style={{ margin: 0, color: "#d1d5db" }}>{user.suspendedReason || "No reason was provided."}</p>
+          </div>
         </div>
-      </div>
 
-      <p style={{ marginTop: "2em", fontSize: "0.8em", color: "#9ca3af" }}>If you believe this is a mistake, please contact support.</p>
-    </div>
+        <p style={{ marginTop: "2em", fontSize: "0.8em", color: "#9ca3af" }}>If you believe this is a mistake, please contact support.</p>
+        <a href="/api/auth/logout" className="lf--submit" style={{ textDecoration: 'none', marginTop: '1.5em' }}>Log out</a>
+      </div>
+    </>
   );
 }
