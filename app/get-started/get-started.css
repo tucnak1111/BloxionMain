@@ -2,6 +2,10 @@ body, .create-workspace-container {
     padding-top: 100px
 }
 
+html, body {
+    overflow-x: hidden
+}
+
 .create-workspace-container {
   width: 100%;
   max-width: 1200px;
