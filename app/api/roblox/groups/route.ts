@@ -48,7 +48,7 @@ export async function GET() {
 
     // Combine group data with icons
     const groups = robloxData.data.map((g: any) => {
-      const thumbnail = thumbnailsData?.find((t: any) => t.targetId === g.id);
+      const thumbnail = thumbnailsData?.find((t: any) => t.targetId === g.group.id);
       return {
         id: g.group.id,
         name: g.group.name,
