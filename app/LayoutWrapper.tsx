@@ -1,4 +1,4 @@
- to"use client";
+"use client";
 
 import { useState } from "react";
 import Navbar from "../components/navbar"; // Assuming navbar is now a separate component
@@ -9,6 +9,13 @@ type User = {
   avatarUrl: string | null;
 } | null;
 
+export default function LayoutWrapper({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user: User;
+}) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
