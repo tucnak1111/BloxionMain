@@ -11,10 +11,11 @@ type User = {
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
+  openSettings: () => void;
   user: User;
 }
 
-export default function Sidebar({ isOpen, toggleSidebar, user }: SidebarProps) {
+export default function Sidebar({ isOpen, toggleSidebar, openSettings, user }: SidebarProps) {
   return (
     <>
       <div className={`sidebar-overlay ${isOpen ? "open" : ""}`} onClick={toggleSidebar}></div>
@@ -27,7 +28,9 @@ export default function Sidebar({ isOpen, toggleSidebar, user }: SidebarProps) {
           {user && (
             <>
               <a href="/workspaces">Workspaces</a>
-              <a href="/settings">Settings</a>
+              <button onClick={openSettings} style={{all: 'unset', cursor: 'pointer'}}>
+                <a role="button">Settings</a>
+              </button>
               <a href="/profile">Profile</a>
               <a href="/billing">Billing</a>
             </>

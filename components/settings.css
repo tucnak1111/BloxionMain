@@ -1,0 +1,96 @@
+/* Settings Overlay */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* Dimmed background */
+  z-index: 2000; /* Higher than sidebar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Settings Modal Box */
+.settings-modal {
+  width: 80vw;
+  height: 75vh;
+  max-width: 1200px;
+  background: #1e293b; /* Dark slate background */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+
+  /* Animation for entry */
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.settings-overlay.open .settings-modal {
+  transform: scale(1);
+}
+
+/* Close button for the modal */
+.settings-close-btn {
+  position: absolute;
+  top: 1em;
+  right: 1.5em;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 2em;
+  cursor: pointer;
+  line-height: 1;
+  z-index: 10;
+}
+
+/* Settings Internal Sidebar */
+.settings-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: rgba(15, 23, 42, 0.5); /* Even darker for contrast */
+  padding: 2em 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-sidebar button {
+  width: 100%;
+  padding: 0.8em 2em;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  text-align: left;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.settings-sidebar button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.settings-sidebar button.active {
+  color: #fff;
+  font-weight: 600;
+  border-left-color: #38bdf8; /* Highlight color */
+}
+
+/* Settings Main Content Area */
+.settings-content {
+  flex-grow: 1;
+  padding: 2em 3em;
+  overflow-y: auto;
+}
