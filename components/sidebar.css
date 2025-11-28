@@ -99,6 +99,7 @@
 /* Re-using navbar styles for consistency */
 .sidebar-footer .user-info {
   gap: 0.75em;
+  top: 60px;
 }
 
 .sidebar-footer .navbar-logout {
