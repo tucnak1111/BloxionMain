@@ -1,84 +1,147 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 import axios from "axios";
 import { prisma } from "../../../../prisma/Client";
+import { Workspace, WorkspaceMember } from "@prisma/client";
 
-export async function POST(req: Request) {
-  try {
-    const { robloxId } = await req.json();
-    if (!robloxId) {
-      return NextResponse.json({ error: "Missing robloxId" }, { status: 400 });
-    }
+interface JwtPayload extends jwt.JwtPayload {
+  id: string;
+}
 
-    // Get Roblox group roles
-    const { data } = await axios.get(
-      `https://groups.roblox.com/v2/users/${robloxId}/groups/roles`
-    );
+interface RobloxGroup {
+  group: {
+    id: number;
+    name: string;
+  };
+  role: {
+    id: number;
+    name: string;
+    rank: number;
+  };
+}
 
-    const userGroups = data?.data ?? [];
-    const groupIds = userGroups.map((g: any) => g.group.id.toString());
+/**
+ * Fetches a user's group roles from the Roblox API.
+ */
+async function getRobloxGroupRoles(robloxId: string): Promise<RobloxGroup[]> {
+  const url = `https://groups.roblox.com/v2/users/${robloxId}/groups/roles`;
+  const { data } = await axios.get(url);
+  return data?.data ?? [];
+}
 
-    // Find workspaces matching groups
-    const workspaces = await prisma.workspace.findMany({
+/**
+ * Syncs a user's workspace memberships based on their Roblox group roles.
+ */
+async function syncWorkspacesForUser(
+  userId: string,
+  robloxId: string,
+  userGroups: RobloxGroup[]
+): Promise<string[]> {
+  const groupIds = userGroups.map((g) => g.group.id.toString());
+
+  // 1. Find all workspaces that match the user's groups and all their existing memberships.
+  const [relevantWorkspaces, existingMemberships] = await Promise.all([
+    prisma.workspace.findMany({
       where: { groupId: { in: groupIds } },
-    });
+    }),
+    prisma.workspaceMember.findMany({
+      where: { userId: userId },
+    }),
+  ]);
 
-    const updated: string[] = [];
+  const updatedWorkspaceNames: string[] = [];
+  const transactions = [];
 
-    for (const workspace of workspaces) {
-      const match = userGroups.find(
-        (g: any) => g.group.id.toString() === workspace.groupId
-      );
-      if (!match) continue;
+  for (const workspace of relevantWorkspaces) {
+    const groupMatch = userGroups.find((g) => g.group.id.toString() === workspace.groupId);
+    if (!groupMatch) continue;
 
-      const userRank = match.role.rank;
-      const rankName = match.role.name;
-      const allowed = workspace.allowedRanks.includes(userRank);
+    const userRank = groupMatch.role.rank;
+    const rankName = groupMatch.role.name;
+    const isAllowed = workspace.allowedRanks.includes(userRank);
 
-      // Find existing membership
-      const existing = await prisma.workspaceMember.findFirst({
-        where: { workspaceId: workspace.id, robloxId: robloxId.toString() },
-      });
+    const existingMembership = existingMemberships.find((m) => m.workspaceId === workspace.id);
 
-      if (allowed) {
-        // Upsert membership
-        if (existing) {
-          await prisma.workspaceMember.update({
-            where: { id: existing.id },
-            data: { rank: userRank, rankName },
-          });
-        } else {
-          // Find linked user if exists
-          const user = await prisma.user.findUnique({
-            where: { robloxId: robloxId.toString() },
-          });
-
-          await prisma.workspaceMember.create({
+    if (isAllowed) {
+      // If user is allowed, create or update their membership.
+      if (existingMembership) {
+        // Update if rank has changed.
+        if (existingMembership.rank !== userRank) {
+          transactions.push(
+            prisma.workspaceMember.update({
+              where: { id: existingMembership.id },
+              data: { rank: userRank, rankName },
+            })
+          );
+        }
+      } else {
+        // Create new membership.
+        transactions.push(
+          prisma.workspaceMember.create({
             data: {
               workspaceId: workspace.id,
-              userId: user ? user.id : workspace.ownerId, // fallback if user not registered yet
-              robloxId: robloxId.toString(),
+              userId: userId,
+              robloxId: robloxId,
               rank: userRank,
               rankName,
-              roles: [],
             },
-          });
-        }
-        updated.push(workspace.groupName ?? workspace.id);
-      } else if (existing) {
-        await prisma.workspaceMember.delete({ where: { id: existing.id } });
+          })
+        );
       }
+      updatedWorkspaceNames.push(workspace.groupName ?? workspace.id);
+    } else if (existingMembership) {
+      // If user is no longer allowed but has a membership, remove it.
+      transactions.push(prisma.workspaceMember.delete({ where: { id: existingMembership.id } }));
     }
+  }
+
+  // Execute all database operations in a single transaction.
+  if (transactions.length > 0) {
+    await prisma.$transaction(transactions);
+  }
+
+  return updatedWorkspaceNames;
+}
+
+export async function POST() {
+  const token = cookies().get("bloxion_auth")?.value;
+  if (!token) {
+    return NextResponse.json({ error: "Not logged in" }, { status: 401 });
+  }
+
+  try {
+    // 1. Authenticate the user and get their Bloxion and Roblox IDs.
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+      select: { id: true, robloxId: true },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // 2. Fetch the user's groups from Roblox.
+    const userGroups = await getRobloxGroupRoles(user.robloxId);
+
+    // 3. Process memberships and update the database.
+    const updatedWorkspaces = await syncWorkspacesForUser(user.id, user.robloxId, userGroups);
 
     return NextResponse.json({
       success: true,
-      updatedCount: updated.length,
-      updatedWorkspaces: updated,
+      updatedCount: updatedWorkspaces.length,
+      updatedWorkspaces: updatedWorkspaces,
     });
   } catch (err: any) {
-    console.error("Role sync failed:", err);
-    return NextResponse.json(
-      { error: "Internal server error", detail: err.message },
-      { status: 500 }
-    );
+    if (err instanceof jwt.JsonWebTokenError) {
+      return NextResponse.json({ error: "Invalid or expired session" }, { status: 403 });
+    }
+    if (axios.isAxiosError(err)) {
+      console.error("Roblox API request failed during role sync:", err.response?.data || err.message);
+      return NextResponse.json({ error: "Failed to fetch roles from Roblox." }, { status: 502 });
+    }
+    console.error("Role sync failed:", err.message);
+    return NextResponse.json({ error: "An internal server error occurred." }, { status: 500 });
   }
 }
