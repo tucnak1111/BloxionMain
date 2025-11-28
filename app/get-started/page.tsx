@@ -30,14 +30,20 @@ export default function GetStartedPage() {
   // Fetch user's groups on initial load
   useEffect(() => {
     const fetchGroups = async () => {
+      console.log("Attempting to fetch groups...");
       try {
         const response = await fetch("/api/roblox/groups");
+        console.log("API Response Status:", response.status);
+
         if (response.ok) {
           const data = await response.json();
+          console.log("Fetched groups data:", data);
           setGroups(data);
+        } else {
+          console.error("API responded with an error:", response.statusText);
         }
       } catch (error) {
-        console.error("Failed to fetch groups:", error);
+        console.error("Failed to fetch groups (catch block):", error);
       } finally {
         setIsLoading(false);
       }
