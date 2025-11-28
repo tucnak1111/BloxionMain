@@ -1,5 +1,4 @@
 import "./sidebar.css"; // Re-using some styles
-import "./navbar.css";
 
 type User = {
   username: string | null;
