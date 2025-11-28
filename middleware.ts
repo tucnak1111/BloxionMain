@@ -1,48 +1,28 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
 
-// Define the public routes that don't require authentication
-const publicRoutes = ["/login", "/api/auth/callback", "/not-allowed", "/error"];
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get("bloxion_auth")?.value;
+  const { pathname } = request.nextUrl;
 
-export function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-
-  // Check if the route is public
-  const isPublicRoute = publicRoutes.some((publicPath) =>
-    path.startsWith(publicPath)
-  );
-
-  if (isPublicRoute) {
-    return NextResponse.next();
-  }
-
-  // 1. Get the token from the cookie
-  const cookie = req.cookies.get("bloxion_auth");
-  const token = cookie?.value;
-
-  if (!token) {
-    // Redirect to login if no token is found
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  // 2. Verify the token
-  try {
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      throw new Error("JWT_SECRET is not defined in environment variables.");
+  // If the user is authenticated
+  if (token) {
+    // If they try to access the login page, redirect them to workspaces
+    if (pathname === "/login") {
+      return NextResponse.redirect(new URL("/workspaces", request.url));
     }
-    jwt.verify(token, secret);
-    // If token is valid, proceed to the requested page
     return NextResponse.next();
-  } catch (error) {
-    console.error("JWT Verification Error:", error);
-    // Redirect to login if token is invalid or expired
-    return NextResponse.redirect(new URL("/login", req.url));
   }
+
+  // If the user is not authenticated and not on the login page, redirect them
+  if (!token && pathname !== "/login") {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  return NextResponse.next();
 }
 
-// 3. Configure the matcher
 export const config = {
-  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico).*)"],
+  // The matcher excludes API routes, static files, and the login page itself
+  matcher: ["/((?!api/auth/callback|login|_next/static|_next/image|favicon.ico).*)"],
 };
