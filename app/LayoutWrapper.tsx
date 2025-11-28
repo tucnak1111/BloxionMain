@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Navbar from "../components/navbar"; // Assuming navbar is now a separate component
-import Sidebar from "./sidebar/sidebar";
+import Sidebar from "../components/Sidebar";
 
 type User = {
   username: string | null;
