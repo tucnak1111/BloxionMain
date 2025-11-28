@@ -1,0 +1,105 @@
+/* Main Navbar styles */
+.navbar {
+  padding: 0 2em;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.navbar-brand {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+}
+
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+/* User section in Navbar */
+.navbar-user {
+  position: relative; /* Crucial for dropdown positioning */
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.user-info:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-info img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.user-info span {
+  color: #cbd5e1;
+  font-size: 0.9em;
+}
+
+/* Dropdown Menu */
+.user-dropdown {
+  position: absolute;
+  top: 120%; /* Position below the user info */
+  right: 0;
+  background: #293548;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  width: 200px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  overflow: hidden;
+  padding: 0.5em 0;
+}
+
+.user-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 0.75em 1.5em;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-dropdown button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}

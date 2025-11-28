@@ -31,7 +31,7 @@ export default function LayoutWrapper({
 
   return (
     <>
-      <Navbar toggleSidebar={toggleSidebar} user={user} />
+      <Navbar toggleSidebar={toggleSidebar} user={user} openSettings={openSettings} />
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} user={user} openSettings={openSettings} />
       <main>{children}</main>
       <Settings isOpen={isSettingsOpen} onClose={() => setSettingsOpen(false)} />
