@@ -85,7 +85,7 @@ export default function GetStartedPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/workspaces/create", {
+      const response = await fetch("/api/workspace/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
