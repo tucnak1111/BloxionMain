@@ -1,43 +1,17 @@
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
-import { prisma } from "../prisma/Client";
 import "./sidebar.css"; // Re-using some styles
 import "./navbar.css";
 
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
-
-/**
- * Fetches the current user's data for the navbar.
- */
-async function getCurrentUser() {
-  const token = cookies().get("bloxion_auth")?.value;
-  if (!token) return null;
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: {
-        username: true,
-        avatarUrl: true,
-      },
-    });
-    return user;
-  } catch (error) {
-    // Invalid token, treat as logged out
-    return null;
-  }
-}
+type User = {
+  username: string | null;
+  avatarUrl: string | null;
+} | null;
 
 interface NavbarProps {
   toggleSidebar?: () => void;
+  user: User;
 }
 
-export default async function Navbar({ toggleSidebar }: NavbarProps) {
-  const user = await getCurrentUser();
-
+export default function Navbar({ toggleSidebar, user }: NavbarProps) {
   return (
     <nav className="navbar">
       <div className="navbar-container">
