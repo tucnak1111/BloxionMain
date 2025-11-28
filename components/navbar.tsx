@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import "./navbar.css";
+import "./Navbar.css";
 
 type User = {
   username: string | null;
