@@ -133,3 +133,14 @@ model Logbook {
 
   @@index([workspaceId])
 }
+
+model global_notices
+	id String @id @default(uuid())
+	active Boolean @default(true)
+	type String 
+  text String
+	author_name String?
+  author_avatar String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
