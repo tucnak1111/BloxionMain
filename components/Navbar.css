@@ -1,16 +1,21 @@
-/* Main Navbar styles */
+/* General Navbar Styling */
 .navbar {
-  padding: 0 2em;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: fixed;
-  top: 0;
+  top: 1em;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 1200px;
   z-index: 1000;
-  overflow: visible;
+  padding: 0.75em 1.5em;
+
+  /* Glassmorphism Effect */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 .navbar-container {
