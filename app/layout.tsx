@@ -41,6 +41,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
+      <script src="https://uptime.betterstack.com/widgets/announcement.js" data-id="231533" async="async" type="text/javascript"></script>
        <GlobalNotice />
         <LayoutWrapper user={user}>{children}</LayoutWrapper>
       </body>
