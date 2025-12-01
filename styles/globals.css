@@ -6,3 +6,7 @@ body {
     "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
     "Helvetica Neue", sans-serif;
 }
+
+main {
+  margin-top: 120px !important;
+}
