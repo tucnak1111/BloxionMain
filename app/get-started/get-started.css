@@ -1,9 +1,7 @@
 html, body {
     overflow-x: hidden
 }
-body {
-    padding-top: 60px; /* Add padding to body to offset fixed navbar height */
-}
+
 
 .create-workspace-container {
   width: 100%;
@@ -12,6 +10,7 @@ body {
   padding: 2em;
   display: flex;
   flex-direction: column;
+  padding-top: 60px;
 }
 
 .step-header {
