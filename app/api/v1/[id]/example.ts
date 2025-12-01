@@ -1,4 +1,4 @@
-//import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 //import { prisma } from "../../../../../prisma/Client";
 
 //export async function GET(req: Request){
