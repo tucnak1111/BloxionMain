@@ -6,7 +6,7 @@ html, body {
 .create-workspace-container {
   width: 100%;
   max-width: 900px;
-  margin: 2em auto; /* Reset margin, as body padding now handles spacing */
+  margin: 120px auto 2em; /* Reset margin, as body padding now handles spacing */
   padding: 2em;
   display: flex;
   flex-direction: column;
