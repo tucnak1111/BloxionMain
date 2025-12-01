@@ -6,7 +6,7 @@ import "./not-allowed/style.css"; // Global styles for body and background
 import "../components/sidebar.css";
 import "../components/Navbar.css";
 import LayoutWrapper from "./LayoutWrapper";
-
+import GlobalNotice from "../components/GlobalNotice";
 interface JwtPayload extends jwt.JwtPayload {
   id: string;
 }
@@ -41,6 +41,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
+       <GlobalNotice />
         <LayoutWrapper user={user}>{children}</LayoutWrapper>
       </body>
     </html>
