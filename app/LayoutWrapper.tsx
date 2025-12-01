@@ -33,7 +33,7 @@ export default function LayoutWrapper({
     <>
       <Navbar toggleSidebar={toggleSidebar} user={user} openSettings={openSettings} />
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} user={user} openSettings={openSettings} />
-      <main>{children}</main>
+      <main style={{ paddingTop: "60px" }}>{children}</main>
       <Settings isOpen={isSettingsOpen} onClose={() => setSettingsOpen(false)} />
     </>
   );
