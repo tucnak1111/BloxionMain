@@ -5,7 +5,7 @@ export default function Loading() {
     
     
     <div className="loading-overlay">
-      Bloxion
+      <div className="title"> Bloxion </div>
       <div className="spinner"></div>
     </div>
   );
