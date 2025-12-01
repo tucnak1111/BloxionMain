@@ -5,8 +5,11 @@ html, body {
 .create-workspace-container {
   width: 100%;
   max-width: 900px;
-  margin: 2em auto;
-  padding: 100px 2em 2em 2em; /* Added 100px top padding to push content below navbar */
+  margin: 100px auto 2em auto; /* Add margin-top to push content below fixed navbar */
+  padding: 2em; /* Revert padding to original value, as margin handles top spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .step-header {
