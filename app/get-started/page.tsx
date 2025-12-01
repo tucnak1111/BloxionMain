@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Loading from "../loading"; // Import the splash screen component
 import "./get-started.css";
 
 interface Group {
@@ -112,7 +113,11 @@ export default function GetStartedPage() {
   };
 
   const renderStep = () => {
-    if (isLoading) return <div>Loading...</div>;
+    // Show the splash screen while fetching initial data
+    if (step === "select-group" && isLoading) {
+      return <Loading />;
+    }
+    if (isLoading) return <Loading />; // Also show for subsequent loading states
 
     switch (step) {
       case "select-group":
