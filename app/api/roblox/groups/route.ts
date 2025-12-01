@@ -7,6 +7,8 @@ interface JwtPayload extends jwt.JwtPayload {
   id: string;
 }
 
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 // Fetches groups a user is in from Roblox API
 export async function GET() {
   const token = cookies().get("bloxion_auth")?.value;
