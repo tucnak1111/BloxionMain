@@ -17,14 +17,14 @@ import { NextResponse } from "next/server";
     // TODO: compare with api key in the database
     //if (token !== correct_key) {
         //return NextResponse.json(
-            //{ error: "Wrong key. ensure your key is correct." };
+            //{ error: "Wrong key. ensure your key is correct." },
             //{ status: 401}
        // );
     //}
     // parse request body
    // let body;
    // try {
-    //    body = await.req.json();
+    //    body = await req.json();
    // } catch {
      //   return NextResponse.json(
       //      { error: "invalid body." },
@@ -39,6 +39,6 @@ import { NextResponse } from "next/server";
 export async function GET(){
     return NextResponse.json(
         { error: "example API; nothing to get" },
-        { status: 404}
+        { status: 403 }
     );
 }
