@@ -134,7 +134,7 @@ model Logbook {
   @@index([workspaceId])
 }
 
-model global_notices
+model global_notices {
 	id String @id @default(uuid())
 	active Boolean @default(true)
 	type String 
@@ -143,4 +143,15 @@ model global_notices
   author_avatar String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model workspacePlaytime {
+  robloxid String @id @default(cuid())
+	workspaceid String
+	seconds Int
+// relations 
+	workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  @@index([workspaceId])
+  @@index([robloxId])
+  @@index([workspaceId, robloxId])
 }
