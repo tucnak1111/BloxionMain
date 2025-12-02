@@ -1,5 +1,5 @@
 export async function homepage() {
-    return(
-        </>
+    return (
+        <body><p>text</p></body>
     );
 }
