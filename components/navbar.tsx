@@ -57,7 +57,8 @@ export default function Navbar({ toggleSidebar, openSettings, user }: NavbarProp
               <div className="user-info" onClick={() => setDropdownOpen(!isDropdownOpen)}>
                 {user.avatarUrl && <img src={user.avatarUrl} alt="User Avatar" />}
                 <span>
-                  {user.displayName || user.username} (@{user.username})
+                   {user.displayName}
+                   {user.displayName !== user.username && ` (@${user.username})`}
                 </span>
               </div>
 
