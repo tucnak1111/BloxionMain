@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     await prisma.workspacePlaytime.upsert({
       where: { robloxId_workspaceId: { robloxId, workspaceId } },
       update: { seconds: { increment: seconds } },
-      data: {
+      create: {
         robloxId,
         workspaceId,
         seconds,
