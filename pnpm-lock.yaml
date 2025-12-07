@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@paddle/paddle-node-sdk':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@prisma/client':
         specifier: ^5.12.1
         version: 5.12.1(prisma@5.12.1)
@@ -83,6 +86,13 @@ packages:
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
+    engines: {node: '>=10'}
+
+  '@fast-csv/format@4.3.5':
+    resolution: {integrity: sha512-3T2T/i3s2i0pAs582jN64S23B6A4L3o4x+quCEs3p3kH9D6Jp6S2weTvaH3Tj53o23rKkS1T62Qh5sA9gA==}
+
+  '@fast-csv/parse@4.3.6':
+    resolution: {integrity: sha512-G2bF4iJ6pP3aEXL54yJp34l2O/i4g58r4N2F7s3i3001I2h+44a0g2sZ1nB9w9Q8ce8B29n4h2o+A==}
     engines: {node: '>=10'}
 
   '@auth/core@0.41.0':
@@ -433,6 +443,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  'abort-controller@3.0.0':
+    resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5jwcNAFR3b70/2G0fS2J18r5QdZ2CAAzN/3TItuEtgVvAi8p9frEa1CEGFQ==}
+    engines: {node: '>=6.5'}
+
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -579,6 +593,9 @@ packages:
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
     engines: {node: '>=10.16.0'}
+
+  'event-target-shim@5.0.1':
+    resolution: {integrity: sha512-i/2b+Sr0K+wsY0MhVItT42TTCODwy4bYsnMdrG6u2yFU4IDtOd3lTFxH22jpK33T8gIhs524k4o09260b43h9A==}
 
   call-bind-apply-helpers@1.0.2:
     resolution: {integrity: sha512-Sp1ablJ0ivDkSzjcaJdxEunN5/XvksFJ2sMBFfq6x0ryhQV/2b/KwFe21cMpmHtPOSij8K99/wSfoEuTObmuMQ==}
@@ -1605,6 +1622,10 @@ packages:
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
+  'safe-stable-stringify@2.4.3':
+    resolution: {integrity: sha512-kYqgV3a2i2p2X3y1l4sD0ss3tF3bB3yWn8p2i1n68l42441x62e5nN2E4t139R4lF+p332i2t52aA==}
+    engines: {node: '>= 10'}
+
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
@@ -1976,6 +1997,14 @@ packages:
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@fast-csv/format@4.3.5': {}
+
+  '@fast-csv/parse@4.3.6': {}
+
+  'abort-controller@3.0.0':
+    dependencies:
+      'event-target-shim': 5.0.1
 
   '@auth/core@0.41.0':
     dependencies:
@@ -2452,6 +2481,8 @@ snapshots:
   busboy@1.6.0:
     dependencies:
       streamsearch: 1.1.0
+
+  'event-target-shim@5.0.1': {}
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -3606,6 +3637,14 @@ snapshots:
       react-is: 16.13.1
 
   proxy-from-env@1.1.0: {}
+
+  'safe-stable-stringify@2.4.3': {}
+
+  '@paddle/paddle-node-sdk@1.2.0':
+    dependencies:
+      '@fast-csv/format': 4.3.5
+      '@fast-csv/parse': 4.3.6
+      'safe-stable-stringify': 2.4.3
 
   punycode@2.3.1: {}
 
