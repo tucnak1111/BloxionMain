@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+//import { NextResponse } from "next/server";
 //import { prisma } from "../../../../../prisma/Client";
 
 //export async function GET(req: Request){
@@ -37,7 +37,7 @@ import { NextResponse } from "next/server";
 
 
 export async function GET(){
-    return NextResponse.json(
+    return Response.json(
         { error: "example API; nothing to get" },
         { status: 403 }
     );
