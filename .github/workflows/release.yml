@@ -44,9 +44,6 @@ jobs:
           node-version: "20"
           cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Configure Git user
         run: |
           git config user.name "GitHub Actions Bot"
