@@ -12,6 +12,10 @@ on:
           - minor
           - major
         default: "patch"
+      prerelease_id:
+        description: "Pre-release identifier (e.g., alpha, beta, rc). Leave blank for a stable release."
+        required: false
+        type: string
 
 jobs:
   release:
@@ -39,9 +43,14 @@ jobs:
       - name: Bump version, commit, and tag
         id: version_bumper
         run: |
-          # This command updates package.json, creates a commit, and adds a git tag.
-          # The new version number is captured for the next step.
-          npm version ${{ github.event.inputs.version_type }} -m "chore(release): bump version to %s"
+          # If a prerelease_id is provided, perform a prerelease version bump.
+          # Otherwise, perform a standard version bump.
+          if [ -n "${{ github.event.inputs.prerelease_id }}" ]; then
+            npm version prerelease --preid=${{ github.event.inputs.prerelease_id }} -m "chore(release): bump version to %s"
+          else
+            npm version ${{ github.event.inputs.version_type }} -m "chore(release): bump version to %s"
+          fi
+
           NEW_VERSION=$(node -p "require('./package.json').version")
           echo "new_version=v${NEW_VERSION}" >> $GITHUB_OUTPUT
 
@@ -56,5 +65,6 @@ jobs:
           tag_name: ${{ steps.version_bumper.outputs.new_version }}
           release_name: "Release ${{ steps.version_bumper.outputs.new_version }}"
           body: "New release for version ${{ steps.version_bumper.outputs.new_version }}. See commit history for details."
+          # Mark as prerelease if the prerelease_id input is not empty
+          prerelease: ${{ github.event.inputs.prerelease_id != '' }}
           draft: false
-          prerelease: false
