@@ -33,17 +33,19 @@ jobs:
           # Use the PAT to allow pushing changes back to the repository
           token: ${{ secrets.GH_PAT }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8 # Or your desired pnpm version
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8 # Or your desired pnpm version
-          run_install: true # Runs pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Configure Git user
         run: |
