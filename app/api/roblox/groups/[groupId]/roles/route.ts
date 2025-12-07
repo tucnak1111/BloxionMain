@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+/// <reference types="next/server" />
 
 export async function GET(
   req: Request,
