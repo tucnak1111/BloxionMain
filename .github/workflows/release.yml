@@ -37,7 +37,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "pnpm"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8 # Or your desired pnpm version
+          run_install: true # Runs pnpm install
 
       - name: Configure Git user
         run: |
@@ -50,9 +56,9 @@ jobs:
           # If a prerelease_id is provided, perform a prerelease version bump.
           # Otherwise, perform a standard version bump.
           if [ -n "${{ github.event.inputs.prerelease_id }}" ]; then
-            npm version prerelease --preid=${{ github.event.inputs.prerelease_id }} -m "chore(release): bump version to %s"
+            pnpm version prerelease --preid=${{ github.event.inputs.prerelease_id }}
           else
-            npm version ${{ github.event.inputs.version_type }} -m "chore(release): bump version to %s"
+            pnpm version ${{ github.event.inputs.version_type }}
           fi
 
           NEW_VERSION=$(node -p "require('./package.json').version")
