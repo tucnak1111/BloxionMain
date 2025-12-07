@@ -20,6 +20,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Grant permissions for the GITHUB_TOKEN to create a release and for checkout to push
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
