@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { groupId: string } }
+  req: Request,
+  context: { params: { groupId: string } }
 ) {
-  const { groupId } = params;
+  const { groupId } = context.params;
 
   // 1. Input Validation: Ensure groupId is a valid number.
   if (!/^\d+$/.test(groupId)) {
