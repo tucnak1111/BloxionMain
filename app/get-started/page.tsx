@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import Loading from "../loading"; // Import the splash screen component
 import "./get-started.css";
 
@@ -17,6 +18,11 @@ interface Role {
   rank: number;
 }
 
+interface User {
+  id: string;
+  // other user properties can be added here
+}
+
 type Step = "select-group" | "select-roles" | "creating";
 
 export default function GetStartedPage() {
@@ -26,30 +32,47 @@ export default function GetStartedPage() {
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [selectedRoleIds, setSelectedRoleIds] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  // Fetch user's groups on initial load
+  // Fetch user's groups and session data on initial load
   useEffect(() => {
-    const fetchGroups = async () => {
-      console.log("Attempting to fetch groups...");
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch("/api/roblox/groups");
-        console.log("API Response Status:", response.status);
+        // Fetch groups and user session in parallel for efficiency
+        const [groupsResponse, userResponse] = await Promise.all([
+          fetch("/api/roblox/groups"),
+          fetch("/api/auth/me"),
+        ]);
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Fetched groups data:", data);
-          setGroups(data);
+        // Handle groups response
+        if (groupsResponse.ok) {
+          const groupsData = await groupsResponse.json();
+          setGroups(groupsData);
         } else {
-          console.error("API responded with an error:", response.statusText);
+          toast.error("Could not load your groups. Please try again later.");
+          console.error("API responded with an error:", groupsResponse.statusText);
+        }
+
+        // Handle user session response
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          setUser(userData);
+        } else {
+          toast.error("Could not verify your session. Please log in again.");
+          console.error("Failed to fetch user session:", userResponse.statusText);
+          // Optional: Redirect to login if session is invalid
+          // router.push('/login');
         }
       } catch (error) {
-        console.error("Failed to fetch groups (catch block):", error);
+        toast.error("An unexpected error occurred while loading data.");
+        console.error("Failed to fetch initial data:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchGroups();
+    fetchData();
   }, []);
 
   // Fetch roles when a group is selected
@@ -62,8 +85,11 @@ export default function GetStartedPage() {
         const data = await response.json();
         setRoles(data);
         setStep("select-roles");
+      } else {
+        toast.error("Failed to load roles for this group.");
       }
     } catch (error) {
+      toast.error("An unexpected error occurred while fetching roles.");
       console.error("Failed to fetch roles:", error);
     } finally {
       setIsLoading(false);
@@ -81,7 +107,7 @@ export default function GetStartedPage() {
   };
 
   const handleCreateWorkspace = async () => {
-    if (!selectedGroup) return;
+    if (!selectedGroup || !user) return;
     setStep("creating");
     setIsLoading(true);
 
@@ -90,7 +116,7 @@ export default function GetStartedPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: "placeholder_user_id", // Replace with actual user ID from auth context
+          userId: user.id, // Use the actual user ID from the fetched session
           groupId: selectedGroup.id.toString(),
           groupName: selectedGroup.name,
           allowedRanks: Array.from(selectedRoleIds),
@@ -101,11 +127,13 @@ export default function GetStartedPage() {
         // On success, redirect to checkout
         router.push("/checkout");
       } else {
+        toast.error("Failed to create your workspace. Please try again.");
         // Handle error
         console.error("Failed to create workspace");
         setStep("select-roles"); // Go back to previous step on failure
       }
     } catch (error) {
+      toast.error("An unexpected error occurred during workspace creation.");
       console.error("Error during workspace creation:", error);
     } finally {
       setIsLoading(false);

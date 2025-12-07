@@ -1,0 +1,28 @@
+/* Set a default dark theme and font for the entire application */
+body {
+  background-color: #111827;
+  color: #e5e7eb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* This ensures the main content pushes the footer to the bottom of the viewport */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1; /* Allows this element to grow and fill available space */
+}
+
+.app-footer {
+  padding: 1.5em 2em;
+  text-align: center;
+  font-size: 0.85em;
+  color: #6b7280; /* Muted text color */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto; /* Pushes footer to the bottom in a flex container */
+}

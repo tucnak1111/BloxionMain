@@ -134,23 +134,24 @@ model Logbook {
   @@index([workspaceId])
 }
 
-model global_notices {
-	id String @id @default(uuid())
-	active Boolean @default(true)
-	type String 
+model GlobalNotice {
+  id            String    @id @default(uuid())
+  active        Boolean   @default(true)
+  type          String
   text String
-	author_name String?
-  author_avatar String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  authorName    String?
+  authorAvatar  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
-model workspacePlaytime {
-  robloxid String @id @default(cuid())
-	workspaceid String
-	seconds Int
-// relations 
-	workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+model WorkspacePlaytime {
+  robloxId    String @id @default(cuid())
+  workspaceId String
+  seconds     Int
+  // relations
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
   @@index([workspaceId])
   @@index([robloxId])
   @@index([workspaceId, robloxId])
