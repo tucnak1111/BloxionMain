@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../prisma/Client";
+import { prisma } from "../../../../prisma/Client";
 
 export async function POST(req: Request) {
   let body;
@@ -14,24 +14,26 @@ export async function POST(req: Request) {
     );
   }
 
-  const { userId, time } = body;
+  const { robloxId, workspaceId, seconds } = body;
 
   // Validate fields
-  if (typeof userId !== "number" || typeof time !== "number") {
+  if (typeof robloxId !== "string" || typeof workspaceId !== "string" || typeof seconds !== "number") {
     return NextResponse.json(
-      { error: "Invalid properties; expected { userId: number, time: number }" },
+      { error: "Invalid properties; expected { robloxId: string, workspaceId: string, seconds: number }" },
       { status: 400 }
     );
   }
 
   // Store in the database
   try {
-    await prisma.playtime.create({
+    await prisma.workspacePlaytime.upsert({
+      where: { robloxId_workspaceId: { robloxId, workspaceId } },
+      update: { seconds: { increment: seconds } },
       data: {
-        userId,
-        timeSpent: time,
-        timestamp: new Date()
-      }
+        robloxId,
+        workspaceId,
+        seconds,
+      },
     });
   } catch (err) {
     console.error("Database error:", err);
