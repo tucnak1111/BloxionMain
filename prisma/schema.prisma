@@ -19,66 +19,67 @@ datasource db {
 
 // Roblox User (Bloxion Account)
 model User {
-  id              String            @id @default(cuid())
-  robloxId        String            @unique              // Roblox User ID
+  id              String    @id @default(cuid())
+  robloxId        String    @unique // Roblox User ID
   username        String
   displayName     String?
   avatarUrl       String?
-  isSuspended     Boolean           @default(false)
+  isSuspended     Boolean   @default(false)
   suspendedReason String?
   suspendedAt     DateTime?
 
   // Workspaces they own
-  workspaces      Workspace[]
+  workspaces Workspace[]
 
   // Workspaces they are a member of
-  memberships     WorkspaceMember[]
+  memberships WorkspaceMember[]
 
   // Discord link (optional)
-  discord         DiscordLink?
+  discord DiscordLink?
 
   // API Keys
-  apiKeys         ApiKey[]
+  apiKeys ApiKey[]
 
   // Logbooks they have authored
-  logbooks        Logbook[]
+  logbooks Logbook[]
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Workspace (linked to a Roblox group)
 model Workspace {
-  id            String            @id @default(cuid())
-  ownerId       String
-  groupId       String
-  allowedRanks  Int[]                                 // Who may access workspace
-  trackedRoleIds Int[] @default([])                   // Roles to track for logs/activity
-  createdAt     DateTime          @default(now())
-  groupName     String? 
-  owner         User              @relation(fields: [ownerId], references: [id])
-  members       WorkspaceMember[]
-  logbooks      Logbook[]
+  id             String              @id @default(cuid())
+  ownerId        String
+  groupId        String
+  allowedRanks   Int[] // Who may access workspace
+  trackedRoleIds Int[]               @default([]) // Roles to track for logs/activity
+  createdAt      DateTime            @default(now())
+  groupName      String?
+  owner          User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  members        WorkspaceMember[]
+  logbooks       Logbook[]
+  playtime       WorkspacePlaytime[]
 }
 
 // User's membership inside a workspace
 model WorkspaceMember {
-  id          String     @id @default(cuid())
+  id          String   @id @default(cuid())
   workspaceId String
   userId      String
-  rank        Int        @default(0)                 // Roblox group rank
-  roles       String[]   @default([])                // Custom Bloxion roles
+  rank        Int      @default(0) // Roblox group rank
+  roles       String[] @default([]) // Custom Bloxion roles
 
   // Permissions
-  canPost     Boolean    @default(false)
-  canEdit     Boolean    @default(false)
-  canDelete   Boolean    @default(false)
+  canPost   Boolean @default(false)
+  canEdit   Boolean @default(false)
+  canDelete Boolean @default(false)
 
-  joinedAt    DateTime   @default(now())
-  robloxId    String
-  rankName    String?
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
-  user        User       @relation(fields: [userId], references: [id])
+  joinedAt  DateTime  @default(now())
+  robloxId  String
+  rankName  String?
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([workspaceId, userId]) // A user cannot be added twice
 }
@@ -88,29 +89,29 @@ model BanLog {
   id        String   @id @default(cuid())
   userId    String
   reason    String
-  bannedBy  String   // "bot" or admin user ID
+  bannedBy  String // "bot" or admin user ID
   createdAt DateTime @default(now())
 }
 
 // Discord OAuth link (optional for bot integration)
 model DiscordLink {
-  id         String   @id @default(cuid())
-  userId     String   @unique
-  discordId  String   @unique
-  username   String
-  avatarUrl  String?
-  linkedAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  discordId String   @unique
+  username  String
+  avatarUrl String?
+  linkedAt  DateTime @default(now())
 
-  user       User     @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 // API Keys for programmatic access
 model ApiKey {
-  id          String   @id @default(cuid())
-  key         String   @unique // In production, this should be a hash of the key
+  id          String    @id @default(cuid())
+  key         String    @unique // In production, this should be a hash of the key
   userId      String
-  permissions String[] @default([]) // e.g., ["logbook:create", "logbook:read"]
-  createdAt   DateTime @default(now())
+  permissions String[]  @default([]) // e.g., ["logbook:create", "logbook:read"]
+  createdAt   DateTime  @default(now())
   lastUsedAt  DateTime?
 
   // Relation to User
@@ -119,14 +120,14 @@ model ApiKey {
 
 // Logbook entries within a workspace
 model Logbook {
-  id          String   @id @default(cuid())
-  title       String
-  content     String?
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
 
   // Relations
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
@@ -135,18 +136,18 @@ model Logbook {
 }
 
 model GlobalNotice {
-  id            String    @id @default(uuid())
-  active        Boolean   @default(true)
-  type          String
-  text String
-  authorName    String?
-  authorAvatar  String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           String   @id @default(uuid())
+  active       Boolean  @default(true)
+  type         String
+  text         String
+  authorName   String?
+  authorAvatar String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model WorkspacePlaytime {
-  robloxId    String @id @default(cuid())
+  robloxId    String    @id @default(cuid())
   workspaceId String
   seconds     Int
   // relations
