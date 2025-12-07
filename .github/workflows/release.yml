@@ -59,9 +59,8 @@ jobs:
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.version_bumper.outputs.new_version }}
           release_name: "Release ${{ steps.version_bumper.outputs.new_version }}"
           body: "New release for version ${{ steps.version_bumper.outputs.new_version }}. See commit history for details."
