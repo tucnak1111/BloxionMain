@@ -20,7 +20,7 @@ export async function GET(
         next: {
           revalidate: 3600, // Cache for 1 hour (3600 seconds)
         },
-      }
+      } as RequestInit
     );
 
     // 3. Improved Error Handling: Forward the status from the Roblox API.
