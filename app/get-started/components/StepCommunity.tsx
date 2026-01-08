@@ -1,4 +1,4 @@
-import styles from "./steps.module.css";
+import styles from "./steps/steps.module.css";
 
 export default function StepCommunity({ onNext }: any) {
   const mockCommunity = {
