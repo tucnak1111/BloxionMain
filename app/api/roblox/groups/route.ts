@@ -48,25 +48,52 @@ export async function GET() {
     const thumbnailsData = thumbnailJson.data; // Correctly access the 'data' property
 
     // Combine group data with icons
-    const groups = robloxData.data.map((g: any) => {
-  const thumbnail = thumbnailsData?.find(
-    (t: any) => t.targetId === g.group.id
-  );
+  const groups = await Promise.all(
+  robloxData.data.map(async (g: any) => {
+    // Fetch group roles (THIS is new)
+    const rolesRes = await fetch(
+      `https://groups.roblox.com/v1/groups/${g.group.id}/roles`
+    );
 
-  return {
-    id: g.group.id,
-    name: g.group.name,
-    iconUrl: thumbnail?.imageUrl
-  ? thumbnail.imageUrl.replace("http://", "https://")
-  : null,
+    if (!rolesRes.ok) {
+      throw new Error("Failed to fetch group roles");
+    }
 
-    // NEW 👇
-    memberCount: g.group.memberCount,
-    ownerName: g.group.owner?.username ?? null,
-    roleName: g.role.name,
-    roleRank: g.role.rank,
-  };
-});
+    const rolesJson = await rolesRes.json();
+
+    // Only roles the user can actually manage
+    const roles = rolesJson.roles
+      .filter((r: any) => r.rank <= g.role.rank)
+      .map((r: any) => ({
+        id: r.id,
+        name: r.name,
+        rank: r.rank,
+      }))
+      .sort((a: any, b: any) => b.rank - a.rank);
+
+    const thumbnail = thumbnailsData?.find(
+      (t: any) => t.targetId === g.group.id
+    );
+
+    return {
+      id: g.group.id,
+      name: g.group.name,
+      iconUrl: thumbnail?.imageUrl
+        ? thumbnail.imageUrl.replace("http://", "https://")
+        : null,
+
+      memberCount: g.group.memberCount,
+      ownerName: g.group.owner?.username ?? null,
+
+      // user’s role
+      roleName: g.role.name,
+      roleRank: g.role.rank,
+
+      // 👇 THIS is what you needed
+      roles,
+    };
+  })
+);
 
     return NextResponse.json(groups);
   } catch (error) {
