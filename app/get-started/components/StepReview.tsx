@@ -8,7 +8,9 @@ export default function StepReview({ data, onBack, onCreate }: any) {
       <div className={styles.reviewBox}>
         <div><strong>Community:</strong> {data.community.name}</div>
         <div><strong>Workspace:</strong> {data.name}</div>
-        <div><strong>Access:</strong> {data.access}</div>
+       <div><strong>
+  {data.minRank.name} and above
+</strong></div>
       </div>
 
       <div className={styles.actions}>
