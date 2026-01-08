@@ -12,17 +12,16 @@ export default function CreateWorkspacePage() {
   const [step, setStep] = useState(1);
 
   const [data, setData] = useState({
-    community: null as null | {
-      id: string;
-      name: string;
-      members: number;
-      role: string;
-    },
-    name: "",
-    description: "",
-    access: "open" as "open" | "restricted",
-    minRank: null as null | { name: string; rank: number },
-  });
+  community: null as null | {
+    id: number;
+    name: string;
+    iconUrl: string | null;
+  },
+  name: "",
+  description: "",
+  access: "open" as "open" | "restricted",
+  minRank: null as null | { name: string; rank: number },
+});
 
   return (
     <main className={styles.createRoot}>
