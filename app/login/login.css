@@ -44,31 +44,6 @@
 }
 
 .lf--submit {
-  display: block;
-  width: 100%;
-  padding: 1em;
-  border: none;
-  border-radius: 6px;
-  background: linear-gradient(to right, #35c3c1, #00d6b7);
-  color: #fff;
-  font-size: .9em;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  cursor: pointer;
-  transition: all .2s ease;
-}
-
-.lf--submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(53,195,193, .4);
-}
-
-.lf--submit:focus {
-  outline: none;
-  transform: scale(1.03);
-}
-.lf--submit {
   display: flex;
   align-items: center;
   justify-content: center;
