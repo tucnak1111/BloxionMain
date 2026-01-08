@@ -76,4 +76,3 @@ jobs:
           # Mark as prerelease if the prerelease_id input is not empty
           prerelease: ${{ github.event.inputs.prerelease_id != '' }}
           draft: false
-          generate_release_notes: true
