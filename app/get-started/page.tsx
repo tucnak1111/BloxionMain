@@ -59,18 +59,19 @@ export default function CreateWorkspacePage() {
           />
         )}
 
-        {step === 3 && (
-          <StepAccess
-            data={data}
-            onBack={() => setStep(2)}
-            onNext={(updates) => {
-              setData({ ...data, ...updates });
-              setStep(4);
-            }}
-          />
-        )}
+{step === 3 && data.community && (
+  <StepAccess
+    group={data.community}
+    value={data.minRank}
+    onBack={() => setStep(2)}
+    onNext={(role) => {
+      setData({ ...data, minRank: role });
+      setStep(4);
+    }}
+  />
+)}
 
-        {step === 4 && (
+        {step === 4 && data.minRank && (
           <StepReview
             data={data}
             onBack={() => setStep(3)}
