@@ -31,10 +31,8 @@ export default function LayoutWrapper({
     setSettingsOpen(true);
   };
 
-  // Pages that should NOT have navbar/sidebar
-  const noLayoutPages = ["/login", "/not-allowed", "/error"];
-
-  const shouldShowLayout = user && !noLayoutPages.includes(pathname);
+  // Show navbar/sidebar on all pages
+  const shouldShowLayout = true;
 
   if (!shouldShowLayout) {
     return <>{children}</>;
