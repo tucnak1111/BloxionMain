@@ -1,5 +1,4 @@
 .login-page {
-  min-height: calc(100vh - 96px); /* Account for navbar height */
   display: flex;
   background-color: #1e293b;
   align-items: center;
@@ -62,7 +61,7 @@
   gap: .5em;
   width: 100%;
   padding: 1em;
-  min-height: 44px; /* keep button size stable when switching to spinner */
+  min-height: 18px; /* keep button size stable when switching to spinner */
   border: none;
   border-radius: 6px;
   background: linear-gradient(to right, #35c3c1, #00d6b7);
