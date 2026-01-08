@@ -16,13 +16,13 @@ export default function WorkspacesPage() {
   useEffect(() => {
     const fetchWorkspaces = async () => {
       try {
-        const response = await fetch("/api/workspaces");
-        if (response.ok) {
-          const data = await response.json();
+        const res = await fetch("/api/workspaces");
+        if (res.ok) {
+          const data = await res.json();
           setWorkspaces(data);
         }
-      } catch (error) {
-        console.error("Failed to fetch workspaces:", error);
+      } catch (err) {
+        console.error("Failed to fetch workspaces:", err);
       } finally {
         setLoading(false);
       }
@@ -31,30 +31,78 @@ export default function WorkspacesPage() {
     fetchWorkspaces();
   }, []);
 
+  /* -------------------- Loading -------------------- */
   if (loading) {
     return (
       <div className="flex items-center justify-center p-6">
-        <p className="text-zinc-400">Loading workspaces...</p>
+        <p className="text-zinc-400">Loading workspaces…</p>
       </div>
     );
   }
 
+  /* -------------------- Has workspaces -------------------- */
   if (workspaces.length > 0) {
     return (
       <div className="p-6">
         <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold">Your Workspaces</h1>
-            <button className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
-              Create New
-            </button>
+          {/* Header */}
+          <div className="mb-10">
+            <h1 className="text-3xl font-semibold mb-1">Workspaces</h1>
+            <p className="text-zinc-400">
+              Manage and access your communities.
+            </p>
           </div>
+
+          {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Create workspace card */}
+            <Link href="/get-started">
+              <div
+                className="h-full rounded-xl border border-dashed border-zinc-700
+                           bg-zinc-900/40 hover:border-indigo-500 hover:bg-zinc-900
+                           transition cursor-pointer flex items-center justify-center"
+              >
+                <div className="text-center p-6">
+                  <div
+                    className="w-12 h-12 mx-auto mb-3 rounded-full bg-indigo-600/10
+                               flex items-center justify-center text-indigo-400 text-xl"
+                  >
+                    +
+                  </div>
+                  <p className="font-medium">Create workspace</p>
+                  <p className="text-sm text-zinc-400 mt-1">
+                    Start managing a new group
+                  </p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Existing workspaces */}
             {workspaces.map((ws) => (
               <Link key={ws.id} href={`/workspace/${ws.id}/home`}>
-                <div className="bg-zinc-800 p-6 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-colors cursor-pointer h-full">
-                  <h2 className="text-xl font-semibold mb-2">{ws.groupName || "Unnamed Workspace"}</h2>
-                  <p className="text-zinc-400 text-sm">Group ID: {ws.groupId}</p>
+                <div
+                  className="h-full rounded-xl border border-zinc-700 bg-zinc-900/60
+                             hover:border-zinc-500 hover:bg-zinc-900 transition
+                             cursor-pointer p-5 flex gap-4"
+                >
+                  {/* Initial / icon */}
+                  <div
+                    className="w-10 h-10 rounded-lg bg-zinc-700/50
+                               flex items-center justify-center
+                               font-semibold text-zinc-300"
+                  >
+                    {ws.groupName?.[0] ?? "W"}
+                  </div>
+
+                  {/* Text */}
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-lg font-semibold truncate">
+                      {ws.groupName || "Unnamed Workspace"}
+                    </h2>
+                    <p className="text-sm text-zinc-400 mt-1">
+                      Group ID: {ws.groupId}
+                    </p>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -64,16 +112,31 @@ export default function WorkspacesPage() {
     );
   }
 
+  /* -------------------- Empty fallback -------------------- */
   return (
-    <div className="flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-zinc-800 p-8 rounded-xl shadow-lg border border-zinc-700 text-center">
-        <h1 className="text-2xl font-bold mb-2">No workspaces available</h1>
-        <p className="text-zinc-400 mb-6">
-          You don't have any workspaces yet. Create one to get started.
+    <div className="flex items-center justify-center min-h-[60vh] p-6">
+      <div
+        className="w-full max-w-md bg-zinc-900/60 border border-zinc-700
+                   rounded-2xl p-10 text-center"
+      >
+      
+
+        <h1 className="text-2xl font-semibold mb-2">
+          No workspaces yet
+        </h1>
+
+        <p className="text-zinc-400 mb-8">
+          Create a workspace to start managing your community.
         </p>
-        <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
-          Create Workspace
-        </button>
+
+        <Link href="/get-started">
+          <button
+            className="w-full bg-indigo-600 hover:bg-indigo-500
+                       text-white font-medium py-3 rounded-lg transition"
+          >
+            Create workspace
+          </button>
+        </Link>
       </div>
     </div>
   );
