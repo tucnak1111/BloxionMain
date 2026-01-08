@@ -1,6 +1,5 @@
 /* General Navbar Styling */
 .navbar {
-  position: sticky;
   top: 1em;
   left: 50%;
   transform: translateX(-50%);
