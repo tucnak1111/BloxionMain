@@ -65,7 +65,10 @@ export default function CreateWorkspacePage() {
     value={data.minRank}
     onBack={() => setStep(2)}
     onNext={(role) => {
-      setData({ ...data, minRank: role });
+      setData({
+        ...data,
+        minRank: role,
+      });
       setStep(4);
     }}
   />
