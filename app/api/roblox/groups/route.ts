@@ -49,13 +49,22 @@ export async function GET() {
 
     // Combine group data with icons
     const groups = robloxData.data.map((g: any) => {
-      const thumbnail = thumbnailsData?.find((t: any) => t.targetId === g.group.id);
-      return {
-        id: g.group.id,
-        name: g.group.name,
-        iconUrl: thumbnail ? thumbnail.imageUrl : null,
-      };
-    });
+  const thumbnail = thumbnailsData?.find(
+    (t: any) => t.targetId === g.group.id
+  );
+
+  return {
+    id: g.group.id,
+    name: g.group.name,
+    iconUrl: thumbnail ? thumbnail.imageUrl : null,
+
+    // NEW 👇
+    memberCount: g.group.memberCount,
+    ownerName: g.group.owner?.username ?? null,
+    roleName: g.role.name,
+    roleRank: g.role.rank,
+  };
+});
 
     return NextResponse.json(groups);
   } catch (error) {
