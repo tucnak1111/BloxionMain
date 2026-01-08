@@ -11,6 +11,7 @@ export type Group = {
   ownerName: string | null;
   roleName: string;
   roleRank: number;
+  roles: string;
 };
 
 export default function StepCommunity({
