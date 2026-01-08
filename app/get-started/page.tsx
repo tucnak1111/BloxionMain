@@ -6,7 +6,17 @@ import StepCommunity from "./components/StepCommunity";
 import StepSetup from "./components/StepSetup";
 import StepAccess from "./components/StepAccess";
 import StepReview from "./components/StepReview";
-
+import styles from "./CreateWorkspacePage.module.css";
+export default function CreateWorkspacePage() {
+  return (
+    <main className={styles.createRoot}>
+      <div className={styles.createContainer}>
+        <Stepper step={step} />
+        {currentStep}
+      </div>
+    </main>
+  );
+}
 export default function CreateWorkspacePage() {
   const [step, setStep] = useState(1);
 
