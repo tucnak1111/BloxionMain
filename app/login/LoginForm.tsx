@@ -38,7 +38,6 @@ export default function LoginForm() {
 
       <div className="login-footer" aria-hidden={false}>
         <p>&copy; {new Date().getFullYear()} Bloxion. All Rights Reserved.</p>
-        <p>Version {version}</p>
       </div>
     </form>
   );
