@@ -18,7 +18,7 @@ interface RobloxGroup {
 }
 
 export async function GET(req: Request) {
-  const token = cookies().get("bloxion_auth")?.value;
+  const token = (await cookies()).get("bloxion_auth")?.value;
   if (!token) {
     return NextResponse.json({ error: "Unauthorized: Not logged in" }, { status: 401 });
   }

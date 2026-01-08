@@ -13,7 +13,7 @@ interface JwtPayload extends jwt.JwtPayload {
  * Fetches the current user's status to check for active session and suspension.
  */
 async function getCurrentUser() {
-  const token = cookies().get("bloxion_auth")?.value;
+  const token = (await cookies()).get("bloxion_auth")?.value;
   if (!token) return null;
 
   try {

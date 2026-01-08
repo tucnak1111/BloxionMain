@@ -7,8 +7,6 @@ interface JwtPayload extends jwt.JwtPayload {
   id: string;
 }
 
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-
 // Fetches groups a user is in from Roblox API
 export async function GET() {
   const cookieStore = await cookies();
@@ -18,9 +16,6 @@ export async function GET() {
   }
 
   try {
-    // --- TEMPORARY DELAY FOR TESTING ---
-    await delay(3000); // Wait for 3 seconds
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
