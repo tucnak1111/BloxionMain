@@ -40,8 +40,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="app-container">
-        <LayoutWrapper user={user}>
-          <div className="main-content">
+        <div className="layout-wrapper">
+          <LayoutWrapper user={user}>
+            <div className="main-content">
             {/* Toaster for notifications across all pages */}
             <Toaster
               position="top-center"
@@ -57,14 +58,15 @@ export default async function RootLayout({
               }}
             />
             {children}
-          </div>
+            </div>
+          </LayoutWrapper>
+        </div>
 
-          {/* Global Footer */}
-          <footer className="app-footer">
-            <p>&copy; {new Date().getFullYear()} Bloxion. All Rights Reserved.</p>
-            <p>Version {version}</p>
-          </footer>
-        </LayoutWrapper>
+        {/* Global Footer */}
+        <footer className="app-footer">
+          <p>&copy; {new Date().getFullYear()} Bloxion. All Rights Reserved.</p>
+          <p>Version {version}</p>
+        </footer>
       </body>
     </html>
   );

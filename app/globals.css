@@ -14,6 +14,13 @@ body {
   min-height: 100vh;
 }
 
+/* Wrapper that holds the app chrome and main content so footer can sit as a sibling and be pushed down */
+.layout-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .main-content {
   flex: 1; /* Allows this element to grow and fill available space */
 }
