@@ -94,3 +94,20 @@
   padding: 16px;
   font-size: 14px;
 }
+
+.communityCard {
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 14px;
+  background: #0f0f0f;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.communityCard:hover {
+  border-color: #14b8a6;
+}
+
+.communitySelected {
+  border-color: #14b8a6;
+}
