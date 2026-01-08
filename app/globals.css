@@ -21,6 +21,21 @@ body {
   flex-direction: column;
 }
 
+/* Fixed version badge shown on every page (bottom-right) */
+.app-version {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  font-size: 0.75em;
+  color: #9ca3af;
+  background: rgba(17,24,39,0.6);
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.04);
+  z-index: 1200;
+  pointer-events: none; /* non-interactive */
+}
+
 .main-content {
   flex: 1; /* Allows this element to grow and fill available space */
 }

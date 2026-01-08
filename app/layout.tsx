@@ -1,5 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { version } from "../package.json";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { prisma } from "../prisma/Client";
@@ -60,6 +61,9 @@ export default async function RootLayout({
             </div>
           </LayoutWrapper>
         </div>
+
+        {/* Version badge (fixed, bottom-right) - not a footer */}
+        <div className="app-version">Version {version}</div>
 
       </body>
     </html>
