@@ -1,4 +1,4 @@
-export function StepReview({ data, onBack, onCreate }: any) {
+export default function StepReview({ data, onBack, onCreate }: any) {
   return (
     <section className="space-y-6 bg-neutral-950 border border-neutral-800 rounded-2xl p-6">
       <h1 className="text-2xl font-semibold">Review & Create</h1>
