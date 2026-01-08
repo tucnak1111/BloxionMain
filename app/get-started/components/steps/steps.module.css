@@ -128,3 +128,38 @@
   border-color: #14b8a6;
   box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.4);
 }
+
+.communityRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.communityIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.communityIconFallback {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #1f1f1f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.communityInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.communityName {
+  font-weight: 600;
+}
