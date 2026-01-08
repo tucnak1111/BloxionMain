@@ -1,8 +1,14 @@
 .card {
-  background: #0b0b0b;
+  background: linear-gradient(
+    180deg,
+    #2a3c5d 0%,
+    #233452 100%);
   border: 1px solid #1f1f1f;
-  border-radius: 16px;
+  border-radius: 24px;
   padding: 24px;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .title {
@@ -78,10 +84,16 @@
 
 .communityCard {
   border: 1px solid #1f1f1f;
-  border-radius: 12px;
+  border-radius: 24px;
   padding: 16px;
-  background: #0f0f0f;
+  background: linear-gradient(
+    180deg,
+    #2a3c5d 0%,
+    #233452 100%);
   cursor: pointer;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .communityCard:hover {
