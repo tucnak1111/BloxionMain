@@ -1,0 +1,96 @@
+.card {
+  background: #0b0b0b;
+  border: 1px solid #1f1f1f;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  margin-top: 6px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #fff;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #14b8a6;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+}
+
+.primary {
+  background: #14b8a6;
+  color: #000;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: #2dd4bf;
+}
+
+.secondary {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.secondary:hover {
+  color: #fff;
+}
+
+.communityCard {
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 16px;
+  background: #0f0f0f;
+  cursor: pointer;
+}
+
+.communityCard:hover {
+  border-color: #14b8a6;
+}
+
+.reviewBox {
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 14px;
+}
