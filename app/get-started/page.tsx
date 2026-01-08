@@ -1,22 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Stepper from "./components/stepper";
+import Stepper from "./components/Stepper";
 import StepCommunity from "./components/StepCommunity";
 import StepSetup from "./components/StepSetup";
 import StepAccess from "./components/StepAccess";
 import StepReview from "./components/StepReview";
 import styles from "./CreateWorkspacePage.module.css";
-export default function CreateWorkspacePage() {
-  return (
-    <main className={styles.createRoot}>
-      <div className={styles.createContainer}>
-        <Stepper step={step} />
-        {currentStep}
-      </div>
-    </main>
-  );
-}
+
 export default function CreateWorkspacePage() {
   const [step, setStep] = useState(1);
 
@@ -34,50 +25,56 @@ export default function CreateWorkspacePage() {
   });
 
   return (
-    <>
-      <Stepper step={step} />
+    <main className={styles.createRoot}>
+      <div className={styles.createContainer}>
+        <Stepper step={step} />
 
-      {step === 1 && (
-        <StepCommunity
-          value={data.community}
-          onNext={(community) => {
-            setData({ ...data, community, name: community.name });
-            setStep(2);
-          }}
-        />
-      )}
+        {step === 1 && (
+          <StepCommunity
+            value={data.community}
+            onNext={(community) => {
+              setData({
+                ...data,
+                community,
+                name: community.name,
+              });
+              setStep(2);
+            }}
+          />
+        )}
 
-      {step === 2 && (
-        <StepSetup
-          data={data}
-          onBack={() => setStep(1)}
-          onNext={(updates) => {
-            setData({ ...data, ...updates });
-            setStep(3);
-          }}
-        />
-      )}
+        {step === 2 && (
+          <StepSetup
+            data={data}
+            onBack={() => setStep(1)}
+            onNext={(updates) => {
+              setData({ ...data, ...updates });
+              setStep(3);
+            }}
+          />
+        )}
 
-      {step === 3 && (
-        <StepAccess
-          data={data}
-          onBack={() => setStep(2)}
-          onNext={(updates) => {
-            setData({ ...data, ...updates });
-            setStep(4);
-          }}
-        />
-      )}
+        {step === 3 && (
+          <StepAccess
+            data={data}
+            onBack={() => setStep(2)}
+            onNext={(updates) => {
+              setData({ ...data, ...updates });
+              setStep(4);
+            }}
+          />
+        )}
 
-      {step === 4 && (
-        <StepReview
-          data={data}
-          onBack={() => setStep(3)}
-          onCreate={() => {
-            console.log("Create workspace:", data);
-          }}
-        />
-      )}
-    </>
+        {step === 4 && (
+          <StepReview
+            data={data}
+            onBack={() => setStep(3)}
+            onCreate={() => {
+              console.log("Create workspace:", data);
+            }}
+          />
+        )}
+      </div>
+    </main>
   );
 }
