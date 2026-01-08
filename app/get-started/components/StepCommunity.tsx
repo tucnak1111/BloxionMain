@@ -70,38 +70,49 @@ export default function StepCommunity({
         !error &&
         groups.map((group) => (
           <div
-            key={group.id}
-            className={`${styles.communityCard} ${
-              value?.id === group.id ? styles.communitySelected : ""
-            }`}
-            onClick={() => onNext(group)}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              {group.iconUrl ? (
-                <img
-                  src={group.iconUrl}
-                  alt={group.name}
-                  width={40}
-                  height={40}
-                  style={{
-                    borderRadius: 8,
-                    background: "#111",
-                  }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 8,
-                    background: "#1f1f1f",
-                  }}
-                />
-              )}
+  key={group.id}
+  className={`${styles.communityCard} ${
+    value?.id === group.id ? styles.communitySelected : ""
+  }`}
+  onClick={() => onNext(group)}
+>
+  <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+    {group.iconUrl ? (
+      <img
+        src={group.iconUrl}
+        alt={group.name}
+        width={44}
+        height={44}
+        style={{ borderRadius: 10 }}
+      />
+    ) : (
+      <div
+        style={{
+          width: 44,
+          height: 44,
+          borderRadius: 10,
+          background: "#1f1f1f",
+        }}
+      />
+    )}
 
-              <strong>{group.name}</strong>
-            </div>
-          </div>
+    <div style={{ flex: 1 }}>
+      <div style={{ fontWeight: 600 }}>{group.name}</div>
+
+      <div className={styles.subtitle}>
+        {group.memberCount.toLocaleString()} members
+        {" · "}
+        Rank: {group.roleName} ({group.roleRank})
+      </div>
+
+      {group.ownerName && (
+        <div className={styles.subtitle}>
+          Owner: {group.ownerName}
+        </div>
+      )}
+    </div>
+  </div>
+</div>
         ))}
     </section>
   );
