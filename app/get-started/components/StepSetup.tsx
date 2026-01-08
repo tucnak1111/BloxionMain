@@ -1,4 +1,4 @@
-export function StepSetup({
+export default function StepSetup({
   data,
   onBack,
   onNext,
