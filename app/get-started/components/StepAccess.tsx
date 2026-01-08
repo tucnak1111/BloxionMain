@@ -1,39 +1,59 @@
-import styles from "./steps/steps.module.css";
+"use client";
 
-export default function StepAccess({ data, onBack, onNext }: any) {
+import styles from "./steps/steps.module.css";
+import type { Group } from "./StepCommunity";
+
+type Role = {
+  name: string;
+  rank: number;
+};
+
+export default function StepRoleAccess({
+  group,
+  value,
+  onBack,
+  onNext,
+}: {
+  group: Group;
+  value: Role | null;
+  onBack: () => void;
+  onNext: (role: Role) => void;
+}) {
+  // Only roles the user can manage
+  const selectableRoles = group.roles
+    .filter((r) => r.rank <= group.userRole.rank)
+    .sort((a, b) => b.rank - a.rank);
+
   return (
     <section className={styles.card}>
-      <h1 className={styles.title}>Access Rules</h1>
+      <h1 className={styles.title}>Workspace Permissions</h1>
+      <p className={styles.subtitle}>
+        Select the minimum Roblox role required to access this workspace.
+      </p>
 
-      <label className={styles.radio}>
-        <input
-          type="radio"
-          checked={data.access === "open"}
-          onChange={() => onNext({ access: "open", minRank: null })}
-        />
-        Open to community
-      </label>
-
-      <label className={styles.radio}>
-        <input
-          type="radio"
-          checked={data.access === "restricted"}
-          onChange={() =>
+      {selectableRoles.map((role) => (
+        <div
+          key={role.rank}
+          className={`${styles.communityCard} ${
+            value?.rank === role.rank ? styles.communitySelected : ""
+          }`}
+          onClick={() =>
             onNext({
-              access: "restricted",
-              minRank: { name: "Business Partner", rank: 50 },
+              name: role.name,
+              rank: role.rank,
             })
           }
-        />
-        Restricted by rank
-      </label>
+        >
+          <strong>{role.name}</strong>
+          <div className={styles.subtitle}>
+            Rank {role.rank} and above
+          </div>
+        </div>
+      ))}
 
       <div className={styles.actions}>
         <button onClick={onBack} className={styles.secondary}>
           Back
-        </button>
-        <button onClick={() => onNext({})} className={styles.primary}>
-          Continue
         </button>
       </div>
     </section>
