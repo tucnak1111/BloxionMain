@@ -1,6 +1,5 @@
 .login-page {
-  min-height: 100vh;
-  overflow: hidden;
+  min-height: calc(100vh - 96px); /* Account for navbar height */
   display: flex;
   background-color: #1e293b;
   align-items: center;
