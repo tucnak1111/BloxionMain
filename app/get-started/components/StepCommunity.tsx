@@ -7,6 +7,10 @@ type Group = {
   id: number;
   name: string;
   iconUrl: string | null;
+  memberCount: number;
+  ownerName: string | null;
+  roleName: string;
+  roleRank: number;
 };
 
 export default function StepCommunity({
