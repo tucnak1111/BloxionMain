@@ -1,6 +1,6 @@
 "use client";
 
-export default function WorkspaceUsersPage({ params }: { params: { id: string } }) {
+export default function WorkspaceUsersPage() {
   return (
     <main className="min-h-screen bg-zinc-900 text-zinc-100 p-6">
       <div className="max-w-5xl mx-auto">
