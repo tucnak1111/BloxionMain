@@ -8,7 +8,7 @@ type Role = {
   rank: number;
 };
 
-export default function StepRoleAccess({
+export default function StepAccess({
   group,
   value,
   onBack,
