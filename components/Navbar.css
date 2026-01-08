@@ -8,7 +8,7 @@
   max-width: 1200px;
   z-index: 1000;
   padding: 0.75em 1.5em;
-  min-height: calc(100vh - 96px);
+
 
   /* Glassmorphism Effect */
   background: rgba(255, 255, 255, 0.08);
