@@ -1,6 +1,6 @@
 const steps = ["Community", "Setup", "Access", "Review"];
 
-export function Stepper({ step }: { step: number }) {
+export default function Stepper({ step }: { step: number }) {
   return (
     <div className="flex items-center gap-4 mb-10">
       {steps.map((label, i) => {
