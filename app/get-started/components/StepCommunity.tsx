@@ -86,15 +86,22 @@ export default function StepCommunity({
         style={{ borderRadius: 10 }}
       />
     ) : (
-      <div
-        style={{
-          width: 44,
-          height: 44,
-          borderRadius: 10,
-          background: "#1f1f1f",
-        }}
-      />
-    )}
+<div
+  style={{
+    width: 44,
+    height: 44,
+    borderRadius: 10,
+    background: "#1f1f1f",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#6b7280",
+    fontSize: 12,
+    fontWeight: 600,
+  }}
+>
+  {group.name.charAt(0).toUpperCase()}
+</div>
 
     <div style={{ flex: 1 }}>
       <div style={{ fontWeight: 600 }}>{group.name}</div>
