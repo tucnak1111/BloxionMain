@@ -40,12 +40,6 @@ body {
   flex: 1; /* Allows this element to grow and fill available space */
 }
 
-.app-footer {
-  padding: 1.5em 2em;
-  
-  text-align: center;
-  font-size: 0.85em;
-  color: #6b7280; /* Muted text color */
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: auto; /* Pushes footer to the bottom in a flex container */
-}
+/* Removed .app-footer to avoid an unintended footer rendering at the top.
+   If a page-level footer is needed, add a specific footer component and
+   style it locally or with a dedicated class instead. */
