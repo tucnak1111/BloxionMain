@@ -13,7 +13,8 @@ interface JwtPayload extends jwt.JwtPayload {
  * Authenticates a user from a session cookie.
  */
 async function authenticateWithCookie(): Promise<User | null> {
-  const token = cookies().get("bloxion_auth")?.value;
+  const cookieStore = await cookies();
+  const token = cookieStore.get("bloxion_auth")?.value;
   if (!token) return null;
 
   const secret = process.env.JWT_SECRET;
