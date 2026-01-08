@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Stepper from "./components/stepper";
+import Stepper from "./components/Stepper";
 import StepCommunity from "./components/StepCommunity";
 import StepSetup from "./components/StepSetup";
 import StepAccess from "./components/StepAccess";
