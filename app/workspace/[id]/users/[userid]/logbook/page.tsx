@@ -1,6 +1,6 @@
 import UserList from "../../../components/userList";
 
-export default async function WorkspaceUsersPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function WorkspaceUsersPage({ params }: { params: Promise<{ id: string; userid: string }> }) {
   const { id } = await params;
   return (
     <main className="min-h-screen bg-zinc-900 text-zinc-100 p-6">

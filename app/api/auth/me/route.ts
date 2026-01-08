@@ -5,7 +5,7 @@ import { prisma } from "../../../../prisma/Client";
 
 export async function GET() {
   const cookieStore = cookies();
-  const token = cookieStore.get("bloxion_auth")?.value;
+  const token = (await cookieStore).get("bloxion_auth")?.value;
 
   if (!token) {
     return NextResponse.json({ error: "Not logged in" }, { status: 401 });

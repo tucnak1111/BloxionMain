@@ -4,7 +4,9 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   try {
     // Clear the authentication cookie by setting its maxAge to 0
-    cookies().set("bloxion_auth", "", {
+    (await
+      // Clear the authentication cookie by setting its maxAge to 0
+      cookies()).set("bloxion_auth", "", {
       path: "/",
       httpOnly: true,
       maxAge: 0,
