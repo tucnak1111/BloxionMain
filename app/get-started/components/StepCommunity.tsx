@@ -66,60 +66,47 @@ export default function StepCommunity({
         </p>
       )}
 
-      {!loading &&
-        !error &&
-        groups.map((group) => (
-          <div
-  key={group.id}
-  className={`${styles.communityCard} ${
-    value?.id === group.id ? styles.communitySelected : ""
-  }`}
-  onClick={() => onNext(group)}
->
-  <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
-    {group.iconUrl ? (
-      <img
-        src={group.iconUrl}
-        alt={group.name}
-        width={44}
-        height={44}
-        style={{ borderRadius: 10 }}
-      />
-    ) : (
-<div
-  style={{
-    width: 44,
-    height: 44,
-    borderRadius: 10,
-    background: "#1f1f1f",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#6b7280",
-    fontSize: 12,
-    fontWeight: 600,
-  }}
->
-  {group.name.charAt(0).toUpperCase()}
-</div>
+{!loading &&
+  !error &&
+  groups.map((group) => (
+    <div
+      key={group.id}
+      className={`${styles.communityCard} ${
+        value?.id === group.id ? styles.communitySelected : ""
+      }`}
+      onClick={() => onNext(group)}
+    >
+      <div className={styles.communityRow}>
+        {group.iconUrl ? (
+          <img
+            src={group.iconUrl}
+            alt={group.name}
+            width={44}
+            height={44}
+            className={styles.communityIcon}
+          />
+        ) : (
+          <div className={styles.communityIconFallback}>
+            {group.name.charAt(0).toUpperCase()}
+          </div>
+        )}
 
-    <div style={{ flex: 1 }}>
-      <div style={{ fontWeight: 600 }}>{group.name}</div>
+        <div className={styles.communityInfo}>
+          <div className={styles.communityName}>{group.name}</div>
 
-      <div className={styles.subtitle}>
-        {group.memberCount.toLocaleString()} members
-        {" · "}
-        Rank: {group.roleName} ({group.roleRank})
-      </div>
+          <div className={styles.subtitle}>
+            {group.memberCount.toLocaleString()} members ·{" "}
+            {group.roleName} ({group.roleRank})
+          </div>
 
-      {group.ownerName && (
-        <div className={styles.subtitle}>
-          Owner: {group.ownerName}
+          {group.ownerName && (
+            <div className={styles.subtitle}>
+              Owner: {group.ownerName}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
-  </div>
-</div>
         ))}
     </section>
   );
