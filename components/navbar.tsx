@@ -41,7 +41,7 @@ export default function Navbar({ toggleSidebar, openSettings, user }: NavbarProp
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-left">
-          {toggleSidebar && (
+          {toggleSidebar && user && (
             <button onClick={toggleSidebar} className="sidebar-toggle-btn">
               &#9776;
             </button>
