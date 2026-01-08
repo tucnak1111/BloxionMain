@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Workspace {
   id: string;
@@ -50,10 +51,12 @@ export default function WorkspacesPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {workspaces.map((ws) => (
-              <div key={ws.id} className="bg-zinc-800 p-6 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-colors">
-                <h2 className="text-xl font-semibold mb-2">{ws.groupName || "Unnamed Workspace"}</h2>
-                <p className="text-zinc-400 text-sm">Group ID: {ws.groupId}</p>
-              </div>
+              <Link key={ws.id} href={`/workspace/${ws.id}/home`}>
+                <div className="bg-zinc-800 p-6 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-colors cursor-pointer h-full">
+                  <h2 className="text-xl font-semibold mb-2">{ws.groupName || "Unnamed Workspace"}</h2>
+                  <p className="text-zinc-400 text-sm">Group ID: {ws.groupId}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
