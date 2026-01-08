@@ -43,7 +43,9 @@ body {
 .appContent {
   padding-top: calc(64px + 1em); /* navbar height + top offset */
 }
-
+body {
+  overflow-x: hidden;
+}
 /* Removed .app-footer to avoid an unintended footer rendering at the top.
    If a page-level footer is needed, add a specific footer component and
    style it locally or with a dedicated class instead. */
