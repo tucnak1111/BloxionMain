@@ -20,9 +20,7 @@ export default function StepAccess({
   onNext: (role: Role) => void;
 }) {
   // Only roles the user can manage
-  const selectableRoles = group.roles
-    .filter((r) => r.rank <= group.userRole.rank)
-    .sort((a, b) => b.rank - a.rank);
+  const selectableRoles = group.roles;
 
   return (
     <section className={styles.card}>
