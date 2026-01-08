@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./steps/steps.module.css";
-import type Group from "./StepCommunity";
+import type { Group } from "./StepCommunity";
 
 type Role = {
   name: string;
