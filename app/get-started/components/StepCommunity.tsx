@@ -9,10 +9,15 @@ export type Group = {
   iconUrl: string | null;
   memberCount: number;
   ownerName: string | null;
+
   roleName: string;
   roleRank: number;
-  roleName: string;
-  roleRank: number;
+
+  roles: {
+    id: number;
+    name: string;
+    rank: number;
+  }[];
 };
 
 export default function StepCommunity({
