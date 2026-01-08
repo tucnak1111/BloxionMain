@@ -17,15 +17,21 @@ export default function CreateWorkspacePage() {
     name: string;
     iconUrl: string | null;
 
-    
     memberCount: number;
     ownerName: string | null;
+
     roleName: string;
     roleRank: number;
+
+    
+    roles: {
+      id: number;
+      name: string;
+      rank: number;
+    }[];
   },
   name: "",
   description: "",
-  access: "open" as "open" | "restricted",
   minRank: null as null | { name: string; rank: number },
 });
 
