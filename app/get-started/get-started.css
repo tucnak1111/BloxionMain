@@ -3,7 +3,7 @@
 .create-workspace-container {
   width: 100%;
   max-width: 900px;
-  margin: 90px auto 2em; /* Provides space for the fixed navbar at the top */
+  margin: 2em auto; /* Removed top margin since navbar padding is handled by layout */
   padding: 2em;
   display: flex;
   flex-direction: column;

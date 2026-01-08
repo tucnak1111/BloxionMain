@@ -1,9 +1,5 @@
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
+.not-allowed-page {
+  height: 100vh;
   display: flex;
   background-color: #1e293b;
   align-items: center;
@@ -17,7 +13,7 @@ body {
   position: relative;
 }
 
-body::before {
+.not-allowed-page::before {
   content: "";
   position: absolute;
   inset: 0;

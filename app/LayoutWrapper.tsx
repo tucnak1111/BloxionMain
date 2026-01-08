@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Navbar from "../components/navbar"; // Assuming navbar is now a separate component
 import Sidebar from "../components/sidebar";
 import Settings from "../components/Settings";
@@ -20,6 +21,7 @@ export default function LayoutWrapper({
 }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -27,6 +29,15 @@ export default function LayoutWrapper({
 
   const openSettings = () => {
     setSettingsOpen(true);
+  };
+
+  // Pages that should NOT have navbar/sidebar
+  const noLayoutPages = ["/login", "/not-allowed", "/error"];
+
+  const shouldShowLayout = user && !noLayoutPages.includes(pathname);
+
+  if (!shouldShowLayout) {
+    return <>{children}</>;
   }
 
   return (

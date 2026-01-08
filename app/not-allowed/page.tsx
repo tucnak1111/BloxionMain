@@ -46,7 +46,7 @@ export default async function SuspendedPage() {
   }
 
   return (
-    <>
+    <div className="not-allowed-page">
       <div className="login-form">
         <h1 style={{ color: "#ef4444", marginBottom: "0.5em", fontWeight: 650 }}>
           Account Suspended
@@ -71,6 +71,6 @@ export default async function SuspendedPage() {
           <a href="https://docs.bloxion.xyz/legal/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Terms of Service</a>
         </div>
       </div>
-    </>
+    </div>
   );
 }

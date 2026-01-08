@@ -33,15 +33,15 @@ export default function WorkspacesPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-zinc-900 text-zinc-100 flex items-center justify-center p-6">
+      <div className="flex items-center justify-center p-6">
         <p className="text-zinc-400">Loading workspaces...</p>
-      </main>
+      </div>
     );
   }
 
   if (workspaces.length > 0) {
     return (
-      <main className="min-h-screen bg-zinc-900 text-zinc-100 p-6">
+      <div className="p-6">
         <div className="max-w-5xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">Your Workspaces</h1>
@@ -60,12 +60,12 @@ export default function WorkspacesPage() {
             ))}
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-zinc-900 text-zinc-100 flex items-center justify-center p-6">
+    <div className="flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-zinc-800 p-8 rounded-xl shadow-lg border border-zinc-700 text-center">
         <h1 className="text-2xl font-bold mb-2">No workspaces available</h1>
         <p className="text-zinc-400 mb-6">
@@ -75,6 +75,6 @@ export default function WorkspacesPage() {
           Create Workspace
         </button>
       </div>
-    </main>
+    </div>
   );
 }

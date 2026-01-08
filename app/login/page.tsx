@@ -38,5 +38,5 @@ export default async function LoginPage() {
     redirect("/workspaces");
   }
 
-  return <LoginForm />;
+  return <div className="login-page"><LoginForm /></div>;
 }
