@@ -1,38 +1,28 @@
-export default function StepCommunity({
-  value,
-  onNext,
-}: {
-  value: any;
-  onNext: (community: any) => void;
-}) {
+import styles from "./steps.module.css";
+
+export default function StepCommunity({ onNext }: any) {
   const mockCommunity = {
-    id: "1",
     name: "Example Group",
     members: 12,
     role: "Executive Board",
   };
 
   return (
-    <section className="space-y-6 bg-neutral-950 border border-neutral-800 rounded-2xl p-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Select Community</h1>
-        <p className="text-neutral-400 mt-1">
-          Choose which community this workspace belongs to.
-        </p>
-      </div>
+    <section className={styles.card}>
+      <h1 className={styles.title}>Select Community</h1>
+      <p className={styles.subtitle}>
+        Choose which community this workspace belongs to.
+      </p>
 
-      <button
+      <div
+        className={styles.communityCard}
         onClick={() => onNext(mockCommunity)}
-        className="w-full text-left border border-neutral-800 rounded-xl p-4
-                   hover:border-teal-500 hover:bg-neutral-900 transition"
       >
-        <div className="font-medium text-neutral-100">
-          {mockCommunity.name}
-        </div>
-        <div className="text-sm text-neutral-400 mt-1">
+        <strong>{mockCommunity.name}</strong>
+        <div className={styles.subtitle}>
           {mockCommunity.members} members · Your role: {mockCommunity.role}
         </div>
-      </button>
+      </div>
     </section>
   );
 }
