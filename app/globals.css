@@ -40,6 +40,10 @@ body {
   flex: 1; /* Allows this element to grow and fill available space */
 }
 
+.appContent {
+  padding-top: calc(64px + 1em); /* navbar height + top offset */
+}
+
 /* Removed .app-footer to avoid an unintended footer rendering at the top.
    If a page-level footer is needed, add a specific footer component and
    style it locally or with a dedicated class instead. */
