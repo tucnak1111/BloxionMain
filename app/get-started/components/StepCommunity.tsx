@@ -1,4 +1,4 @@
-export function StepCommunity({
+export default function StepCommunity({
   value,
   onNext,
 }: {
