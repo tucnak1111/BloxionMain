@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import "./login.css";
+import { version } from "../../package.json";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,11 @@ export default function LoginForm() {
         <a href="https://docs.bloxion.xyz/legal/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Privacy Policy</a>
         <span style={{ margin: '0 0.5em' }}>&bull;</span>
         <a href="https://docs.bloxion.xyz/legal/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Terms of Service</a>
+      </div>
+
+      <div className="login-footer" aria-hidden={false}>
+        <p>&copy; {new Date().getFullYear()} Bloxion. All Rights Reserved.</p>
+        <p>Version {version}</p>
       </div>
     </form>
   );

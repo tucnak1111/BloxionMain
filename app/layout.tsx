@@ -1,6 +1,5 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import { version } from "../package.json";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { prisma } from "../prisma/Client";
@@ -62,11 +61,6 @@ export default async function RootLayout({
           </LayoutWrapper>
         </div>
 
-        {/* Global Footer */}
-        <footer className="app-footer">
-          <p>&copy; {new Date().getFullYear()} Bloxion. All Rights Reserved.</p>
-          <p>Version {version}</p>
-        </footer>
       </body>
     </html>
   );
