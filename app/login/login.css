@@ -50,6 +50,7 @@
   gap: .5em;
   width: 100%;
   padding: 1em;
+  min-height: 44px; /* keep button size stable when switching to spinner */
   border: none;
   border-radius: 6px;
   background: linear-gradient(to right, #35c3c1, #00d6b7);
@@ -76,6 +77,7 @@
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+  display: inline-block;
 }
 
 @keyframes spin {
