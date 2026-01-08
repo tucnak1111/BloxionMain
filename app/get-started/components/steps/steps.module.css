@@ -86,6 +86,7 @@
   border: 1px solid #1f1f1f;
   border-radius: 24px;
   padding: 16px;
+  margin-top: 12px;
   background: linear-gradient(
     180deg,
     #2a3c5d 0%,
@@ -107,14 +108,8 @@
   font-size: 14px;
 }
 
-.communityCard {
-  border: 1px solid #1f1f1f;
-  border-radius: 12px;
-  padding: 14px;
-  background: #0f0f0f;
-  cursor: pointer;
-  margin-top: 12px;
-}
+
+
 
 .communityCard:hover {
   border-color: #14b8a6;
@@ -124,13 +119,7 @@
   border-color: #14b8a6;
 }
 
-.communityCard {
-  border: 1px solid #1f1f1f;
-  border-radius: 14px;
-  padding: 16px;
-  background: linear-gradient(180deg, #0f0f0f, #0b0b0b);
-  cursor: pointer;
-}
+
 
 .communityCard:hover {
   border-color: #14b8a6;
