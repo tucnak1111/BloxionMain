@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./steps/steps.module.css";
 
-type Group = {
+export type Group = {
   id: number;
   name: string;
   iconUrl: string | null;
