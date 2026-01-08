@@ -111,3 +111,20 @@
 .communitySelected {
   border-color: #14b8a6;
 }
+
+.communityCard {
+  border: 1px solid #1f1f1f;
+  border-radius: 14px;
+  padding: 16px;
+  background: linear-gradient(180deg, #0f0f0f, #0b0b0b);
+  cursor: pointer;
+}
+
+.communityCard:hover {
+  border-color: #14b8a6;
+}
+
+.communitySelected {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.4);
+}
