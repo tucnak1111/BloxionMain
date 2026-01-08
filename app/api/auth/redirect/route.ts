@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 export async function GET() {
   const ROBLOX_CLIENT_ID = process.env.ROBLOX_CLIENT_ID!;
   const REDIRECT_URI = process.env.ROBLOX_REDIRECT_URI!;
@@ -10,6 +11,7 @@ export async function GET() {
 
   const response = NextResponse.redirect(authUrl);
 
+  // In Next.js 15, we set cookies on the response object
   response.cookies.set("roblox_oauth_state", STATE, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
