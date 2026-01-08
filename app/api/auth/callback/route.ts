@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import axios from "axios";
 import { prisma } from "../../../../prisma/Client";
 import jwt from "jsonwebtoken";
@@ -82,20 +81,12 @@ async function upsertUser(robloxUser: any, avatarUrl: string | null) {
   });
 }
 
-function createSession(user: any) {
-  const token = jwt.sign(
+function generateToken(user: any) {
+  return jwt.sign(
     { id: user.id, robloxId: user.robloxId, username: user.username },
     JWT_SECRET!,
     { expiresIn: "7d" }
   );
-
-  cookies().set(COOKIE_NAME, token, {
-    path: "/",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: COOKIE_MAX_AGE,
-  });
 }
 
 export async function GET(req: NextRequest) {
@@ -125,18 +116,31 @@ export async function GET(req: NextRequest) {
     // 3. Create or update the user in the database
     const user = await upsertUser(robloxUser, avatarUrl);
 
-    // 4. Create a session and set the authentication cookie
-    createSession(user);
+    // 4. Generate session token
+    const token = generateToken(user);
+
+    let response: NextResponse;
 
     // 5. Redirect based on user suspension status
     if (user.isSuspended) {
       const reason = encodeURIComponent(user.suspendedReason || "No reason provided");
       const suspendedUrl = new URL("/not-allowed", req.url);
       suspendedUrl.searchParams.set("reason", reason);
-      return NextResponse.redirect(suspendedUrl);
+      response = NextResponse.redirect(suspendedUrl);
+    } else {
+      response = NextResponse.redirect(new URL("../../workspaces", req.url));
     }
 
-    return NextResponse.redirect(new URL("../../workspaces", req.url));
+    // Set the cookie on the response object
+    response.cookies.set(COOKIE_NAME, token, {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: COOKIE_MAX_AGE,
+    });
+
+    return response;
   } catch (err: any) {
     console.error("Authentication callback failed:", {
       message: err.message,
@@ -152,4 +156,3 @@ export async function GET(req: NextRequest) {
 
   }
 }
-
