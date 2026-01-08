@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  context: { params: { groupId: string } }
+  context: { params: Promise<{ groupId: string }> }
 ) {
-  const { groupId } = context.params;
+  const { groupId } = await context.params;
 
   // 1. Input Validation: Ensure groupId is a valid number.
   if (!/^\d+$/.test(groupId)) {
