@@ -56,7 +56,9 @@ export async function GET() {
   return {
     id: g.group.id,
     name: g.group.name,
-    iconUrl: thumbnail ? thumbnail.imageUrl : null,
+    iconUrl: thumbnail?.imageUrl
+  ? thumbnail.imageUrl.replace("http://", "https://")
+  : null,
 
     // NEW 👇
     memberCount: g.group.memberCount,
