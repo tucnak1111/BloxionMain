@@ -61,14 +61,25 @@ async function getRobloxAvatar(userId: string): Promise<string | null> {
     return null;
   }
 }
+async function getUsername(userId: string): Promise<{
+  username: string;
+  displayName: string;
+}> {
+  const { data } = await axios.get(`https://users.roblox.com/v1/users/${userId}`);
+  return { username: data.name, displayName: data.displayName };
+}
 
 async function upsertUser(robloxUser: any, avatarUrl: string | null) {
+
+  const { username, displayName } = await getUsername(robloxUser.sub);
+
   return prisma.user.upsert({
     where: { robloxId: robloxUser.sub },
-    update: { username: robloxUser.name, avatarUrl },
+    update: { username, displayName, avatarUrl },
     create: {
       robloxId: robloxUser.sub,
-      username: robloxUser.name,
+      username,
+      displayName,
       avatarUrl,
     },
     select: {
