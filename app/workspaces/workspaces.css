@@ -103,8 +103,8 @@
 .workspace-card {
   height: 100%;
   border-radius: 0.75rem;
-  border: 1px solid #3f3f46;
-  background-color: rgba(24, 24, 27, 0.6);
+  border: 1px dashed #3f3f46;
+  background-color: rgba(24, 24, 27, 0.4);
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   padding: 1.25rem;
@@ -115,7 +115,7 @@
 }
 
 .workspace-card:hover {
-  border-color: #71717a;
+  border-color: #6366f1;
   background-color: #18181b;
 }
 
