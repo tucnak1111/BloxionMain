@@ -57,7 +57,6 @@
   border: 1px dashed #3f3f46;
   background-color: rgba(24, 24, 27, 0.4);
   transition: all 0.2s ease-in-out;
-  cursor: not-allowed; /* EDIT IN PROD */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,7 +180,7 @@
 
 .create-workspace-button {
   width: 100%;
-  background-color: #38383b; /*#4f46e5*/
+  background-color: #4f46e5; /* Changed from #38383b to enable it */
   color: white;
   font-weight: 500;
   padding-top: 0.75rem;
@@ -189,13 +188,17 @@
   border-radius: 0.5rem;
   transition: background-color 0.2s ease-in-out;
   border: none;
-  cursor: not-allowed; /* EDIT IN PROD */
-  pointer-events: none; /* EDIT IN PROD */
+  cursor: pointer; /* Changed from not-allowed */
 }
 
 .create-workspace-button:hover {
-  background-color: #2a2a2e; /*#6366f1*/
-  pointer-events: none; /* EDIT IN PROD */
+  background-color: #6366f1; /* Changed from #2a2a2e */
+}
+
+.workspace-meta {
+  font-size: 0.75rem; /* text-xs */
+  color: #a1a1aa; /* text-gray-400 */
+  margin-top: 0.5rem;
 }
 
 a {

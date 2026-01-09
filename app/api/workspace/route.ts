@@ -26,6 +26,19 @@ export async function GET(req: Request) {
         id: true,
         groupId: true,
         groupName: true,
+        // Include owner's display name
+        owner: {
+          select: {
+            displayName: true,
+            username: true, // Fallback if displayName is null
+          },
+        },
+        // Count members
+        _count: {
+          select: {
+            members: true,
+          },
+        },
       },
     });
 
@@ -40,22 +53,49 @@ export async function GET(req: Request) {
             id: true,
             groupId: true,
             groupName: true,
+            // Include owner's display name
+            owner: {
+              select: {
+                displayName: true,
+                username: true,
+              },
+            },
+            // Count members
+            _count: {
+              select: {
+                members: true,
+              },
+            },
           },
         },
       },
     });
 
-    // Extract workspace details from memberWorkspaces
-    const memberWorkspaceDetails = memberWorkspaces.map(
-      (membership) => membership.workspace
-    );
+    // Process ownedWorkspaces
+    const formattedOwnedWorkspaces = ownedWorkspaces.map(ws => ({
+      id: ws.id,
+      groupId: ws.groupId,
+      groupName: ws.groupName,
+      memberCount: ws._count.members,
+      groupOwner: ws.owner.displayName || ws.owner.username,
+    }));
 
-    // Combine and remove duplicates (a user might own and be a member, though ownerId should cover it)
+    // Process memberWorkspaces
+    const formattedMemberWorkspaces = memberWorkspaces.map(membership => ({
+      id: membership.workspace.id,
+      groupId: membership.workspace.groupId,
+      groupName: membership.workspace.groupName,
+      memberCount: membership.workspace._count.members,
+      groupOwner: membership.workspace.owner.displayName || membership.workspace.owner.username,
+    }));
+
+    // Combine and remove duplicates
     const allWorkspacesMap = new Map();
-    ownedWorkspaces.forEach((ws) => allWorkspacesMap.set(ws.id, ws));
-    memberWorkspaceDetails.forEach((ws) => allWorkspacesMap.set(ws.id, ws));
+    formattedOwnedWorkspaces.forEach((ws) => allWorkspacesMap.set(ws.id, ws));
+    formattedMemberWorkspaces.forEach((ws) => allWorkspacesMap.set(ws.id, ws));
 
     const allWorkspaces = Array.from(allWorkspacesMap.values());
+
 
     return NextResponse.json(allWorkspaces);
   } catch (err: any) {

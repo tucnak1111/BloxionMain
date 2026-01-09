@@ -8,6 +8,8 @@ interface Workspace {
   id: string;
   groupName: string | null;
   groupId: string;
+  memberCount: number;
+  groupOwner: string;
 }
 
 export default function WorkspacesPage() {
@@ -73,6 +75,9 @@ export default function WorkspacesPage() {
                   </h2>
                   <p className="workspace-group-id">
                     Group ID: {ws.groupId}
+                  </p>
+                  <p className="workspace-meta">
+                    Owner: {ws.groupOwner} | Members: {ws.memberCount}
                   </p>
                 </div>
               </Link>
