@@ -1,41 +1,59 @@
-import { NextResponse } from "next/server";
-import { prisma } from "../../../../prisma/Client"; 
-import { z } from "zod";
+import { prisma } from "../../../../prisma/Client";
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-const WorkspaceSchema = z.object({
-  userId: z.string(),
-  groupId: z.string(),
-  groupName: z.string(),
-  allowedRanks: z.array(z.number()),
-});
+interface JwtPayload extends jwt.JwtPayload {
+  id: string;
+}
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const token = req.cookies.get("bloxion_auth")?.value;
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
-    const body = await req.json();
-    const data = WorkspaceSchema.parse(body);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const userId = decoded.id;
 
-    const { userId, groupId, groupName, allowedRanks } = data;
+    const { name, description, community, minRank } = await req.json();
+
+    if (!name || !description || !community || !minRank) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     const workspace = await prisma.workspace.create({
       data: {
         ownerId: userId,
-        groupId,
-        groupName,
-        allowedRanks,
+        groupName: community.name,
+        groupId: community.id.toString(),
+        allowedRanks: [minRank.rank],
+        members: {
+          create: {
+            userId: userId,
+            robloxId: "0", // Should be fetched from user's profile
+            rank: 255, // Owner rank
+            rankName: "Owner",
+            canPost: true,
+            canEdit: true,
+            canDelete: true,
+          },
+        },
       },
     });
-    return NextResponse.json({ success: true, workspace }, {status: 201});
-  } catch (err: any) {
-    console.error("Error: ", err);
 
+    return NextResponse.json(workspace);
+  } catch (error) {
+    console.error("Workspace creation failed:", error);
+    if (error instanceof jwt.JsonWebTokenError) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
     return NextResponse.json(
-      {
-        success: false,
-        error: err.message || "Invalid request", errorDetails: err.errors || null
-      },
-      {
-        status: 400
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }
