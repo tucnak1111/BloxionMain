@@ -1,23 +1,20 @@
 .navbar {
-  position: static;
+  position: fixed;
   top: 0;
-
-  margin: 1em auto;
-
-  width: 95%;
-  max-width: 1200px;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  padding: 0.75em 1.5em;
-
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(18, 26, 44, 0.6);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navbar-container {
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75em 1.5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
