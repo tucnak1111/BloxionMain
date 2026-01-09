@@ -95,6 +95,9 @@ export default function WorkspacesPage() {
             Create workspace
           </button>
         </Link>
+        <p className="create-workspace-note">
+          Workspace creation is currently disabled while we continue with development.
+        </p>
       </div>
     </div>
   );

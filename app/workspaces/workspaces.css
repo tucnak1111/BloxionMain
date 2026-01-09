@@ -57,7 +57,7 @@
   border: 1px dashed #3f3f46;
   background-color: rgba(24, 24, 27, 0.4);
   transition: all 0.2s ease-in-out;
-  cursor: pointer;
+  cursor: not-allowed; /* EDIT IN PROD */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,7 +181,7 @@
 
 .create-workspace-button {
   width: 100%;
-  background-color: #4f46e5;
+  background-color: #38383b; /*#4f46e5*/
   color: white;
   font-weight: 500;
   padding-top: 0.75rem;
@@ -189,14 +189,21 @@
   border-radius: 0.5rem;
   transition: background-color 0.2s ease-in-out;
   border: none;
-  cursor: pointer;
+  cursor: not-allowed; /* EDIT IN PROD */
 }
 
 .create-workspace-button:hover {
-  background-color: #6366f1;
+  background-color: #2a2a2e; /*#6366f1*/
 }
 
 a {
   text-decoration: none;
   color: inherit;
+}
+
+.create-workspace-note {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: center;
 }
