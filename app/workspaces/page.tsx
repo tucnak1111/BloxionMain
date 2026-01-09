@@ -17,7 +17,7 @@ export default function WorkspacesPage() {
   useEffect(() => {
     const fetchWorkspaces = async () => {
       try {
-        const res = await fetch("/api/workspace/WorkspaceFetch");
+        const res = await fetch("/api/workspace");
         if (res.ok) {
           const data = await res.json();
           setWorkspaces(data);
@@ -95,9 +95,7 @@ export default function WorkspacesPage() {
             Create workspace
           </button>
         </Link>
-        <p className="create-workspace-note">
-          Workspace creation is currently disabled while we continue with development.
-        </p>
+
       </div>
     </div>
   );

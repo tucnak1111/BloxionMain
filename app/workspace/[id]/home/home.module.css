@@ -1,0 +1,86 @@
+.container {
+  padding: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.875rem; /* 3xl */
+  font-weight: 700; /* bold */
+  color: #fff;
+}
+
+.groupId {
+  color: #a1a1aa; /* gray-400 */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) { /* md breakpoint */
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  background-color: #1f2937; /* gray-800 */
+  padding: 1.5rem;
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+}
+
+.cardTitle {
+  font-size: 1.25rem; /* xl */
+  font-weight: 600; /* semibold */
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  space-y: 0.75rem; /* space-y-3 */
+}
+
+.listItem a {
+  color: #60a5fa; /* blue-400 */
+  text-decoration: none;
+}
+
+.listItem a:hover {
+  color: #93c5fd; /* blue-300 */
+}
+
+.textGray {
+  color: #a1a1aa; /* gray-400 */
+}
+
+.textLight {
+  color: #d1d5db; /* gray-300 */
+}
+
+.textWhite {
+  color: #fff;
+}
+
+.fontMedium {
+  font-weight: 500;
+}
+
+.colSpan1 {
+    grid-column: span 1 / span 1;
+}
+
+.colSpan2 {
+    grid-column: span 2 / span 2;
+}
