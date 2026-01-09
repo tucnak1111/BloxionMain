@@ -40,31 +40,26 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="app-container">
-        <div className="layout-wrapper">
-          <LayoutWrapper user={user}>
-            <div className="main-content">
-            {/* Toaster for notifications across all pages */}
-            <Toaster
-              position="top-center"
-              reverseOrder={false}
-              toastOptions={{
-                duration: 5000,
-                style: {
-                  background: "#1e293b",
-                  color: "#fff",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.3)",
-                },
-              }}
-            />
-            {children}
-            </div>
-          </LayoutWrapper>
-        </div>
+        <LayoutWrapper user={user}>
+          {/* Toaster for notifications across all pages */}
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            toastOptions={{
+              duration: 5000,
+              style: {
+                background: "#1e293b",
+                color: "#fff",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                boxShadow: "0 8px 20px rgba(0, 0, 0, 0.3)",
+              },
+            }}
+          />
+          {children}
+        </LayoutWrapper>
 
         {/* Version badge (fixed, bottom-right) - not a footer */}
         <div className="app-version">Version {version}</div>
-
       </body>
     </html>
   );

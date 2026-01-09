@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import Navbar from "../components/navbar"; // Assuming navbar is now a separate component
+import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
 import Settings from "../components/Settings";
 
@@ -31,19 +31,21 @@ export default function LayoutWrapper({
     setSettingsOpen(true);
   };
 
-  // Show navbar/sidebar on all pages
-  const shouldShowLayout = true;
+  const noLayoutRoutes = ["/login", "/get-started", "/error", "/not-allowed"];
+  const shouldShowLayout = !noLayoutRoutes.some((route) => pathname.startsWith(route));
 
   if (!shouldShowLayout) {
     return <>{children}</>;
   }
 
   return (
-    <>
+    <div className="layout-wrapper">
       <Navbar toggleSidebar={toggleSidebar} user={user} openSettings={openSettings} />
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} user={user} openSettings={openSettings} />
-<main className="appContent">{children}</main>
+      <main className="appContent">
+        <div className="main-content">{children}</div>
+      </main>
       <Settings isOpen={isSettingsOpen} onClose={() => setSettingsOpen(false)} />
-    </>
+    </div>
   );
 }
