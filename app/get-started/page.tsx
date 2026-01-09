@@ -52,7 +52,7 @@ export default function CreateWorkspacePage() {
       if (response.ok) {
         const workspace = await response.json();
         toast.success("Workspace created successfully!");
-        router.push(`/workspace/${workspace.id}`);
+        router.push(`/workspace/${workspace.id}/home`);
       } else {
         const errorData = await response.json();
         toast.error(errorData.error || "Failed to create workspace.");
