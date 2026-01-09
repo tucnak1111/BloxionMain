@@ -190,10 +190,12 @@
   transition: background-color 0.2s ease-in-out;
   border: none;
   cursor: not-allowed; /* EDIT IN PROD */
+  pointer-events: none; /* EDIT IN PROD */
 }
 
 .create-workspace-button:hover {
   background-color: #2a2a2e; /*#6366f1*/
+  pointer-events: none; /* EDIT IN PROD */
 }
 
 a {
@@ -207,3 +209,5 @@ a {
   color: #9ca3af;
   text-align: center;
 }
+
+
