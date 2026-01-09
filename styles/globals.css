@@ -8,9 +8,8 @@ body {
 }
 
 main {
-  margin-top: 120px !important;
 }
 
 .appContent {
-  padding-top: calc(64px + 1em); /* navbar height + top offset */
+  padding-top: 72px; /* navbar height */
 }
