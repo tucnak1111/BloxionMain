@@ -16,6 +16,16 @@ export async function POST(req: NextRequest) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     const userId = decoded.id;
 
+    // Fetch the user to get their robloxId
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { robloxId: true },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
     const { name, description, community, minRank } = await req.json();
 
     if (!name || !description || !community || !minRank) {
@@ -27,14 +37,14 @@ export async function POST(req: NextRequest) {
 
     const workspace = await prisma.workspace.create({
       data: {
-        ownerId: userId,
+        ownerId: user.robloxId, // Set ownerId to robloxId
         groupName: community.name,
         groupId: community.id.toString(),
         allowedRanks: [minRank.rank],
         members: {
           create: {
             userId: userId,
-            robloxId: "0", // Should be fetched from user's profile
+            robloxId: user.robloxId, // Set member's robloxId to user's robloxId
             rank: 255, // Owner rank
             rankName: "Owner",
             canPost: true,

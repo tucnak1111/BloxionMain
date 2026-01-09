@@ -84,3 +84,12 @@
 .colSpan2 {
     grid-column: span 2 / span 2;
 }
+
+/* Custom spacing for overview section */
+.spaceY3 > *:not(:last-child) {
+  margin-bottom: 0.75rem; /* space-y-3 */
+}
+
+.textError {
+  color: #ef4444; /* red-500 */
+}

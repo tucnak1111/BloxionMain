@@ -54,19 +54,48 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
 
     const workspace = await prisma.workspace.findUnique({
       where: { id: workspaceId },
-      select: { id: true, groupId: true, allowedRanks: true, groupName: true },
+      select: {
+        id: true,
+        groupId: true,
+        allowedRanks: true,
+        groupName: true,
+        // Include owner's display name
+        owner: {
+          select: {
+            displayName: true,
+            username: true, // Fallback if displayName is null
+          },
+        },
+        // Count members
+        _count: {
+          select: {
+            members: true,
+          },
+        },
+      },
     });
 
     if (!workspace) {
       return NextResponse.json({ error: "Workspace not found" }, { status: 404 });
     }
 
+    // Process the workspace data to include memberCount and groupOwner
+    const formattedWorkspace = {
+      id: workspace.id,
+      groupId: workspace.groupId,
+      groupName: workspace.groupName,
+      allowedRanks: workspace.allowedRanks, // Keep existing fields
+      memberCount: workspace._count.members,
+      groupOwner: workspace.owner.displayName || workspace.owner.username,
+    };
+
+
     const { data: groupData } = await axios.get(
       `https://groups.roblox.com/v2/users/${user.robloxId}/groups/roles`
     );
 
     const userGroups: RobloxGroup[] = groupData?.data ?? [];
-    const groupMatch = userGroups.find((g) => g.group.id.toString() === workspace.groupId);
+    const groupMatch = userGroups.find((g) => g.group.id.toString() === formattedWorkspace.groupId);
 
     if (!groupMatch) {
       return NextResponse.json(
@@ -76,14 +105,14 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
     }
 
     const userRank = groupMatch.role.rank;
-    if (!workspace.allowedRanks.includes(userRank)) {
+    if (!formattedWorkspace.allowedRanks.includes(userRank)) {
       return NextResponse.json(
         { error: "Forbidden: Your rank in the group does not grant you access." },
         { status: 403 }
       );
     }
 
-    return NextResponse.json({ success: true, workspace });
+    return NextResponse.json({ success: true, workspace: formattedWorkspace });
   } catch (err: any) {
     if (err instanceof jwt.JsonWebTokenError) {
       return NextResponse.json({ error: "Invalid or expired session" }, { status: 403 });

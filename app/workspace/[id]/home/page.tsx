@@ -9,6 +9,9 @@ interface Workspace {
   id: string;
   groupName: string | null;
   groupId: string;
+  allowedRanks: number[];
+  memberCount: number; // Added
+  groupOwner: string; // Added
 }
 
 export default function WorkspaceHomepage({ params }: { params: { id: string } }) {
@@ -50,7 +53,7 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
 
   if (error) {
     return (
-      <div className={`${styles.container} text-red-500`}> {/* Using inline color for error for now */}
+      <div className={`${styles.container} ${styles.textError}`}> {/* Using custom class for error */}
         Error: {error}
       </div>
     );
@@ -108,8 +111,9 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
         {/* Workspace Overview/Metrics (Example) */}
         <div className={`${styles.card} ${styles.colSpan1}`}>
           <h2 className={styles.cardTitle}>Overview</h2>
-          <div className={`${styles.textLight} space-y-3`}> {/* space-y-3 needs to be handled via module css if not using tailwind */}
-            <div>Members: <span className={`${styles.fontMedium} ${styles.textWhite}`}>XX</span> (TODO)</div>
+          <div className={`${styles.textLight} ${styles.spaceY3}`}> {/* Using custom class for space-y-3 */}
+            <div>Owner: <span className={`${styles.fontMedium} ${styles.textWhite}`}>{workspace.groupOwner}</span></div>
+            <div>Members: <span className={`${styles.fontMedium} ${styles.textWhite}`}>{workspace.memberCount}</span></div>
             <div>Open Time Off Requests: <span className={`${styles.fontMedium} ${styles.textWhite}`}>YY</span> (TODO)</div>
           </div>
         </div>
