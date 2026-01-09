@@ -27,7 +27,9 @@ export default function LoginForm() {
       <h1>Welcome to Bloxion</h1>
 
       <button className="lf--submit" disabled={loading}>
-        {loading ? <span className="spinner" /> : "Log In with Roblox"}
+        {loading ? <span className="spinner" /> : (
+          <> <img src="/Roblox_Logo.svg" alt="Roblox Logo" className="roblox-icon"/><span>Log In with Roblox </span></>
+        )}
       </button>
 
       <div style={{ marginTop: '2em', fontSize: '0.75em', color: '#9ca3af' }}>
