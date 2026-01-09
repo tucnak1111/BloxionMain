@@ -20,9 +20,9 @@ export function middleware(request: NextRequest) {
   }
 
   // If the user is not authenticated and trying to access a protected page
-  if (!token && !pathname.startsWith("/login")) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  //if (!token && !pathname.startsWith("/login")) {
+    //return NextResponse.redirect(new URL("/login", request.url));
+ // }
 
   return NextResponse.next();
 }
