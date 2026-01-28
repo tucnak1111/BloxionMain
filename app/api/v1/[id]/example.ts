@@ -36,10 +36,10 @@
 // paste code 
 
 
-export async default function GET(){
+//export async default function GET(){
     //return Response.json(
   //      { error: "example API; nothing to get" },
  //       { status: 403 }
     //);
-    return null;
-}
+    //return null;
+//}
