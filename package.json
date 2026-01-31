@@ -10,7 +10,8 @@
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "postinstall": "prisma generate",
-    "db:migrate": "prisma migrate deploy"
+    "db:migrate": "prisma migrate deploy",
+    "electron": "electron electron/main.js"
   },
   "dependencies": {
     "@paddle/paddle-node-sdk": "^1.2.0",
@@ -32,6 +33,7 @@
     "@types/node": "^20.12.8",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "electron": "^40.1.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "15.2.6",
     "prisma": "5.12.1",
