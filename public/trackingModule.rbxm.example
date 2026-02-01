@@ -1,4 +1,4 @@
 local function inactive()
-    warn("inactive")
+    error("inactive") return
 end
 inactive()
