@@ -33,9 +33,9 @@ export default function LoginForm() {
       </button>
 
       <div style={{ marginTop: '2em', fontSize: '0.75em', color: '#9ca3af' }}>
-        <a href="https://docs.bloxion.xyz/legal/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Privacy Policy</a>
+        <a href="https://docs.bloxionapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Privacy Policy</a>
         <span style={{ margin: '0 0.5em' }}>&bull;</span>
-        <a href="https://docs.bloxion.xyz/legal/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Terms of Service</a>
+        <a href="https://docs.bloxionapp.com/legal/terms-of-service" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Terms of Service</a>
       </div>
 
       <div className="login-footer" aria-hidden={false}>
