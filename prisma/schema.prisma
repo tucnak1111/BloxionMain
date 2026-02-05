@@ -158,3 +158,12 @@ model WorkspacePlaytime {
   @@index([robloxId])
   @@unique([robloxId, workspaceId])
 }
+model addon {
+	id String @id @default(cuid()) @unique
+	name String @unique 
+	creator String
+	created Int?
+	lastUpdated Int?
+	category String
+	visibility String
+}
