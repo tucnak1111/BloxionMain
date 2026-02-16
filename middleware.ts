@@ -3,16 +3,17 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("bloxion_auth")?.value;
+  const isAuthenticated = Boolean(token);
   const { pathname } = request.nextUrl;
 
   // If user is on the root path, redirect them based on auth status
   if (pathname === "/") {
-    const url = token ? "/workspaces" : "/login";
+    const url = isAuthenticated ? "/workspaces" : "/login";
     return NextResponse.redirect(new URL(url, request.url));
   }
 
   // If the user is authenticated
-  if (token) {
+  if (isAuthenticated) {
     // If they try to access the login page, redirect them to workspaces
     if (pathname === "/login") {
       return NextResponse.redirect(new URL("/workspaces", request.url));
@@ -20,9 +21,9 @@ export function middleware(request: NextRequest) {
   }
 
   // If the user is not authenticated and trying to access a protected page
-  //if (!token && !pathname.startsWith("/login")) {
-    //return NextResponse.redirect(new URL("/login", request.url));
- // }
+  if (!isAuthenticated && !pathname.startsWith("/login")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   return NextResponse.next();
 }
