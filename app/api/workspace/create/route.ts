@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
     const workspace = await prisma.workspace.create({
       data: {
-        ownerId: user.robloxId, // Set ownerId to robloxId
+        ownerId: userId,
         groupName: community.name,
         groupId: community.id.toString(),
         allowedRanks: [minRank.rank],
