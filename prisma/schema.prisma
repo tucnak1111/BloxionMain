@@ -167,3 +167,11 @@ model addon {
 	category String
 	visibility String
 }
+
+model BetaAccessCode {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

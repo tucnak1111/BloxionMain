@@ -1,0 +1,134 @@
+.beta-access-page {
+  min-height: calc(100vh - 96px);
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+.beta-access-page::after {
+  content: "";
+  position: absolute;
+  width: min(55vw, 540px);
+  height: min(55vw, 540px);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(0, 214, 183, 0.2) 0%, rgba(0, 214, 183, 0) 70%);
+  filter: blur(12px);
+  top: 8%;
+  right: 8%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.beta-access-form {
+  position: relative;
+  z-index: 1;
+  max-width: 460px;
+  width: min(100%, 460px);
+  margin: 0;
+  text-align: left;
+  border-radius: 22px;
+  padding: 2rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)),
+    rgba(8, 13, 25, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 22px 60px rgba(2, 8, 23, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.beta-access-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.beta-access-icon {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: #9ff6e8;
+  background: rgba(53, 195, 193, 0.18);
+  border: 1px solid rgba(159, 246, 232, 0.3);
+  font-size: 1rem;
+}
+
+.beta-access-badge {
+  margin: 0;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ff6e8;
+  background: rgba(53, 195, 193, 0.16);
+  border: 1px solid rgba(159, 246, 232, 0.35);
+  border-radius: 999px;
+}
+
+.beta-access-form h1 {
+  margin: 0 0 0.7rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.beta-access-subtitle {
+  margin: 0 0 1.3rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.beta-access-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #dbeafe;
+}
+
+.beta-code-input {
+  width: 100%;
+  padding: 0.85em 0.95em;
+  margin-bottom: 0.75em;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(8, 13, 25, 0.72);
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.beta-code-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.beta-code-input:focus-visible {
+  outline: none;
+  border-color: rgba(53, 195, 193, 0.95);
+  box-shadow: 0 0 0 3px rgba(53, 195, 193, 0.24);
+  transform: translateY(-1px);
+}
+
+.beta-code-error {
+  margin: 0 0 1em;
+  color: #fecaca;
+  font-size: 0.85em;
+}
+
+.beta-access-submit {
+  margin-top: 0.2rem;
+  border-radius: 10px;
+}
+
+.beta-access-help {
+  margin: 0.9rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.56);
+  text-align: center;
+}
