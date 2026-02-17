@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import "./login.css";
-import { version } from "../../package.json";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -20,22 +19,29 @@ export default function LoginForm() {
         handleLogin();
       }}
     >
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
-        rel="stylesheet"
-      />
+      <p className="login-badge">Bloxion</p>
       <h1>Welcome to Bloxion</h1>
+      <p className="login-subtitle">Premium tools for high-performance Roblox community operations.</p>
 
       <button className="lf--submit" disabled={loading}>
-        {loading ? <span className="spinner" /> : (
-          <> <img src="/Roblox_Logo.svg" alt="Roblox Logo" className="roblox-icon"/><span>Log In with Roblox </span></>
+        {loading ? (
+          <span className="spinner" />
+        ) : (
+          <>
+            <img src="/Roblox_Logo.svg" alt="Roblox Logo" className="roblox-icon" />
+            <span>Continue with Roblox</span>
+          </>
         )}
       </button>
 
-      <div style={{ marginTop: '2em', fontSize: '0.75em', color: '#9ca3af' }}>
-        <a href="https://docs.bloxionapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Privacy Policy</a>
-        <span style={{ margin: '0 0.5em' }}>&bull;</span>
-        <a href="https://docs.bloxionapp.com/legal/terms-of-service" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none' }}>Terms of Service</a>
+      <div className="legal-links">
+        <a href="https://docs.bloxionapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">
+          Privacy Policy
+        </a>
+        <span aria-hidden>&bull;</span>
+        <a href="https://docs.bloxionapp.com/legal/terms-of-service" target="_blank" rel="noopener noreferrer">
+          Terms of Service
+        </a>
       </div>
 
       <div className="login-footer" aria-hidden={false}>
