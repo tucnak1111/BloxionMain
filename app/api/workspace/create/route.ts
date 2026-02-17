@@ -28,18 +28,36 @@ export async function POST(req: NextRequest) {
 
     const { name, description, community, minRank } = await req.json();
 
-    if (!name || !description || !community || !minRank) {
+    const hasRequiredFields =
+      typeof name === "string" &&
+      typeof description === "string" &&
+      community &&
+      typeof community === "object" &&
+      (typeof community.id === "string" || typeof community.id === "number") &&
+      typeof community.name === "string" &&
+      minRank &&
+      typeof minRank === "object" &&
+      typeof minRank.rank === "number";
+
+    if (!hasRequiredFields) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Invalid or missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    if (!Number.isInteger(minRank.rank) || minRank.rank < 0 || minRank.rank > 255) {
+      return NextResponse.json(
+        { error: "Invalid minRank.rank value" },
         { status: 400 }
       );
     }
 
     const workspace = await prisma.workspace.create({
       data: {
-        ownerId: user.robloxId, // Set ownerId to robloxId
+        ownerId: userId,
         groupName: community.name,
-        groupId: community.id.toString(),
+        groupId: String(community.id),
         allowedRanks: [minRank.rank],
         members: {
           create: {

@@ -106,10 +106,17 @@ export async function GET(req: NextRequest) {
 
     const code = req.nextUrl.searchParams.get("code");
     const error = req.nextUrl.searchParams.get("error");
+    const state = req.nextUrl.searchParams.get("state");
+    const storedState = req.cookies.get("roblox_oauth_state")?.value;
 
     // Handle OAuth cancellation or errors from Roblox
     if (error) {
       console.warn("OAuth flow failed or was cancelled by the user.", { error });
+      return NextResponse.redirect(new URL("/error", req.url));
+    }
+
+    if (!state || !storedState || state !== storedState) {
+      console.warn("OAuth state validation failed.", { receivedState: state, hasStoredState: Boolean(storedState) });
       return NextResponse.redirect(new URL("/error", req.url));
     }
 
@@ -142,13 +149,22 @@ export async function GET(req: NextRequest) {
       response = NextResponse.redirect(new URL("../../workspaces", req.url));
     }
 
-    // Set the cookie on the response object
+    // Set the session cookie on the response object
     response.cookies.set(COOKIE_NAME, token, {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: COOKIE_MAX_AGE,
+    });
+
+    // One-time OAuth state cookie cleanup
+    response.cookies.set("roblox_oauth_state", "", {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 0,
     });
 
     return response;
