@@ -169,9 +169,24 @@ model addon {
 }
 
 model BetaAccessCode {
-  id        String   @id @default(cuid())
-  code      String   @unique
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String              @id @default(cuid())
+  code      String              @unique
+  isActive  Boolean             @default(true)
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  attempts  BetaAccessAttempt[]
+}
+
+model BetaAccessAttempt {
+  id               String          @id @default(cuid())
+  status           String
+  codeIdentifier   String
+  betaAccessCodeId String?
+  attemptedAt      DateTime        @default(now())
+
+  betaAccessCode BetaAccessCode? @relation(fields: [betaAccessCodeId], references: [id], onDelete: SetNull)
+
+  @@index([attemptedAt])
+  @@index([status])
+  @@index([betaAccessCodeId])
 }

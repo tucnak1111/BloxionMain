@@ -31,7 +31,7 @@ export default function LayoutWrapper({
     setSettingsOpen(true);
   };
 
-  const noLayoutRoutes = ["/login", "/get-started", "/error", "/not-allowed"];
+  const noLayoutRoutes = ["/login", "/betaAccess", "/get-started", "/error", "/not-allowed"];
   const shouldShowLayout = !noLayoutRoutes.some((route) => pathname.startsWith(route));
 
   if (!shouldShowLayout) {
