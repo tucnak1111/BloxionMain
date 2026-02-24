@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     // Fetch the user to get their robloxId
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { robloxId: true },
+      select: { robloxId: true, id: true }, 
     });
 
     if (!user) {
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
     const workspace = await prisma.workspace.create({
       data: {
-        ownerId: user.robloxId, // Set ownerId to robloxId
+        ownerId: user.id, // Set ownerId to robloxId
         groupName: community.name,
         groupId: community.id.toString(),
         allowedRanks: [minRank.rank],

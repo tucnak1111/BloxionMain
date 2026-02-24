@@ -28,7 +28,7 @@ export default function LoginForm() {
 
       <button className="lf--submit" disabled={loading}>
         {loading ? <span className="spinner" /> : (
-          <> <img src="/Roblox_Logo.svg" alt="Roblox Logo" className="roblox-icon"/><span>Log In with Roblox </span></>
+          <> {/*<img src="/Roblox_Logo.svg" alt="Roblox Logo" className="roblox-icon"/>*/}<span>Log In with Roblox </span></>
         )}
       </button>
 
