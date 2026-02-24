@@ -11,6 +11,8 @@ interface Member {
   rankName: string;
 }
 
+const REQUEST_TIMEOUT_MS = 12000;
+
 export default function UserList({ workspaceId }: { workspaceId: string }) {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,31 +21,61 @@ export default function UserList({ workspaceId }: { workspaceId: string }) {
   const [query] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    let active = true;
+
     async function fetchMembers() {
-      setLoading(true);
-      setError(null);
-      setWorkspaceMissing(false);
+      if (active) {
+        setLoading(true);
+        setError(null);
+        setWorkspaceMissing(false);
+      }
 
       try {
-        const res = await fetch(`/api/workspace/members?workspaceId=${workspaceId}`);
+        const res = await fetch(`/api/workspace/members?workspaceId=${workspaceId}`, {
+          signal: controller.signal,
+        });
         const data = await res.json();
         if (!res.ok || !data.success) {
           if (res.status === 404) {
-            setWorkspaceMissing(true);
+            if (active) {
+              setWorkspaceMissing(true);
+            }
             return;
           }
           throw new Error(data.error || "Failed to load users");
         }
-        setMembers(data.members);
+        if (active) {
+          setMembers(data.members);
+        }
       } catch (err) {
+        if (!active) {
+          return;
+        }
+
+        if ((err as Error).name === "AbortError") {
+          setError("User list request timed out. Please refresh.");
+          return;
+        }
+
         console.error("Failed to fetch members:", err);
         setError("Could not load users.");
       } finally {
-        setLoading(false);
+        clearTimeout(timeoutId);
+        if (active) {
+          setLoading(false);
+        }
       }
     }
 
     fetchMembers();
+
+    return () => {
+      active = false;
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [workspaceId]);
 
   const filteredMembers = useMemo(() => {

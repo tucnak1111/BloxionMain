@@ -20,6 +20,8 @@ export type Group = {
   }[];
 };
 
+const REQUEST_TIMEOUT_MS = 12000;
+
 export default function StepCommunity({
   value,
   onNext,
@@ -32,24 +34,47 @@ export default function StepCommunity({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    let active = true;
+
     async function loadGroups() {
       try {
-        const res = await fetch("/api/roblox/groups");
+        const res = await fetch("/api/roblox/groups", { signal: controller.signal });
 
         if (!res.ok) {
           throw new Error("Failed to load groups");
         }
 
         const data = await res.json();
-        setGroups(data);
+        if (active) {
+          setGroups(data);
+        }
       } catch (err) {
-        setError("Could not load your Roblox groups");
+        if (!active) {
+          return;
+        }
+
+        setError(
+          (err as Error).name === "AbortError"
+            ? "Loading groups timed out. Please refresh."
+            : "Could not load your Roblox groups"
+        );
       } finally {
-        setLoading(false);
+        clearTimeout(timeoutId);
+        if (active) {
+          setLoading(false);
+        }
       }
     }
 
     loadGroups();
+
+    return () => {
+      active = false;
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, []);
 
   return (

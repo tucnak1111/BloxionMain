@@ -12,26 +12,45 @@ interface Workspace {
   groupOwner: string;
 }
 
+const REQUEST_TIMEOUT_MS = 12000;
+
 export default function WorkspacesPage() {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    let active = true;
+
     const fetchWorkspaces = async () => {
       try {
-        const res = await fetch("/api/workspace");
+        const res = await fetch("/api/workspace", { signal: controller.signal });
         if (res.ok) {
           const data = await res.json();
-          setWorkspaces(data);
+          if (active) {
+            setWorkspaces(data);
+          }
         }
       } catch (err) {
-        console.error("Failed to fetch workspaces:", err);
+        if ((err as Error).name !== "AbortError") {
+          console.error("Failed to fetch workspaces:", err);
+        }
       } finally {
-        setLoading(false);
+        clearTimeout(timeoutId);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
     fetchWorkspaces();
+
+    return () => {
+      active = false;
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, []);
 
   if (loading) {
