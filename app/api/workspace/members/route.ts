@@ -32,7 +32,16 @@ export async function GET(req: Request) {
         id: workspaceId,
         OR: [{ ownerId: userId }, { members: { some: { userId } } }],
       },
-      select: { id: true },
+      select: {
+        id: true,
+        ownerId: true,
+        owner: {
+          select: {
+            username: true,
+            avatarUrl: true,
+          },
+        },
+      },
     });
 
     if (!workspaceAccess) {
@@ -46,6 +55,7 @@ export async function GET(req: Request) {
       where: { workspaceId },
       select: {
         id: true,
+        userId: true,
         rank: true,
         rankName: true,
         user: {
@@ -65,6 +75,20 @@ export async function GET(req: Request) {
       rankId: member.rank,
       rankName: member.rankName ?? `Rank ${member.rank}`,
     }));
+
+    const ownerAlreadyIncluded = members.some(
+      (member) => member.userId === workspaceAccess.ownerId
+    );
+
+    if (!ownerAlreadyIncluded) {
+      formattedMembers.unshift({
+        id: `owner-${workspaceAccess.id}`,
+        username: workspaceAccess.owner.username,
+        avatarUrl: workspaceAccess.owner.avatarUrl,
+        rankId: 255,
+        rankName: "Owner",
+      });
+    }
 
     return NextResponse.json({ success: true, members: formattedMembers });
   } catch (err: any) {
