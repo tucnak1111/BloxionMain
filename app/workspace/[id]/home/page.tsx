@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { useParams } from "next/navigation";
 import styles from "./home.module.css"; // Import the CSS module
 import UserList from "../components/userList";
 
@@ -15,8 +16,9 @@ interface Workspace {
   groupOwner: string; // Added
 }
 
-export default function WorkspaceHomepage({ params }: { params: { id: string } }) {
-  const { id: workspaceId } = params;
+export default function WorkspaceHomepage() {
+  const params = useParams<{ id: string }>();
+  const workspaceId = params?.id;
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +43,11 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
 
     if (workspaceId) {
       fetchWorkspaceDetails();
+      return;
     }
+
+    setError("Invalid workspace ID.");
+    setLoading(false);
   }, [workspaceId]);
 
   if (loading) {
