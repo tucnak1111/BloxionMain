@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import UserCard from "./userCard";
 
 interface Member {
   id: string;
@@ -14,6 +15,7 @@ export default function UserList({ workspaceId }: { workspaceId: string }) {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query] = useState("");
 
   useEffect(() => {
     async function fetchMembers() {
