@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/Client";
+import { Prisma } from "@prisma/client";
 
 export async function POST(req: Request) {
   let body;
@@ -26,6 +27,18 @@ export async function POST(req: Request) {
 
   // Store in the database
   try {
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: workspaceId },
+      select: { id: true },
+    });
+
+    if (!workspace) {
+      return NextResponse.json(
+        { error: "Workspace not found." },
+        { status: 404 }
+      );
+    }
+
     await prisma.workspacePlaytime.upsert({
       where: { robloxId_workspaceId: { robloxId, workspaceId } },
       update: { seconds: { increment: seconds } },
@@ -36,6 +49,16 @@ export async function POST(req: Request) {
       },
     });
   } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2003"
+    ) {
+      return NextResponse.json(
+        { error: "Invalid foreign key reference." },
+        { status: 400 }
+      );
+    }
+
     console.error("Database error:", err);
     return NextResponse.json(
       { error: "Database write failed." },
