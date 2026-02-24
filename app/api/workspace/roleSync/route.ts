@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 import { prisma } from "../../../../prisma/Client";
-import { Workspace, WorkspaceMember } from "@prisma/client";
 
 interface JwtPayload extends jwt.JwtPayload {
   id: string;
@@ -19,6 +18,10 @@ interface RobloxGroup {
     name: string;
     rank: number;
   };
+}
+
+function getMinimumAllowedRank(allowedRanks: number[]): number {
+  return allowedRanks.length ? Math.min(...allowedRanks) : 255;
 }
 
 /**
@@ -59,7 +62,7 @@ async function syncWorkspacesForUser(
 
     const userRank = groupMatch.role.rank;
     const rankName = groupMatch.role.name;
-    const isAllowed = workspace.allowedRanks.includes(userRank);
+    const isAllowed = userRank >= getMinimumAllowedRank(workspace.allowedRanks);
 
     const existingMembership = existingMemberships.find((m) => m.workspaceId === workspace.id);
 

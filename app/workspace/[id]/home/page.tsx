@@ -2,20 +2,33 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import styles from "./home.module.css"; // Import the CSS module
+
+interface WorkspaceMember {
+  id: string;
+  avatarUrl: string | null;
+  displayName: string | null;
+  username: string;
+  rank: number;
+  rankName: string | null;
+}
 
 interface Workspace {
   id: string;
   groupName: string | null;
   groupId: string;
   allowedRanks: number[];
-  memberCount: number; // Added
-  groupOwner: string; // Added
+  minimumRank: number;
+  memberCount: number;
+  groupOwner: string;
+  members: WorkspaceMember[];
 }
 
-export default function WorkspaceHomepage({ params }: { params: { id: string } }) {
-  const { id: workspaceId } = params;
+export default function WorkspaceHomepage() {
+  const params = useParams<{ id: string }>();
+  const workspaceId = params?.id;
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,9 +51,12 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
       }
     };
 
-    if (workspaceId) {
-      fetchWorkspaceDetails();
+    if (!workspaceId) {
+      setLoading(false);
+      return;
     }
+
+    fetchWorkspaceDetails();
   }, [workspaceId]);
 
   if (loading) {
@@ -111,10 +127,44 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
         {/* Workspace Overview/Metrics (Example) */}
         <div className={`${styles.card} ${styles.colSpan1}`}>
           <h2 className={styles.cardTitle}>Overview</h2>
-          <div className={`${styles.textLight} ${styles.spaceY3}`}> {/* Using custom class for space-y-3 */}
+          <div className={`${styles.textLight} ${styles.spaceY3}`}>
             <div>Owner: <span className={`${styles.fontMedium} ${styles.textWhite}`}>{workspace.groupOwner}</span></div>
             <div>Members: <span className={`${styles.fontMedium} ${styles.textWhite}`}>{workspace.memberCount}</span></div>
+            <div>Minimum Rank: <span className={`${styles.fontMedium} ${styles.textWhite}`}>{workspace.minimumRank}</span></div>
             <div>Open Time Off Requests: <span className={`${styles.fontMedium} ${styles.textWhite}`}>YY</span> (TODO)</div>
+          </div>
+        </div>
+
+        <div className={`${styles.card} ${styles.colSpan2}`}>
+          <h2 className={styles.cardTitle}>Workspace Members ({workspace.members.length})</h2>
+          <div className={styles.memberList}>
+            {workspace.members.length === 0 && (
+              <div className={styles.textGray}>No members found in this workspace yet.</div>
+            )}
+            {workspace.members.map((member) => (
+              <div key={member.id} className={styles.memberRow}>
+                {member.avatarUrl ? (
+                  <img
+                    src={member.avatarUrl}
+                    alt={member.displayName || member.username}
+                    className={styles.memberAvatar}
+                  />
+                ) : (
+                  <div className={styles.memberAvatarFallback}>
+                    {(member.displayName || member.username).charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div className={styles.memberMeta}>
+                  <div className={styles.memberDisplayName}>
+                    {member.displayName || member.username}
+                  </div>
+                  <div className={styles.memberUsername}>@{member.username}</div>
+                </div>
+                <div className={styles.memberRank}>
+                  {member.rankName ? `${member.rankName} (${member.rank})` : `Rank ${member.rank}`}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
