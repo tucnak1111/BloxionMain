@@ -17,6 +17,12 @@ interface RobloxGroup {
   };
 }
 
+function hasRankAccess(allowedRanks: number[], userRank: number): boolean {
+  if (!allowedRanks.length) return false;
+  if (allowedRanks.length === 1) return userRank >= allowedRanks[0];
+  return allowedRanks.includes(userRank);
+}
+
 // Define the context type EXACTLY as the validator expects its incoming value to be
 interface Context {
   params: Promise<{
@@ -120,7 +126,7 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
     console.log("API: Workspace Fetch - User is member of Roblox group.");
 
     const userRank = groupMatch.role.rank;
-    if (!formattedWorkspace.allowedRanks.includes(userRank)) {
+    if (!hasRankAccess(formattedWorkspace.allowedRanks, userRank)) {
       console.log("API: Workspace Fetch - User rank insufficient.");
       return NextResponse.json(
         { error: "Forbidden: Your rank in the group does not grant you access." },

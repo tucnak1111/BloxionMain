@@ -51,7 +51,7 @@ model User {
 model Workspace {
   id            String            @id @default(cuid())
   ownerId       String
-  groupId       String
+  groupId       String            @unique
   allowedRanks  Int[]                                 // Who may access workspace
   trackedRoleIds Int[] @default([])                   // Roles to track for logs/activity
   createdAt     DateTime          @default(now())

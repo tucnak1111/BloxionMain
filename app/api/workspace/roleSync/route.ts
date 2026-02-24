@@ -21,6 +21,12 @@ interface RobloxGroup {
   };
 }
 
+function hasRankAccess(allowedRanks: number[], userRank: number): boolean {
+  if (!allowedRanks.length) return false;
+  if (allowedRanks.length === 1) return userRank >= allowedRanks[0];
+  return allowedRanks.includes(userRank);
+}
+
 /**
  * Fetches a user's group roles from the Roblox API.
  */
@@ -59,7 +65,7 @@ async function syncWorkspacesForUser(
 
     const userRank = groupMatch.role.rank;
     const rankName = groupMatch.role.name;
-    const isAllowed = workspace.allowedRanks.includes(userRank);
+    const isAllowed = hasRankAccess(workspace.allowedRanks, userRank);
 
     const existingMembership = existingMemberships.find((m) => m.workspaceId === workspace.id);
 
