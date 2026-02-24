@@ -60,7 +60,7 @@ async function verifyAuthToken(token: string) {
   }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const token = request.cookies.get("bloxion_auth")?.value;
   const isAuthenticated = token ? await verifyAuthToken(token) : false;
   const { pathname } = request.nextUrl;
