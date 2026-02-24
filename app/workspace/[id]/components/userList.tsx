@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import UserCard from "./userCard";
+import { useEffect, useMemo, useState } from "react";
 
 interface Member {
   id: string;
@@ -35,6 +34,18 @@ export default function UserList({ workspaceId }: { workspaceId: string }) {
 
     fetchMembers();
   }, [workspaceId]);
+
+  const filteredMembers = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return members;
+    return members.filter((member) => {
+      return (
+        member.username.toLowerCase().includes(q) ||
+        member.rankName.toLowerCase().includes(q) ||
+        String(member.rankId).includes(q)
+      );
+    });
+  }, [members, query]);
 
   if (loading) return <p className="text-zinc-400">Loading users...</p>;
   if (error) return <p className="text-red-400">{error}</p>;
