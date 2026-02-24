@@ -1,6 +1,7 @@
 import { prisma } from "../../../../prisma/Client";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { Prisma } from "@prisma/client";
 
 interface JwtPayload extends jwt.JwtPayload {
   id: string;
@@ -60,6 +61,15 @@ export async function POST(req: NextRequest) {
     console.error("Workspace creation failed:", error);
     if (error instanceof jwt.JsonWebTokenError) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return NextResponse.json(
+        { error: "A workspace for this group already exists." },
+        { status: 409 }
+      );
     }
     return NextResponse.json(
       { error: "Internal Server Error" },
