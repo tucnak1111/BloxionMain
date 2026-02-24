@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import styles from "./home.module.css"; // Import the CSS module
+import UserList from "../components/userList";
 
 interface Workspace {
   id: string;
@@ -116,6 +117,11 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
             <div>Members: <span className={`${styles.fontMedium} ${styles.textWhite}`}>{workspace.memberCount}</span></div>
             <div>Open Time Off Requests: <span className={`${styles.fontMedium} ${styles.textWhite}`}>YY</span> (TODO)</div>
           </div>
+        </div>
+
+        <div className={`${styles.card} ${styles.colSpan2}`}>
+          <h2 className={styles.cardTitle}>Users</h2>
+          <UserList workspaceId={workspaceId} />
         </div>
       </div>
     </div>
