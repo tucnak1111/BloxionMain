@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /get-started/
+Disallow: /not-allowed/
+Disallow: /api/
+Disallow: /workspaces/
+Allow: /login/
