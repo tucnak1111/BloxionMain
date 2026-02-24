@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import styles from "./home.module.css"; // Import the CSS module
 
@@ -25,8 +26,9 @@ interface Workspace {
   members: WorkspaceMember[];
 }
 
-export default function WorkspaceHomepage({ params }: { params: { id: string } }) {
-  const { id: workspaceId } = params;
+export default function WorkspaceHomepage() {
+  const params = useParams<{ id: string }>();
+  const workspaceId = params?.id;
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,9 +51,12 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
       }
     };
 
-    if (workspaceId) {
-      fetchWorkspaceDetails();
+    if (!workspaceId) {
+      setLoading(false);
+      return;
     }
+
+    fetchWorkspaceDetails();
   }, [workspaceId]);
 
   if (loading) {
@@ -134,7 +139,7 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
           <h2 className={styles.cardTitle}>Workspace Members ({workspace.members.length})</h2>
           <div className={styles.memberList}>
             {workspace.members.length === 0 && (
-              <div className={styles.textGray}>No members meet the minimum rank yet.</div>
+              <div className={styles.textGray}>No members found in this workspace yet.</div>
             )}
             {workspace.members.map((member) => (
               <div key={member.id} className={styles.memberRow}>
