@@ -78,6 +78,11 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
             username: true, // Fallback if displayName is null
           },
         },
+        _count: {
+          select: {
+            members: true,
+          },
+        },
         members: {
           orderBy: {
             rank: "desc",
@@ -105,7 +110,6 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
     console.log("API: Workspace Fetch - Workspace data fetched for ID:", workspaceId);
 
     const minimumRank = getMinimumAllowedRank(workspace.allowedRanks);
-    const eligibleMembers = workspace.members.filter((member) => member.rank >= minimumRank);
 
     // Process the workspace data to include memberCount and groupOwner
     const formattedWorkspace = {
@@ -114,9 +118,9 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
       groupName: workspace.groupName,
       allowedRanks: workspace.allowedRanks,
       minimumRank,
-      memberCount: eligibleMembers.length,
+      memberCount: workspace._count.members,
       groupOwner: workspace.owner.displayName || workspace.owner.username,
-      members: eligibleMembers.map((member) => ({
+      members: workspace.members.map((member) => ({
         id: member.id,
         avatarUrl: member.user.avatarUrl,
         displayName: member.user.displayName,
