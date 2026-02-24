@@ -16,6 +16,8 @@ interface Workspace {
   groupOwner: string; // Added
 }
 
+const REQUEST_TIMEOUT_MS = 12000;
+
 export default function WorkspaceHomepage() {
   const params = useParams<{ id: string }>();
   const workspaceId = params?.id;
@@ -24,30 +26,56 @@ export default function WorkspaceHomepage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    let active = true;
+
     const fetchWorkspaceDetails = async () => {
       try {
-        const res = await fetch(`/api/workspace/${workspaceId}`);
+        const res = await fetch(`/api/workspace/${workspaceId}`, {
+          signal: controller.signal,
+        });
         if (!res.ok) {
           const errData = await res.json();
           throw new Error(errData.error || "Failed to fetch workspace details");
         }
         const data = await res.json();
-        setWorkspace(data.workspace); // API returns { success: true, workspace: {...} }
+        if (active) {
+          setWorkspace(data.workspace); // API returns { success: true, workspace: {...} }
+        }
       } catch (err: any) {
-        setError(err.message);
-        toast.error(err.message);
+        if (!active) {
+          return;
+        }
+
+        const message =
+          err?.name === "AbortError"
+            ? "Workspace request timed out. Please refresh."
+            : err.message;
+
+        setError(message);
+        toast.error(message);
       } finally {
-        setLoading(false);
+        clearTimeout(timeoutId);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
     if (workspaceId) {
       fetchWorkspaceDetails();
-      return;
+      return () => {
+        active = false;
+        clearTimeout(timeoutId);
+        controller.abort();
+      };
     }
 
     setError("Invalid workspace ID.");
     setLoading(false);
+    clearTimeout(timeoutId);
+    controller.abort();
   }, [workspaceId]);
 
   if (loading) {
