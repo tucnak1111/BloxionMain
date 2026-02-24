@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 import { prisma } from "../../../../prisma/Client";
-import { Workspace, WorkspaceMember } from "@prisma/client";
 
 interface JwtPayload extends jwt.JwtPayload {
   id: string;

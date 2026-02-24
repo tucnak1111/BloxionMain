@@ -131,8 +131,11 @@ export default function WorkspaceHomepage({ params }: { params: { id: string } }
         </div>
 
         <div className={`${styles.card} ${styles.colSpan2}`}>
-          <h2 className={styles.cardTitle}>Workspace Members</h2>
+          <h2 className={styles.cardTitle}>Workspace Members ({workspace.members.length})</h2>
           <div className={styles.memberList}>
+            {workspace.members.length === 0 && (
+              <div className={styles.textGray}>No members meet the minimum rank yet.</div>
+            )}
             {workspace.members.map((member) => (
               <div key={member.id} className={styles.memberRow}>
                 {member.avatarUrl ? (
