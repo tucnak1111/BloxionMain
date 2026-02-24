@@ -17,6 +17,10 @@ interface RobloxGroup {
   };
 }
 
+function getMinimumAllowedRank(allowedRanks: number[]): number {
+  return allowedRanks.length ? Math.min(...allowedRanks) : 255;
+}
+
 export async function GET(req: Request) {
   const token = (await cookies()).get("bloxion_auth")?.value;
   if (!token) {
@@ -73,7 +77,7 @@ export async function GET(req: Request) {
 
     // 5. Verify if the user's rank is high enough
     const userRank = groupMatch.role.rank;
-    if (!workspace.allowedRanks.includes(userRank)) {
+    if (userRank < getMinimumAllowedRank(workspace.allowedRanks)) {
       return NextResponse.json(
         { error: "Forbidden: Your rank in the group does not grant you access." },
         { status: 403 }

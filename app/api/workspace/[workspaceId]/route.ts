@@ -17,6 +17,10 @@ interface RobloxGroup {
   };
 }
 
+function getMinimumAllowedRank(allowedRanks: number[]): number {
+  return allowedRanks.length ? Math.min(...allowedRanks) : 255;
+}
+
 // Define the context type EXACTLY as the validator expects its incoming value to be
 interface Context {
   params: Promise<{
@@ -80,6 +84,23 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
             members: true,
           },
         },
+        members: {
+          orderBy: {
+            rank: "desc",
+          },
+          select: {
+            id: true,
+            rank: true,
+            rankName: true,
+            user: {
+              select: {
+                avatarUrl: true,
+                displayName: true,
+                username: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -95,8 +116,17 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
       groupId: workspace.groupId,
       groupName: workspace.groupName,
       allowedRanks: workspace.allowedRanks, // Keep existing fields
+      minimumRank: getMinimumAllowedRank(workspace.allowedRanks),
       memberCount: workspace._count.members,
       groupOwner: workspace.owner.displayName || workspace.owner.username,
+      members: workspace.members.map((member) => ({
+        id: member.id,
+        avatarUrl: member.user.avatarUrl,
+        displayName: member.user.displayName,
+        username: member.user.username,
+        rank: member.rank,
+        rankName: member.rankName,
+      })),
     };
     console.log("API: Workspace Fetch - Formatted workspace data.");
 
@@ -120,7 +150,7 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
     console.log("API: Workspace Fetch - User is member of Roblox group.");
 
     const userRank = groupMatch.role.rank;
-    if (!formattedWorkspace.allowedRanks.includes(userRank)) {
+    if (userRank < formattedWorkspace.minimumRank) {
       console.log("API: Workspace Fetch - User rank insufficient.");
       return NextResponse.json(
         { error: "Forbidden: Your rank in the group does not grant you access." },

@@ -21,6 +21,10 @@ interface RobloxGroup {
   };
 }
 
+function getMinimumAllowedRank(allowedRanks: number[]): number {
+  return allowedRanks.length ? Math.min(...allowedRanks) : 255;
+}
+
 /**
  * Fetches a user's group roles from the Roblox API.
  */
@@ -59,7 +63,7 @@ async function syncWorkspacesForUser(
 
     const userRank = groupMatch.role.rank;
     const rankName = groupMatch.role.name;
-    const isAllowed = workspace.allowedRanks.includes(userRank);
+    const isAllowed = userRank >= getMinimumAllowedRank(workspace.allowedRanks);
 
     const existingMembership = existingMemberships.find((m) => m.workspaceId === workspace.id);
 
