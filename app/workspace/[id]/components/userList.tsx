@@ -15,14 +15,23 @@ export default function UserList({ workspaceId }: { workspaceId: string }) {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [workspaceMissing, setWorkspaceMissing] = useState(false);
   const [query] = useState("");
 
   useEffect(() => {
     async function fetchMembers() {
+      setLoading(true);
+      setError(null);
+      setWorkspaceMissing(false);
+
       try {
         const res = await fetch(`/api/workspace/members?workspaceId=${workspaceId}`);
         const data = await res.json();
         if (!res.ok || !data.success) {
+          if (res.status === 404) {
+            setWorkspaceMissing(true);
+            return;
+          }
           throw new Error(data.error || "Failed to load users");
         }
         setMembers(data.members);
@@ -50,6 +59,7 @@ export default function UserList({ workspaceId }: { workspaceId: string }) {
   }, [members, query]);
 
   if (loading) return <p className="text-zinc-400">Loading users...</p>;
+  if (workspaceMissing) return <p className="text-zinc-500">Workspace not found.</p>;
   if (error) return <p className="text-red-400">{error}</p>;
   if (!members.length) return <p className="text-zinc-500">No users found.</p>;
 

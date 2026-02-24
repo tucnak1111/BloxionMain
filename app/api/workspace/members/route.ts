@@ -27,15 +27,28 @@ export async function GET(req: Request) {
       );
     }
 
-    const workspaceAccess = await prisma.workspace.findFirst({
-      where: {
-        id: workspaceId,
-        OR: [{ ownerId: userId }, { members: { some: { userId } } }],
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: workspaceId },
+      select: {
+        id: true,
+        ownerId: true,
+        members: {
+          where: { userId },
+          select: { id: true },
+          take: 1,
+        },
       },
-      select: { id: true },
     });
 
-    if (!workspaceAccess) {
+    if (!workspace) {
+      return NextResponse.json(
+        { success: false, error: "Workspace not found" },
+        { status: 404 }
+      );
+    }
+
+    const hasAccess = workspace.ownerId === userId || workspace.members.length > 0;
+    if (!hasAccess) {
       return NextResponse.json(
         { success: false, error: "Forbidden: no access to this workspace" },
         { status: 403 }
