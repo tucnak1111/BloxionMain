@@ -60,10 +60,15 @@ async function verifyAuthToken(token: string) {
   }
 }
 
+type SuspensionCheckResult =
+  | { status: "ok"; suspended: boolean }
+  | { status: "unauthorized" }
+  | { status: "unknown" };
+
 async function getSuspensionState(
   request: NextRequest,
   token: string
-): Promise<boolean | null> {
+): Promise<SuspensionCheckResult> {
   try {
     const response = await fetch(new URL("/api/auth/me", request.url), {
       headers: {
@@ -72,14 +77,18 @@ async function getSuspensionState(
       cache: "no-store",
     });
 
+    if (response.status === 401 || response.status === 403) {
+      return { status: "unauthorized" };
+    }
+
     if (!response.ok) {
-      return null;
+      return { status: "unknown" };
     }
 
     const data = await response.json();
-    return Boolean(data?.user?.isSuspended);
+    return { status: "ok", suspended: Boolean(data?.user?.isSuspended) };
   } catch {
-    return null;
+    return { status: "unknown" };
   }
 }
 
@@ -91,11 +100,16 @@ export async function proxy(request: NextRequest) {
   let suspended: boolean | null = null;
 
   if (isAuthenticated && token) {
-    suspended = await getSuspensionState(request, token);
-    if (suspended === null) {
+    const suspensionState = await getSuspensionState(request, token);
+
+    if (suspensionState.status === "unauthorized") {
       const response = NextResponse.redirect(new URL("/login", request.url));
       response.cookies.delete("bloxion_auth");
       return response;
+    }
+
+    if (suspensionState.status === "ok") {
+      suspended = suspensionState.suspended;
     }
   }
 
