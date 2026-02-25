@@ -39,6 +39,7 @@ model User {
 
   // API Keys
   apiKeys         ApiKey[]
+  authLoginEvents AuthLoginEvent[]
 
   // Logbooks they have authored
   logbooks        Logbook[]
@@ -157,4 +158,26 @@ model WorkspacePlaytime {
   @@index([workspaceId])
   @@index([robloxId])
   @@unique([robloxId, workspaceId])
+}
+
+model AuthAttempt {
+  id        String   @id @default(cuid())
+  ipAddress String
+  reason    String
+  path      String
+  createdAt DateTime @default(now())
+
+  @@index([ipAddress, createdAt])
+}
+
+model AuthLoginEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  ipAddress String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([ipAddress, createdAt])
 }
