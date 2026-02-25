@@ -24,25 +24,22 @@ const COOKIE_MAX_AGE = 604800; // 7 days in seconds
 /**
  * Validates that all required environment variables are present.
  */
-function validateEnv() {
+function validateEnv(): Set<string> {
   if (!ROBLOX_CLIENT_ID || !ROBLOX_CLIENT_SECRET || !ROBLOX_REDIRECT_URI || !JWT_SECRET) {
     console.error("Missing one or more required environment variables for Roblox OAuth.");
     throw new Error("Server configuration error.");
   }
-
-  if (!ALLOWED_ROBLOX_USER_IDS || !ALLOWED_ROBLOX_USER_IDS.trim()) {
-    console.error("Missing ALLOWED_ROBLOX_USER_IDS environment variable.");
-    throw new Error("Server configuration error.");
-  }
-}
-
-function getAllowedRobloxUserIds(): Set<string> {
-  return new Set(
+  const allowedRobloxUserIds = new Set(
     (ALLOWED_ROBLOX_USER_IDS || "")
       .split(",")
       .map((id) => id.trim())
       .filter(Boolean)
   );
+  if (allowedRobloxUserIds.size === 0) {
+    console.error("ALLOWED_ROBLOX_USER_IDS must contain at least one valid Roblox user ID.");
+    throw new Error("Server configuration error.");
+  }
+  return allowedRobloxUserIds;
 }
 
 async function exchangeCodeForToken(code: string) {
@@ -117,7 +114,7 @@ function generateToken(user: any) {
 
 export async function GET(req: NextRequest) {
   try {
-    validateEnv();
+    const allowedRobloxUserIds = validateEnv();
 
     const code = req.nextUrl.searchParams.get("code");
     const error = req.nextUrl.searchParams.get("error");
@@ -137,7 +134,6 @@ export async function GET(req: NextRequest) {
 
     // 2. Fetch user info and avatar from Roblox APIs
     const robloxUser = await getRobloxUserInfo(accessToken);
-    const allowedRobloxUserIds = getAllowedRobloxUserIds();
 
     if (!allowedRobloxUserIds.has(String(robloxUser.sub))) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
