@@ -1,12 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
 import { prisma } from "../../../../prisma/Client";
 import axios from "axios";
-
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
+import { requireActiveUserFromToken } from "../../_utils/auth";
 
 interface RobloxGroup {
   group: {
@@ -25,21 +21,12 @@ function hasRankAccess(allowedRanks: number[], userRank: number): boolean {
 
 export async function GET(req: Request) {
   const token = (await cookies()).get("bloxion_auth")?.value;
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized: Not logged in" }, { status: 401 });
-  }
+  const auth = await requireActiveUserFromToken(token);
+  if (!auth.user) return auth.response;
 
   try {
     // 1. Authenticate the user and get their Bloxion and Roblox IDs
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: { id: true, robloxId: true },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = auth.user;
 
     // 2. Get workspaceId from the request URL
     const { searchParams } = new URL(req.url);
@@ -89,9 +76,6 @@ export async function GET(req: Request) {
     // If all checks pass, return the workspace data
     return NextResponse.json({ success: true, workspace });
   } catch (err: any) {
-    if (err instanceof jwt.JsonWebTokenError) {
-      return NextResponse.json({ error: "Invalid or expired session" }, { status: 403 });
-    }
     if (axios.isAxiosError(err)) {
       console.error("Roblox API request failed during workspace fetch:", err.response?.data || err.message);
       return NextResponse.json(
