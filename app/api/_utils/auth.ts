@@ -11,13 +11,25 @@ export type ActiveUser = {
   robloxId: string;
 };
 
+export type SessionUser = {
+  id: string;
+  robloxId: string;
+  username: string | null;
+  isSuspended: boolean;
+  suspendedReason: string | null;
+};
+
 type ActiveUserAuthResult =
   | { user: ActiveUser; response?: never }
   | { user?: never; response: NextResponse };
 
-export async function requireActiveUserFromToken(
+type SessionUserAuthResult =
+  | { user: SessionUser; response?: never }
+  | { user?: never; response: NextResponse };
+
+export async function getSessionUserFromToken(
   token: string | undefined
-): Promise<ActiveUserAuthResult> {
+): Promise<SessionUserAuthResult> {
   if (!token) {
     return {
       response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
@@ -42,7 +54,9 @@ export async function requireActiveUserFromToken(
       select: {
         id: true,
         robloxId: true,
+        username: true,
         isSuspended: true,
+        suspendedReason: true,
       },
     });
 
@@ -52,13 +66,7 @@ export async function requireActiveUserFromToken(
       };
     }
 
-    if (user.isSuspended) {
-      return {
-        response: NextResponse.json({ error: "Forbidden: Account suspended" }, { status: 403 }),
-      };
-    }
-
-    return { user: { id: user.id, robloxId: user.robloxId } };
+    return { user };
   } catch (error) {
     return {
       response: NextResponse.json(
@@ -67,4 +75,26 @@ export async function requireActiveUserFromToken(
       ),
     };
   }
+}
+
+export async function requireActiveUserFromToken(
+  token: string | undefined
+): Promise<ActiveUserAuthResult> {
+  const session = await getSessionUserFromToken(token);
+  if (!session.user) {
+    return { response: session.response };
+  }
+
+  if (session.user.isSuspended) {
+    return {
+      response: NextResponse.json({ error: "Forbidden: Account suspended" }, { status: 403 }),
+    };
+  }
+
+  return {
+    user: {
+      id: session.user.id,
+      robloxId: session.user.robloxId,
+    },
+  };
 }
