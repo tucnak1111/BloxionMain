@@ -8,6 +8,7 @@ const {
   ROBLOX_CLIENT_SECRET,
   ROBLOX_REDIRECT_URI,
   JWT_SECRET,
+  ALLOWED_ROBLOX_USER_IDS,
 } = process.env;
 
 const robloxApi = {
@@ -28,6 +29,20 @@ function validateEnv() {
     console.error("Missing one or more required environment variables for Roblox OAuth.");
     throw new Error("Server configuration error.");
   }
+
+  if (!ALLOWED_ROBLOX_USER_IDS || !ALLOWED_ROBLOX_USER_IDS.trim()) {
+    console.error("Missing ALLOWED_ROBLOX_USER_IDS environment variable.");
+    throw new Error("Server configuration error.");
+  }
+}
+
+function getAllowedRobloxUserIds(): Set<string> {
+  return new Set(
+    (ALLOWED_ROBLOX_USER_IDS || "")
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean)
+  );
 }
 
 async function exchangeCodeForToken(code: string) {
@@ -122,6 +137,12 @@ export async function GET(req: NextRequest) {
 
     // 2. Fetch user info and avatar from Roblox APIs
     const robloxUser = await getRobloxUserInfo(accessToken);
+    const allowedRobloxUserIds = getAllowedRobloxUserIds();
+
+    if (!allowedRobloxUserIds.has(String(robloxUser.sub))) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const avatarUrl = await getRobloxAvatar(robloxUser.sub);
 
     // 3. Create or update the user in the database
