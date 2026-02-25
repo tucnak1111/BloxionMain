@@ -1,20 +1,14 @@
 import { prisma } from "../../../../prisma/Client";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
+import { requireActiveUserFromToken } from "../../_utils/auth";
 
 export async function POST(req: NextRequest) {
   const token = req.cookies.get("bloxion_auth")?.value;
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireActiveUserFromToken(token);
+  if (!auth.user) return auth.response;
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const userId = decoded.id;
+    const userId = auth.user.id;
 
     // Fetch the user to get their robloxId
     const user = await prisma.user.findUnique({
@@ -58,9 +52,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(workspace);
   } catch (error) {
     console.error("Workspace creation failed:", error);
-    if (error instanceof jwt.JsonWebTokenError) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-    }
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

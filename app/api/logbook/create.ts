@@ -81,6 +81,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (user.isSuspended) {
+      return NextResponse.json(
+        { error: "Forbidden: Account suspended" },
+        { status: 403 }
+      );
+    }
+
     // 2. Parse and validate the request body
     const body = await req.json();
     const { title, content, workspaceId } = body;

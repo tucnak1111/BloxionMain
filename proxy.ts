@@ -60,6 +60,26 @@ async function verifyAuthToken(token: string) {
   }
 }
 
+async function isSuspendedUser(request: NextRequest, token: string): Promise<boolean> {
+  try {
+    const response = await fetch(new URL("/api/auth/me", request.url), {
+      headers: {
+        cookie: `bloxion_auth=${token}`,
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const data = await response.json();
+    return Boolean(data?.user?.isSuspended);
+  } catch {
+    return false;
+  }
+}
+
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("bloxion_auth")?.value;
   const isAuthenticated = token ? await verifyAuthToken(token) : false;
@@ -72,6 +92,18 @@ export async function proxy(request: NextRequest) {
 
   if (isAuthenticated && pathname === "/login") {
     return NextResponse.redirect(new URL("/workspaces", request.url));
+  }
+
+  if (isAuthenticated && token) {
+    const suspended = await isSuspendedUser(request, token);
+
+    if (suspended && pathname !== "/not-allowed") {
+      return NextResponse.redirect(new URL("/not-allowed", request.url));
+    }
+
+    if (!suspended && pathname === "/not-allowed") {
+      return NextResponse.redirect(new URL("/workspaces", request.url));
+    }
   }
 
   if (!isAuthenticated && !PUBLIC_PATHS.has(pathname)) {

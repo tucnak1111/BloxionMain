@@ -1,21 +1,15 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
 import { prisma } from "../../../../prisma/Client";
-
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
+import { requireActiveUserFromToken } from "../../_utils/auth";
 
 export async function GET(req: Request) {
   const token = (await cookies()).get("bloxion_auth")?.value;
-  if (!token) {
-    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireActiveUserFromToken(token);
+  if (!auth.user) return auth.response;
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const userId = decoded.id;
+    const userId = auth.user.id;
 
     const { searchParams } = new URL(req.url);
     const workspaceId = searchParams.get("workspaceId");
@@ -81,10 +75,6 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, members: formattedMembers });
   } catch (err: any) {
-    if (err instanceof jwt.JsonWebTokenError) {
-      return NextResponse.json({ success: false, error: "Invalid token" }, { status: 403 });
-    }
-
     console.error("Failed to fetch workspace members:", err.message);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
