@@ -1,6 +1,7 @@
 import { prisma } from "../../../../prisma/Client";
 import { NextRequest, NextResponse } from "next/server";
 import { requireActiveUserFromToken } from "../../_utils/auth";
+import { shouldBrewTeapot, teapotResponse } from "../../_utils/teapot";
 
 export async function POST(req: NextRequest) {
   const token = req.cookies.get("bloxion_auth")?.value;
@@ -27,6 +28,10 @@ export async function POST(req: NextRequest) {
         { error: "Missing required fields" },
         { status: 400 }
       );
+    }
+
+    if (shouldBrewTeapot([name, description, community?.name?.toString(), community?.id?.toString()])) {
+      return teapotResponse("Cannot create a workspace from an absurd request.");
     }
 
     const workspace = await prisma.workspace.create({

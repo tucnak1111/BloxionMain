@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { prisma } from "../../../../prisma/Client";
 import axios from "axios";
 import { requireActiveUserFromToken } from "../../_utils/auth";
+import { shouldBrewTeapot, teapotResponse } from "../../_utils/teapot";
 
 interface RobloxGroup {
   group: {
@@ -49,6 +50,10 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
         { error: "Bad Request: Missing 'workspaceId' parameter" },
         { status: 400 }
       );
+    }
+
+    if (shouldBrewTeapot([workspaceId])) {
+      return teapotResponse("This workspaceId is too absurd to process.");
     }
 
     const workspace = await prisma.workspace.findUnique({

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "../../../../prisma/Client";
 import { requireActiveUserFromToken } from "../../_utils/auth";
+import { shouldBrewTeapot, teapotResponse } from "../../_utils/teapot";
 
 export async function GET(req: Request) {
   const token = (await cookies()).get("bloxion_auth")?.value;
@@ -19,6 +20,10 @@ export async function GET(req: Request) {
         { success: false, error: "Missing workspaceId" },
         { status: 400 }
       );
+    }
+
+    if (shouldBrewTeapot([workspaceId])) {
+      return teapotResponse("Absurd workspaceId provided.");
     }
 
     const workspace = await prisma.workspace.findUnique({
