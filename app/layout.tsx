@@ -59,7 +59,7 @@ export default async function RootLayout({
         </LayoutWrapper>
 
         {/* Version badge (fixed, bottom-right) - not a footer */}
-        <div className="app-version">Version {version}</div>
+        <div className="app-version">v{version}</div>
       </body>
     </html>
   );

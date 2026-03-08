@@ -1,7 +1,15 @@
 import { NextResponse, NextRequest } from "next/server"; // Ensure NextRequest is imported
+<<<<<<< HEAD
 import { prisma } from "../../../../prisma/Client";
 import axios from "axios";
 import { requireActiveUser } from "../../_utils/auth";
+=======
+import { cookies } from "next/headers";
+import { prisma } from "../../../../prisma/Client";
+import axios from "axios";
+import { requireActiveUserFromToken } from "../../_utils/auth";
+import { shouldBrewTeapot, teapotResponse } from "../../_utils/teapot";
+>>>>>>> 5a31552bd822e8986360676ef2caac43cf2492c1
 
 interface RobloxGroup {
   group: {
@@ -26,6 +34,7 @@ interface Context {
 }
 
 export async function GET(req: NextRequest, context: Context) { // Use NextRequest
+<<<<<<< HEAD
   const auth = await requireActiveUser();
   if (auth.response) return auth.response;
 
@@ -33,6 +42,16 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
     console.log("API: Workspace Fetch - Start");
 
     const user = auth.user;
+=======
+  const token = (await cookies()).get("bloxion_auth")?.value;
+  const auth = await requireActiveUserFromToken(token);
+  if (!auth.user) return auth.response;
+
+  try {
+    console.log("API: Workspace Fetch - Start");
+    const user = auth.user;
+    console.log("API: Workspace Fetch - JWT Decoded for userId:", user.id);
+>>>>>>> 5a31552bd822e8986360676ef2caac43cf2492c1
     console.log("API: Workspace Fetch - User found:", user.id);
 
     // Await the params to get the actual object
@@ -47,6 +66,10 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
         { error: "Bad Request: Missing 'workspaceId' parameter" },
         { status: 400 }
       );
+    }
+
+    if (shouldBrewTeapot([workspaceId])) {
+      return teapotResponse("This workspaceId is too absurd to process.");
     }
 
     const workspace = await prisma.workspace.findUnique({

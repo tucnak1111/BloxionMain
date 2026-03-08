@@ -60,21 +60,78 @@ async function verifyAuthToken(token: string) {
   }
 }
 
+type SuspensionCheckResult =
+  | { status: "ok"; suspended: boolean }
+  | { status: "unauthorized" }
+  | { status: "unknown" };
+
+async function getSuspensionState(
+  request: NextRequest,
+  token: string
+): Promise<SuspensionCheckResult> {
+  try {
+    const response = await fetch(new URL("/api/auth/me", request.url), {
+      headers: {
+        cookie: `bloxion_auth=${token}`,
+      },
+      cache: "no-store",
+    });
+
+    if (response.status === 401 || response.status === 403) {
+      return { status: "unauthorized" };
+    }
+
+    if (!response.ok) {
+      return { status: "unknown" };
+    }
+
+    const data = await response.json();
+    return { status: "ok", suspended: Boolean(data?.user?.isSuspended) };
+  } catch {
+    return { status: "unknown" };
+  }
+}
+
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("bloxion_auth")?.value;
   const isAuthenticated = token ? await verifyAuthToken(token) : false;
   const { pathname } = request.nextUrl;
+  const isProtectedPath = !PUBLIC_PATHS.has(pathname);
+  let suspended: boolean | null = null;
+
+  if (isAuthenticated && token) {
+    const suspensionState = await getSuspensionState(request, token);
+
+    if (suspensionState.status === "unauthorized") {
+      const response = NextResponse.redirect(new URL("/login", request.url));
+      response.cookies.delete("bloxion_auth");
+      return response;
+    }
+
+    if (suspensionState.status === "ok") {
+      suspended = suspensionState.suspended;
+    }
+  }
 
   if (pathname === "/") {
-    const url = isAuthenticated ? "/workspaces" : "/login";
+    const url = !isAuthenticated ? "/login" : suspended ? "/not-allowed" : "/workspaces";
     return NextResponse.redirect(new URL(url, request.url));
   }
 
-  if (isAuthenticated && pathname === "/login") {
+  if (isAuthenticated && suspended && pathname !== "/not-allowed") {
+    return NextResponse.redirect(new URL("/not-allowed", request.url));
+  }
+
+  if (isAuthenticated && !suspended && pathname === "/not-allowed") {
     return NextResponse.redirect(new URL("/workspaces", request.url));
   }
 
-  if (!isAuthenticated && !PUBLIC_PATHS.has(pathname)) {
+  if (isAuthenticated && pathname === "/login") {
+    const url = suspended ? "/not-allowed" : "/workspaces";
+    return NextResponse.redirect(new URL(url, request.url));
+  }
+
+  if (!isAuthenticated && isProtectedPath) {
     const response = NextResponse.redirect(new URL("/login", request.url));
     if (token) {
       response.cookies.delete("bloxion_auth");

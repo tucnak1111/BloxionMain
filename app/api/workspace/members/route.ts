@@ -1,10 +1,22 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { prisma } from "../../../../prisma/Client";
 import { requireActiveUser } from "../../_utils/auth";
 
 export async function GET(req: Request) {
   const auth = await requireActiveUser();
   if (auth.response) return auth.response;
+=======
+import { cookies } from "next/headers";
+import { prisma } from "../../../../prisma/Client";
+import { requireActiveUserFromToken } from "../../_utils/auth";
+import { shouldBrewTeapot, teapotResponse } from "../../_utils/teapot";
+
+export async function GET(req: Request) {
+  const token = (await cookies()).get("bloxion_auth")?.value;
+  const auth = await requireActiveUserFromToken(token);
+  if (!auth.user) return auth.response;
+>>>>>>> 5a31552bd822e8986360676ef2caac43cf2492c1
 
   try {
     const userId = auth.user.id;
@@ -17,6 +29,10 @@ export async function GET(req: Request) {
         { success: false, error: "Missing workspaceId" },
         { status: 400 }
       );
+    }
+
+    if (shouldBrewTeapot([workspaceId])) {
+      return teapotResponse("Absurd workspaceId provided.");
     }
 
     const workspace = await prisma.workspace.findUnique({

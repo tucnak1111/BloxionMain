@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { requireActiveUser } from "../_utils/auth";
 
 // Fetches groups a user is in from Roblox API
 export async function GET() {
   const auth = await requireActiveUser();
   if (auth.response) return auth.response;
+=======
+import { cookies } from "next/headers";
+import { requireActiveUserFromToken } from "../_utils/auth";
+
+// Fetches groups a user is in from Roblox API
+export async function GET() {
+  const token = (await cookies()).get("bloxion_auth")?.value;
+  const auth = await requireActiveUserFromToken(token);
+  if (!auth.user) return auth.response;
+>>>>>>> 5a31552bd822e8986360676ef2caac43cf2492c1
 
   try {
     const user = auth.user;

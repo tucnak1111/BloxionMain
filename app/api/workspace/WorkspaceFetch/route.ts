@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { prisma } from "../../../../prisma/Client";
 import axios from "axios";
 import { requireActiveUser } from "../../_utils/auth";
+=======
+import { cookies } from "next/headers";
+import { prisma } from "../../../../prisma/Client";
+import axios from "axios";
+import { requireActiveUserFromToken } from "../../_utils/auth";
+>>>>>>> 5a31552bd822e8986360676ef2caac43cf2492c1
 
 interface RobloxGroup {
   group: {
@@ -19,10 +26,19 @@ function hasRankAccess(allowedRanks: number[], userRank: number): boolean {
 }
 
 export async function GET(req: Request) {
+<<<<<<< HEAD
   const auth = await requireActiveUser();
   if (auth.response) return auth.response;
 
   try {
+=======
+  const token = (await cookies()).get("bloxion_auth")?.value;
+  const auth = await requireActiveUserFromToken(token);
+  if (!auth.user) return auth.response;
+
+  try {
+    // 1. Authenticate the user and get their Bloxion and Roblox IDs
+>>>>>>> 5a31552bd822e8986360676ef2caac43cf2492c1
     const user = auth.user;
 
     // 2. Get workspaceId from the request URL
