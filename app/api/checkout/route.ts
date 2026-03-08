@@ -1,29 +1,13 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
-import { prisma } from "../../../prisma/Client";
-
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
+import { requireActiveUser } from "../_utils/auth";
 
 // Fetches groups a user is in from Roblox API
 export async function GET() {
-  const token = (await cookies()).get("bloxion_auth")?.value;
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireActiveUser();
+  if (auth.response) return auth.response;
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: { robloxId: true },
-    });
-
-    if (!user || !user.robloxId) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = auth.user;
 
     // Fetch groups from Roblox API
     const robloxGroupsResponse = await fetch(

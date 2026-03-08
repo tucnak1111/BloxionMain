@@ -32,18 +32,24 @@ async function getCurrentUser() {
   }
 }
 
-export default async function SuspendedPage() {
+export default async function SuspendedPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ reason?: string }>;
+}) {
   const user = await getCurrentUser();
+  const params = await searchParams;
+  const reasonFromQuery = params.reason ? decodeURIComponent(params.reason) : null;
 
-  // If user is not logged in, redirect to login page
-  if (!user) {
-    redirect("/login");
-  }
+  // Allow rendering even without an active cookie so suspended users can still see the message.
+  if (!user && !reasonFromQuery) redirect("/login");
 
   // If user is logged in but NOT suspended, redirect to dashboard
-  if (!user.isSuspended) {
+  if (user && !user.isSuspended) {
     redirect("/dashboard");
   }
+
+  const suspensionReason = user?.suspendedReason || reasonFromQuery || "No reason was provided.";
 
   return (
     <div className="not-allowed-page">
@@ -58,7 +64,7 @@ export default async function SuspendedPage() {
         <div style={{ textAlign: "left" }}>
           <h2 style={{ fontSize: "1em", fontWeight: 600, color: "#f3f4f6" }}>Reason for Suspension:</h2>
           <div style={{ marginTop: "0.5em", borderRadius: "6px", background: "rgba(255, 255, 255, 0.1)", padding: "1em" }}>
-            <p style={{ margin: 0, color: "#d1d5db" }}>{user.suspendedReason || "No reason was provided."}</p>
+            <p style={{ margin: 0, color: "#d1d5db" }}>{suspensionReason}</p>
           </div>
         </div>
 

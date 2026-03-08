@@ -127,9 +127,6 @@ export async function GET(req: NextRequest) {
     // 3. Create or update the user in the database
     const user = await upsertUser(robloxUser, avatarUrl);
 
-    // 4. Generate session token
-    const token = generateToken(user);
-
     let response: NextResponse;
 
     // 5. Redirect based on user suspension status
@@ -138,18 +135,26 @@ export async function GET(req: NextRequest) {
       const suspendedUrl = new URL("/not-allowed", req.url);
       suspendedUrl.searchParams.set("reason", reason);
       response = NextResponse.redirect(suspendedUrl);
+      response.cookies.set(COOKIE_NAME, "", {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 0,
+      });
     } else {
+      // 4. Generate session token only for active users
+      const token = generateToken(user);
       response = NextResponse.redirect(new URL("../../workspaces", req.url));
+      // Set the cookie on the response object
+      response.cookies.set(COOKIE_NAME, token, {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: COOKIE_MAX_AGE,
+      });
     }
-
-    // Set the cookie on the response object
-    response.cookies.set(COOKIE_NAME, token, {
-      path: "/",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: COOKIE_MAX_AGE,
-    });
 
     return response;
   } catch (err: any) {

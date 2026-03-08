@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
 import axios from "axios";
 import { prisma } from "../../../../prisma/Client";
 import { Workspace, WorkspaceMember } from "@prisma/client";
-
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
+import { requireActiveUser } from "../../_utils/auth";
 
 interface RobloxGroup {
   group: {
@@ -111,22 +106,11 @@ async function syncWorkspacesForUser(
 }
 
 export async function POST() {
-  const token = (await cookies()).get("bloxion_auth")?.value;
-  if (!token) {
-    return NextResponse.json({ error: "Not logged in" }, { status: 401 });
-  }
+  const auth = await requireActiveUser();
+  if (auth.response) return auth.response;
 
   try {
-    // 1. Authenticate the user and get their Bloxion and Roblox IDs.
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: { id: true, robloxId: true },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = auth.user;
 
     // 2. Fetch the user's groups from Roblox.
     const userGroups = await getRobloxGroupRoles(user.robloxId);
@@ -140,9 +124,6 @@ export async function POST() {
       updatedWorkspaces: updatedWorkspaces,
     });
   } catch (err: any) {
-    if (err instanceof jwt.JsonWebTokenError) {
-      return NextResponse.json({ error: "Invalid or expired session" }, { status: 403 });
-    }
     if (axios.isAxiosError(err)) {
       console.error("Roblox API request failed during role sync:", err.response?.data || err.message);
       return NextResponse.json({ error: "Failed to fetch roles from Roblox." }, { status: 502 });

@@ -1,35 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
 import { createHash } from "crypto";
 import { prisma } from "../../../prisma/Client";
 import { User } from "@prisma/client";
-
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
+import { requireActiveUser } from "../_utils/auth";
 
 /**
  * Authenticates a user from a session cookie.
  */
 async function authenticateWithCookie(): Promise<User | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("bloxion_auth")?.value;
-  if (!token) return null;
-
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    console.error("JWT_SECRET is not defined.");
-    throw new Error("Server configuration error.");
-  }
-
-  try {
-    const decoded = jwt.verify(token, secret) as JwtPayload;
-    return await prisma.user.findUnique({ where: { id: decoded.id } });
-  } catch (error) {
-    console.error("Cookie authentication failed:", error);
-    return null; // Invalid or expired token
-  }
+  const auth = await requireActiveUser();
+  if (auth.response) return null;
+  return prisma.user.findUnique({ where: { id: auth.user.id } });
 }
 
 /**
@@ -54,7 +35,8 @@ async function authenticateWithApiKey(authHeader: string | null): Promise<{ user
     include: { user: true },
   });
 
-  return apiKeyData && apiKeyData.user ? { user: apiKeyData.user, apiKeyData } : null;
+  if (!apiKeyData || !apiKeyData.user || apiKeyData.user.isSuspended) return null;
+  return { user: apiKeyData.user, apiKeyData };
 }
 
 export async function POST(req: NextRequest) {

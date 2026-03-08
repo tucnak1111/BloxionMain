@@ -1,12 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"; // Ensure NextRequest is imported
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
 import { prisma } from "../../../../prisma/Client";
 import axios from "axios";
-
-interface JwtPayload extends jwt.JwtPayload {
-  id: string;
-}
+import { requireActiveUser } from "../../_utils/auth";
 
 interface RobloxGroup {
   group: {
@@ -31,25 +26,13 @@ interface Context {
 }
 
 export async function GET(req: NextRequest, context: Context) { // Use NextRequest
-  const token = (await cookies()).get("bloxion_auth")?.value;
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized: Not logged in" }, { status: 401 });
-  }
+  const auth = await requireActiveUser();
+  if (auth.response) return auth.response;
 
   try {
     console.log("API: Workspace Fetch - Start");
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    console.log("API: Workspace Fetch - JWT Decoded for userId:", decoded.id);
-
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: { id: true, robloxId: true },
-    });
-    if (!user) {
-      console.log("API: Workspace Fetch - User not found for userId:", decoded.id);
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = auth.user;
     console.log("API: Workspace Fetch - User found:", user.id);
 
     // Await the params to get the actual object
@@ -138,10 +121,6 @@ export async function GET(req: NextRequest, context: Context) { // Use NextReque
     console.log("API: Workspace Fetch - Successful response for workspace:", formattedWorkspace.id);
     return NextResponse.json({ success: true, workspace: formattedWorkspace });
   } catch (err: any) {
-    if (err instanceof jwt.JsonWebTokenError) {
-      console.error("API: Workspace Fetch - Invalid or expired session:", err.message);
-      return NextResponse.json({ error: "Invalid or expired session" }, { status: 403 });
-    }
     if (axios.isAxiosError(err)) {
       console.error("API: Workspace Fetch - Roblox API request failed:", err.response?.data || err.message);
       return NextResponse.json(
